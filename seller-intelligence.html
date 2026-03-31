@@ -1334,15 +1334,15 @@ const PARTNER_DATA = {
 // ── 카테고리별 업종 협회 (실제 한국 제조사 연결 최단경로) ──────
 const CATEGORY_ASSOC = {
   '스킨케어 / 화장품': { name:'대한화장품협회', url:'https://www.kcia.or.kr/', tip:'홈페이지 상단 메뉴 → 회원사 검색에서 "OEM" 또는 "제조" 입력 → 실제 제조사 연락처 확인' },
-  '건강식품 / 보충제': { name:'한국건강기능식품협회', url:'https://www.khsa.or.kr/', tip:'협회 인증 GMP 제조업체 목록에서 OEM 공장 직접 연락 가능' },
-  '여성 패션 / 의류':  { name:'한국패션산업협회', url:'https://www.koreafashion.org/', tip:'대구 섬유단지 포함 — OEM 제조 공장 회원사 검색' },
-  '게임 / 피규어':     { name:'한국완구협회', url:'https://www.koreatoy.or.kr/', tip:'완구·피규어 OEM 제조사 회원 명단 직접 문의 가능' },
-  '일본 식품 / 과자':  { name:'한국식품산업협회', url:'https://www.kfia.or.kr/', tip:'HACCP 인증 식품 제조사 포함 — OEM 공장 연결' },
-  '생활용품 / 주방':   { name:'한국생활용품시험연구원', url:'https://www.katri.re.kr/', tip:'인증 받은 생활용품 제조사 정보 제공' },
-  '의약품 / 위생용품': { name:'한국의약품수출입협회', url:'https://www.kpea.or.kr/', tip:'의약외품·위생용품 수출 제조사 목록' },
-  '스마트폰 액세서리': { name:'한국전자정보통신산업진흥회', url:'https://www.gokea.org/', tip:'전자부품·액세서리 국내 제조사 회원사 검색' },
-  '반려동물 용품':     { name:'한국펫산업협회', url:'https://www.petindustry.or.kr/', tip:'반려동물 용품 국내 OEM 제조사 협회' },
-  '스포츠 / 아웃도어': { name:'한국스포츠산업협회', url:'https://www.sports.or.kr/', tip:'스포츠용품 국내 OEM 제조사 회원 목록' },
+  '건강식품 / 보충제': { name:'한국건강기능식품협회', url:'https://www.khsa.or.kr/', tip:'GMP 인증 건강기능식품 제조업체 목록 — OEM 공장 직접 연락 가능' },
+  '여성 패션 / 의류':  { name:'한국패션산업협회', url:'https://www.koreafashion.org/', tip:'대구 섬유단지 포함 — OEM 제조 공장 회원사 검색 후 직접 문의' },
+  '게임 / 피규어':     { name:'한국완구협회', url:'https://www.koreatoy.or.kr/', tip:'완구·피규어 OEM 제조사 회원 명단 — 직접 전화 문의 가능' },
+  '일본 식품 / 과자':  { name:'한국식품산업협회', url:'https://www.kfia.or.kr/', tip:'HACCP 인증 식품 제조사 포함 — OEM 소량 생산 공장 연결' },
+  '생활용품 / 주방':   { name:'중소기업현황정보시스템', url:'https://sminfo.mss.go.kr/', tip:'정부 공식 제조사 DB — 생활용품·주방 업종코드로 국내 OEM 공장 검색' },
+  '의약품 / 위생용품': { name:'한국제약바이오협회', url:'https://www.kpbma.or.kr/', tip:'의약외품·위생용품 OEM 제조사 회원사 검색 — 인증 공장 목록 제공' },
+  '스마트폰 액세서리': { name:'한국전자정보통신산업진흥회', url:'https://www.gokea.org/', tip:'전자부품·액세서리 국내 제조사 회원사 검색 — OEM 문의 가능' },
+  '반려동물 용품':     { name:'한국펫제품수출협회', url:'https://www.akppe.org/', tip:'반려동물 용품 국내 OEM 제조사 수출 전문 협회 — 회원사 직접 문의' },
+  '스포츠 / 아웃도어': { name:'한국스포츠산업협회', url:'http://kasipo.com/', tip:'스포츠·아웃도어 용품 OEM 제조사 회원 목록 — 직접 연락처 확인 가능' },
 };
 
 // ── 카테고리별 한국 소싱 최적 검색어 ──────────────────────────
@@ -1503,13 +1503,32 @@ function openFactoryModal(categoryName, icon, activeTab) {
 
       ${assoc ? `
       <a href="${assoc.url}" target="_blank"
-        style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #22C55E;border-radius:10px;padding:12px 14px;margin-bottom:10px;text-decoration:none">
+        style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #22C55E;border-radius:10px;padding:12px 14px;margin-bottom:8px;text-decoration:none">
         <span style="font-size:1.3rem">🏛️</span>
         <div>
           <div style="font-weight:800;font-size:0.85rem;color:#166534">${assoc.name} →</div>
           <div style="font-size:0.72rem;color:#64748B;margin-top:2px">${assoc.tip}</div>
         </div>
       </a>` : ''}
+
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <a href="https://sminfo.mss.go.kr/" target="_blank"
+          style="flex:1;display:flex;align-items:center;gap:8px;background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:10px;padding:10px 12px;text-decoration:none">
+          <span style="font-size:1.1rem">🏢</span>
+          <div>
+            <div style="font-weight:800;font-size:0.78rem;color:#1D4ED8">중소기업현황정보시스템 →</div>
+            <div style="font-size:0.68rem;color:#64748B;margin-top:1px">정부 공식 DB — 전 업종 국내 제조사 검색</div>
+          </div>
+        </a>
+        <a href="https://www.kotra.or.kr/about/supporting/kotra-online-fair.do" target="_blank"
+          style="flex:1;display:flex;align-items:center;gap:8px;background:#FFF7ED;border:1.5px solid #FCD34D;border-radius:10px;padding:10px 12px;text-decoration:none">
+          <span style="font-size:1.1rem">🌏</span>
+          <div>
+            <div style="font-weight:800;font-size:0.78rem;color:#92400E">KOTRA 바이어 연결 →</div>
+            <div style="font-size:0.68rem;color:#64748B;margin-top:1px">수출 전문 국내 제조사 연결 지원</div>
+          </div>
+        </a>
+      </div>
 
       <div style="font-size:0.78rem;font-weight:700;color:#374151;margin-bottom:7px">🔍 네이버에서 공장 직접 검색</div>
       <div style="display:flex;gap:8px;margin-bottom:8px">
