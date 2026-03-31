@@ -1331,6 +1331,20 @@ const PARTNER_DATA = {
   ],
 };
 
+// ── 카테고리별 한국 소싱 최적 검색어 ──────────────────────────
+const CATEGORY_OEM_KEYWORDS = {
+  '스킨케어 / 화장품':  '화장품 OEM 제조',
+  '건강식품 / 보충제':  '건강기능식품 OEM',
+  '여성 패션 / 의류':   '여성의류 OEM 제조',
+  '게임 / 피규어':      '피규어 제조 공장',
+  '일본 식품 / 과자':   '식품 OEM 제조',
+  '생활용품 / 주방':    '주방용품 OEM',
+  '의약품 / 위생용품':  '위생용품 OEM',
+  '스마트폰 액세서리':  '스마트폰 액세서리 OEM',
+  '반려동물 용품':      '반려동물 용품 OEM',
+  '스포츠 / 아웃도어':  '스포츠용품 OEM',
+};
+
 const FACTORY_DATA = {
   '스킨케어 / 화장품': [
     { name:'코스메틱뷰티 OEM', loc:'경기도 화성시', tags:['OEM/ODM','소량가능','K-뷰티'], moq:'500개', lead:'30일', contact:'도매꾹', link:'https://www.domeggook.com' },
@@ -1463,6 +1477,34 @@ function openFactoryModal(categoryName, icon, activeTab) {
   const certLevelText = certData?.level === 'high' ? '🔴 높음' : certData?.level === 'mid' ? '🟡 중간' : '🟢 낮음';
 
   // ── 탭 1: 한국 공장 정보
+  const oemKeyword = CATEGORY_OEM_KEYWORDS[categoryName] || categoryName + ' OEM';
+  const oemKeywordEnc = encodeURIComponent(oemKeyword);
+
+  // 소싱 검색바 (상단 고정)
+  const sourcingSearchBar = `
+    <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:14px;padding:15px 16px;margin-bottom:16px">
+      <div style="font-weight:800;font-size:0.85rem;color:#0369A1;margin-bottom:10px">🔍 한국 소싱처 직접 검색</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <input id="sourcingKeywordInput" type="text" value="${oemKeyword}"
+          style="flex:1;padding:8px 12px;border:1.5px solid #BAE6FD;border-radius:8px;font-size:0.85rem;outline:none;background:#fff"
+          placeholder="검색어 입력..."
+          onkeydown="if(event.key==='Enter')searchKoreanSourcing()">
+        <button onclick="searchKoreanSourcing()"
+          style="padding:8px 16px;background:#0369A1;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;white-space:nowrap">
+          🔍 전체 검색
+        </button>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button onclick="openSourcing('alibaba')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#FF6A00;color:#fff;font-weight:700">🌏 알리바바</button>
+        <button onclick="openSourcing('ec21')"     style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#1D4ED8;color:#fff;font-weight:700">🇰🇷 EC21</button>
+        <button onclick="openSourcing('tradekorea')" style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#059669;color:#fff;font-weight:700">📦 TradeKorea</button>
+        <button onclick="openSourcing('domeggook')" style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#7C3AED;color:#fff;font-weight:700">🏭 도매꾹</button>
+        <button onclick="openSourcing('gmarket')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#E53E3E;color:#fff;font-weight:700">🛒 G마켓</button>
+      </div>
+      <div style="font-size:0.72rem;color:#64748B;margin-top:8px">💡 검색어를 수정하면 각 버튼이 해당 키워드로 검색돼요</div>
+    </div>
+  `;
+
   const liveSection = buildLiveSourcingHTML(categoryName);
   const factoryStaticHTML = (!factories || factories.length === 0)
     ? `<div style="text-align:center;padding:40px;color:var(--muted)">해당 카테고리의 공장 정보가 준비 중입니다.</div>`
@@ -1488,7 +1530,7 @@ function openFactoryModal(categoryName, icon, activeTab) {
         </div>
       </div>
     `).join('');
-  const factoryHTML = liveSection + factoryStaticHTML;
+  const factoryHTML = sourcingSearchBar + liveSection + factoryStaticHTML;
 
   // ── 탭 2: 일본 인증 정보
   const certHTML = certData ? `
@@ -1701,6 +1743,34 @@ function buildLiveSourcingHTML(categoryName) {
       }).join('')}
     </div>
   `;
+}
+
+// ── 한국 소싱처 검색 함수 ─────────────────────────────────────
+function getSourceKeyword() {
+  return (document.getElementById('sourcingKeywordInput')?.value || '').trim();
+}
+
+function openSourcing(platform) {
+  const kw = getSourceKeyword();
+  const kwEnc = encodeURIComponent(kw);
+  const urls = {
+    alibaba:    `https://www.alibaba.com/trade/search?SearchText=${kwEnc}+korea`,
+    ec21:       `https://www.ec21.com/product/search/?q=${kwEnc}`,
+    tradekorea: `https://www.tradekorea.com/product/search.do?searchWord=${kwEnc}`,
+    domeggook:  `https://www.domeggook.com/main/product/productList.php?searchStr=${kwEnc}`,
+    gmarket:    `https://browse.gmarket.co.kr/search?keyword=${kwEnc}`,
+  };
+  window.open(urls[platform] || '#', '_blank');
+}
+
+function searchKoreanSourcing() {
+  const kw = getSourceKeyword();
+  if (!kw) return;
+  const kwEnc = encodeURIComponent(kw);
+  // 주요 3개 사이트 동시 오픈
+  window.open(`https://www.alibaba.com/trade/search?SearchText=${kwEnc}+korea`, '_blank');
+  window.open(`https://www.ec21.com/product/search/?q=${kwEnc}`, '_blank');
+  window.open(`https://www.tradekorea.com/product/search.do?searchWord=${kwEnc}`, '_blank');
 }
 
 function certNav(dir) {
