@@ -1495,11 +1495,10 @@ function openFactoryModal(categoryName, icon, activeTab) {
         </button>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button onclick="openSourcing('alibaba')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#FF6A00;color:#fff;font-weight:700">🌏 알리바바</button>
-        <button onclick="openSourcing('ec21')"     style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#1D4ED8;color:#fff;font-weight:700">🇰🇷 EC21</button>
+        <button onclick="openSourcing('alibaba')"    style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#FF6A00;color:#fff;font-weight:700">🌏 알리바바</button>
+        <button onclick="openSourcing('ownerclan')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#1D4ED8;color:#fff;font-weight:700">🇰🇷 오너클랜</button>
         <button onclick="openSourcing('tradekorea')" style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#059669;color:#fff;font-weight:700">📦 TradeKorea</button>
-        <button onclick="openSourcing('domeggook')" style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#7C3AED;color:#fff;font-weight:700">🏭 도매꾹</button>
-        <button onclick="openSourcing('gmarket')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#E53E3E;color:#fff;font-weight:700">🛒 G마켓</button>
+        <button onclick="openSourcing('onchannel')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#7C3AED;color:#fff;font-weight:700">🏭 온채널</button>
       </div>
       <div style="font-size:0.72rem;color:#64748B;margin-top:8px">💡 검색어를 수정하면 각 버튼이 해당 키워드로 검색돼요</div>
     </div>
@@ -1728,14 +1727,14 @@ function buildLiveSourcingHTML(categoryName) {
             <span style="font-size:0.72rem;color:#64748B">¥${p.itemPrice.toLocaleString()}</span>
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <a href="https://www.alibaba.com/trade/search?SearchText=${kwEnc}" target="_blank"
+            <a href="https://www.alibaba.com/trade/search?SearchText=${kwEnc}+korea" target="_blank"
               style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#FF6A00;color:#fff;font-weight:700">🌏 알리바바</a>
-            <a href="https://www.ec21.com/product/search/?q=${kwEnc}" target="_blank"
-              style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#1D4ED8;color:#fff;font-weight:700">🇰🇷 EC21</a>
+            <a href="https://www.ownerclan.com/search.asp?keyword=${kwEnc}" target="_blank"
+              style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#1D4ED8;color:#fff;font-weight:700">🇰🇷 오너클랜</a>
             <a href="https://www.tradekorea.com/product/search.do?searchWord=${kwEnc}" target="_blank"
               style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#059669;color:#fff;font-weight:700">📦 TradeKorea</a>
-            <a href="https://www.domeggook.com" target="_blank"
-              style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#7C3AED;color:#fff;font-weight:700">🏭 도매꾹</a>
+            <a href="https://www.onch3.co.kr/search/search.html?query=${kwEnc}" target="_blank"
+              style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#7C3AED;color:#fff;font-weight:700">🏭 온채널</a>
             ${p.itemUrl ? `<a href="${p.itemUrl}" target="_blank"
               style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#F59E0B;color:#fff;font-weight:700">🛒 라쿠텐</a>` : ''}
           </div>
@@ -1755,10 +1754,9 @@ function openSourcing(platform) {
   const kwEnc = encodeURIComponent(kw);
   const urls = {
     alibaba:    `https://www.alibaba.com/trade/search?SearchText=${kwEnc}+korea`,
-    ec21:       `https://www.ec21.com/product/search/?q=${kwEnc}`,
+    ownerclan:  `https://www.ownerclan.com/search.asp?keyword=${kwEnc}`,
     tradekorea: `https://www.tradekorea.com/product/search.do?searchWord=${kwEnc}`,
-    domeggook:  `https://www.domeggook.com/main/product/productList.php?searchStr=${kwEnc}`,
-    gmarket:    `https://browse.gmarket.co.kr/search?keyword=${kwEnc}`,
+    onchannel:  `https://www.onch3.co.kr/search/search.html?query=${kwEnc}`,
   };
   window.open(urls[platform] || '#', '_blank');
 }
@@ -1769,7 +1767,7 @@ function searchKoreanSourcing() {
   const kwEnc = encodeURIComponent(kw);
   // 주요 3개 사이트 동시 오픈
   window.open(`https://www.alibaba.com/trade/search?SearchText=${kwEnc}+korea`, '_blank');
-  window.open(`https://www.ec21.com/product/search/?q=${kwEnc}`, '_blank');
+  window.open(`https://www.ownerclan.com/search.asp?keyword=${kwEnc}`, '_blank');
   window.open(`https://www.tradekorea.com/product/search.do?searchWord=${kwEnc}`, '_blank');
 }
 
