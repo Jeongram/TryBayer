@@ -1333,16 +1333,66 @@ const PARTNER_DATA = {
 
 // ── 카테고리별 업종 협회 (실제 한국 제조사 연결 최단경로) ──────
 const CATEGORY_ASSOC = {
-  '스킨케어 / 화장품': { name:'대한화장품협회', url:'https://www.kcia.or.kr/', tip:'홈페이지 상단 메뉴 → 회원사 검색에서 "OEM" 또는 "제조" 입력 → 실제 제조사 연락처 확인' },
-  '건강식품 / 보충제': { name:'한국건강기능식품협회', url:'https://www.khsa.or.kr/', tip:'GMP 인증 건강기능식품 제조업체 목록 — OEM 공장 직접 연락 가능' },
-  '여성 패션 / 의류':  { name:'한국패션산업협회', url:'https://www.koreafashion.org/', tip:'대구 섬유단지 포함 — OEM 제조 공장 회원사 검색 후 직접 문의' },
-  '게임 / 피규어':     { name:'한국완구협회', url:'https://www.koreatoy.or.kr/', tip:'완구·피규어 OEM 제조사 회원 명단 — 직접 전화 문의 가능' },
-  '일본 식품 / 과자':  { name:'한국식품산업협회', url:'https://www.kfia.or.kr/', tip:'HACCP 인증 식품 제조사 포함 — OEM 소량 생산 공장 연결' },
-  '생활용품 / 주방':   { name:'중소기업현황정보시스템', url:'https://sminfo.mss.go.kr/', tip:'정부 공식 제조사 DB — 생활용품·주방 업종코드로 국내 OEM 공장 검색' },
-  '의약품 / 위생용품': { name:'한국제약바이오협회', url:'https://www.kpbma.or.kr/', tip:'의약외품·위생용품 OEM 제조사 회원사 검색 — 인증 공장 목록 제공' },
-  '스마트폰 액세서리': { name:'한국전자정보통신산업진흥회', url:'https://www.gokea.org/', tip:'전자부품·액세서리 국내 제조사 회원사 검색 — OEM 문의 가능' },
-  '반려동물 용품':     { name:'한국펫제품수출협회', url:'https://www.akppe.org/', tip:'반려동물 용품 국내 OEM 제조사 수출 전문 협회 — 회원사 직접 문의' },
-  '스포츠 / 아웃도어': { name:'한국스포츠산업협회', url:'http://kasipo.com/', tip:'스포츠·아웃도어 용품 OEM 제조사 회원 목록 — 직접 연락처 확인 가능' },
+  '스킨케어 / 화장품': {
+    name:'셀프코스 — 화장품 OEM 매칭',
+    url:'https://www.selfcos.com/index/company_list/cosmetic',
+    tip:'국내 화장품 OEM/ODM 제조사 비교견적 — 소량 가능 공장만 필터, 임상시험까지 원스톱',
+    jpTip:'🇯🇵 일본 약사법: 전성분 일본어 표기 필수 · 자외선차단제·미백은 의약부외품 별도 허가 필요'
+  },
+  '건강식품 / 보충제': {
+    name:'칼렛링크 — 소량 건강식품 제조',
+    url:'https://www.caretlink.com/',
+    tip:'100개부터 가능한 소량 다품종 플랫폼 — 허가·제조·물류·판매까지 원스톱 대행',
+    jpTip:'🇯🇵 일본은 건강기능식품 별도 허가 불필요 — 단, 특정 기능성 표시 시 소비자청 신고 필수'
+  },
+  '여성 패션 / 의류': {
+    name:'오슬 — 봉제공장 매칭 플랫폼',
+    url:'https://osle.co.kr/',
+    tip:'조건 맞는 봉제·자수·나염 공장 직접 매칭 — 동대문 소량 생산 공장 포함',
+    jpTip:'🇯🇵 일본 품질표시법: 소재·혼용률·세탁 방법 일본어 표시 의무 · 라쿠텐 등록 시 필수 확인'
+  },
+  '게임 / 피규어': {
+    name:'아이팩토리허브 — 완구 공장 리스트',
+    url:'https://ifactoryhub.com/',
+    tip:'"완구" "피규어" 검색 → 전국 소량 OEM 제조공장 리스트 — 직접 연락 가능',
+    jpTip:'🇯🇵 일본 ST마크(완구안전) 필수 · 전동·배터리 제품은 PSE 인증 추가 필요'
+  },
+  '일본 식품 / 과자': {
+    name:'팩토리플랫폼 — 식품 OEM 매칭',
+    url:'https://www.factory-platform.com/manufacturer?tpf=product/list&category_code=10',
+    tip:'HACCP 인증 식품 제조사 1:1 매칭 — 소량 OEM 의뢰 가능 공장만 등록',
+    jpTip:'🇯🇵 일본 식품위생법: 수입 신고 필수 · 첨가물 기준 한국과 달라 성분 사전 확인 필수'
+  },
+  '생활용품 / 주방': {
+    name:'아이팩토리허브 — 생활용품 공장',
+    url:'https://ifactoryhub.com/',
+    tip:'"주방" "생활용품" 검색 → 전국 소량 OEM 제조공장 리스트 직접 열람 가능',
+    jpTip:'🇯🇵 전열기·전동제품 PSE 마크 필수 · 칼·조리기구 일부 PSC 마크 대상 — 사전 확인 필요'
+  },
+  '의약품 / 위생용품': {
+    name:'한국제약바이오협회 — 인증 제조사',
+    url:'https://www.kpbma.or.kr/',
+    tip:'의약외품·위생용품 인증 OEM 제조사 검색 — 수출 실적 있는 공장 우선 문의',
+    jpTip:'🇯🇵 마스크·소독제는 일본 의약부외품 허가 필요 — 허가 없이 라쿠텐 판매 불가, 반드시 확인'
+  },
+  '스마트폰 액세서리': {
+    name:'JFACK — 폰케이스 OEM 전문',
+    url:'https://jfack.com/',
+    tip:'폰케이스·그립톡·키링 소량 OEM 전문 — 소량 1개부터 주문제작 가능',
+    jpTip:'🇯🇵 배터리 내장 액세서리는 PSE 인증 필수 · 폰케이스 단독은 규제 없어 진입 장벽 낮음'
+  },
+  '반려동물 용품': {
+    name:'칼렛링크 — 반려동물 OEM',
+    url:'https://www.caretlink.com/',
+    tip:'반려동물 간식·영양제 소량 OEM 가능 — 제조·허가·패키지·물류 일괄 대행',
+    jpTip:'🇯🇵 일반 반려동물 용품은 규제 적음 — 단, 동물용 의약품·의약부외품은 별도 허가 필요'
+  },
+  '스포츠 / 아웃도어': {
+    name:'아이팩토리허브 — 스포츠 공장',
+    url:'https://ifactoryhub.com/',
+    tip:'"스포츠" "아웃도어" 검색 → 전국 OEM 제조공장 리스트 — 소량 가능 여부 직접 문의',
+    jpTip:'🇯🇵 일반 스포츠용품 규제 적음 — 등산용 로프·안전장비 일부 PSC 마크 필요, 사전 확인 권장'
+  },
 };
 
 // ── 카테고리별 한국 소싱 최적 검색어 ──────────────────────────
@@ -1497,51 +1547,67 @@ function openFactoryModal(categoryName, icon, activeTab) {
   // 소싱 검색바 (상단 고정) — 업종 협회 + 네이버 검색 중심
   const assoc = CATEGORY_ASSOC[categoryName];
   const sourcingSearchBar = `
-    <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:14px;padding:15px 16px;margin-bottom:16px">
-      <div style="font-weight:800;font-size:0.85rem;color:#166534;margin-bottom:4px">🏭 한국 OEM 공장 직접 연결</div>
-      <div style="font-size:0.75rem;color:#15803D;margin-bottom:12px">실제 한국 제조사와 연결되는 가장 빠른 방법은 업종별 협회입니다</div>
+    <div style="margin-bottom:14px">
 
+      <!-- ① 전문 OEM 플랫폼 메인 버튼 -->
+      <div style="font-weight:800;font-size:0.82rem;color:#166534;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <span>🏭</span> 이 카테고리 추천 OEM 플랫폼
+      </div>
       ${assoc ? `
       <a href="${assoc.url}" target="_blank"
-        style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #22C55E;border-radius:10px;padding:12px 14px;margin-bottom:8px;text-decoration:none">
-        <span style="font-size:1.3rem">🏛️</span>
-        <div>
-          <div style="font-weight:800;font-size:0.85rem;color:#166534">${assoc.name} →</div>
-          <div style="font-size:0.72rem;color:#64748B;margin-top:2px">${assoc.tip}</div>
+        style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:2px solid #22C55E;border-radius:12px;padding:13px 15px;margin-bottom:10px;text-decoration:none;box-shadow:0 2px 6px #22c55e22">
+        <span style="font-size:1.5rem">🏭</span>
+        <div style="flex:1">
+          <div style="font-weight:900;font-size:0.88rem;color:#15803D">${assoc.name} →</div>
+          <div style="font-size:0.72rem;color:#4B5563;margin-top:3px;line-height:1.4">${assoc.tip}</div>
         </div>
+        <span style="font-size:0.7rem;background:#16A34A;color:#fff;padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap">바로가기</span>
       </a>` : ''}
 
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <a href="https://sminfo.mss.go.kr/" target="_blank"
-          style="flex:1;display:flex;align-items:center;gap:8px;background:#EFF6FF;border:1.5px solid #93C5FD;border-radius:10px;padding:10px 12px;text-decoration:none">
-          <span style="font-size:1.1rem">🏢</span>
+      <!-- ② 일본 수출 주의사항 -->
+      ${assoc?.jpTip ? `
+      <div style="background:#FFF7ED;border:1.5px solid #FB923C;border-radius:10px;padding:10px 13px;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px">
+        <span style="font-size:1rem;margin-top:1px">⚠️</span>
+        <div>
+          <div style="font-weight:800;font-size:0.75rem;color:#C2410C;margin-bottom:2px">일본 수출 시 꼭 확인하세요</div>
+          <div style="font-size:0.72rem;color:#7C2D12;line-height:1.5">${assoc.jpTip}</div>
+        </div>
+      </div>` : ''}
+
+      <!-- ③ 보조 플랫폼 2개 -->
+      <div style="display:flex;gap:7px;margin-bottom:10px">
+        <a href="https://ifactoryhub.com/" target="_blank"
+          style="flex:1;display:flex;align-items:center;gap:7px;background:#F8FAFC;border:1.5px solid #CBD5E1;border-radius:9px;padding:9px 10px;text-decoration:none">
+          <span style="font-size:1rem">🗂️</span>
           <div>
-            <div style="font-weight:800;font-size:0.78rem;color:#1D4ED8">중소기업현황정보시스템 →</div>
-            <div style="font-size:0.68rem;color:#64748B;margin-top:1px">정부 공식 DB — 전 업종 국내 제조사 검색</div>
+            <div style="font-weight:800;font-size:0.74rem;color:#1E40AF">아이팩토리허브 →</div>
+            <div style="font-size:0.65rem;color:#64748B;margin-top:1px">전국 공장 카테고리별 리스트</div>
           </div>
         </a>
-        <a href="https://www.kotra.or.kr/about/supporting/kotra-online-fair.do" target="_blank"
-          style="flex:1;display:flex;align-items:center;gap:8px;background:#FFF7ED;border:1.5px solid #FCD34D;border-radius:10px;padding:10px 12px;text-decoration:none">
-          <span style="font-size:1.1rem">🌏</span>
+        <a href="https://www.caretlink.com/" target="_blank"
+          style="flex:1;display:flex;align-items:center;gap:7px;background:#F8FAFC;border:1.5px solid #CBD5E1;border-radius:9px;padding:9px 10px;text-decoration:none">
+          <span style="font-size:1rem">⚗️</span>
           <div>
-            <div style="font-weight:800;font-size:0.78rem;color:#92400E">KOTRA 바이어 연결 →</div>
-            <div style="font-size:0.68rem;color:#64748B;margin-top:1px">수출 전문 국내 제조사 연결 지원</div>
+            <div style="font-weight:800;font-size:0.74rem;color:#7C3AED">칼렛링크 →</div>
+            <div style="font-size:0.65rem;color:#64748B;margin-top:1px">소량 소비재 OEM 원스톱</div>
           </div>
         </a>
       </div>
 
-      <div style="font-size:0.78rem;font-weight:700;color:#374151;margin-bottom:7px">🔍 네이버에서 공장 직접 검색</div>
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <input id="sourcingKeywordInput" type="text" value="${oemKeyword} 공장"
-          style="flex:1;padding:8px 12px;border:1.5px solid #86EFAC;border-radius:8px;font-size:0.85rem;outline:none;background:#fff"
-          placeholder="예: 화장품 OEM 공장 문의"
-          onkeydown="if(event.key==='Enter')searchKoreanSourcing()">
-        <button onclick="searchKoreanSourcing()"
-          style="padding:8px 14px;background:#166534;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;white-space:nowrap">
-          검색
-        </button>
+      <!-- ④ 네이버 직접 검색 -->
+      <div style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;padding:11px 13px">
+        <div style="font-size:0.75rem;font-weight:700;color:#374151;margin-bottom:7px">🔍 네이버에서 공장 직접 검색</div>
+        <div style="display:flex;gap:7px">
+          <input id="sourcingKeywordInput" type="text" value="${oemKeyword} 소량 OEM"
+            style="flex:1;padding:7px 11px;border:1.5px solid #CBD5E1;border-radius:7px;font-size:0.82rem;outline:none;background:#fff"
+            placeholder="예: 화장품 OEM 소량 공장"
+            onkeydown="if(event.key==='Enter')searchKoreanSourcing()">
+          <button onclick="searchKoreanSourcing()"
+            style="padding:7px 13px;background:#1E40AF;color:#fff;border:none;border-radius:7px;font-weight:700;cursor:pointer;font-size:0.8rem;white-space:nowrap">
+            검색
+          </button>
+        </div>
       </div>
-      <div style="font-size:0.71rem;color:#6B7280">💡 협회 사이트에서 회원사 검색 → 직접 전화/이메일 문의가 가장 확실한 방법이에요</div>
     </div>
   `;
 
