@@ -1331,6 +1331,20 @@ const PARTNER_DATA = {
   ],
 };
 
+// ── 카테고리별 업종 협회 (실제 한국 제조사 연결 최단경로) ──────
+const CATEGORY_ASSOC = {
+  '스킨케어 / 화장품': { name:'대한화장품협회', url:'https://www.kcia.or.kr/cboard/list.php?id=member_search', tip:'회원사 검색에서 "OEM" 또는 "제조" 입력 → 실제 제조사 연락처 확인' },
+  '건강식품 / 보충제': { name:'한국건강기능식품협회', url:'https://www.khsa.or.kr/', tip:'협회 인증 GMP 제조업체 목록에서 OEM 공장 직접 연락 가능' },
+  '여성 패션 / 의류':  { name:'한국패션산업협회', url:'https://www.koreafashion.org/', tip:'대구 섬유단지 포함 — OEM 제조 공장 회원사 검색' },
+  '게임 / 피규어':     { name:'한국완구협회', url:'https://www.koreatoy.or.kr/', tip:'완구·피규어 OEM 제조사 회원 명단 직접 문의 가능' },
+  '일본 식품 / 과자':  { name:'한국식품산업협회', url:'https://www.kfia.or.kr/', tip:'HACCP 인증 식품 제조사 포함 — OEM 공장 연결' },
+  '생활용품 / 주방':   { name:'한국생활용품시험연구원', url:'https://www.katri.re.kr/', tip:'인증 받은 생활용품 제조사 정보 제공' },
+  '의약품 / 위생용품': { name:'한국의약품수출입협회', url:'https://www.kpea.or.kr/', tip:'의약외품·위생용품 수출 제조사 목록' },
+  '스마트폰 액세서리': { name:'한국전자정보통신산업진흥회', url:'https://www.gokea.org/', tip:'전자부품·액세서리 국내 제조사 회원사 검색' },
+  '반려동물 용품':     { name:'한국펫산업협회', url:'https://www.petindustry.or.kr/', tip:'반려동물 용품 국내 OEM 제조사 협회' },
+  '스포츠 / 아웃도어': { name:'한국스포츠산업협회', url:'https://www.sports.or.kr/', tip:'스포츠용품 국내 OEM 제조사 회원 목록' },
+};
+
 // ── 카테고리별 한국 소싱 최적 검색어 ──────────────────────────
 const CATEGORY_OEM_KEYWORDS = {
   '스킨케어 / 화장품':  '화장품 OEM 제조',
@@ -1480,27 +1494,35 @@ function openFactoryModal(categoryName, icon, activeTab) {
   const oemKeyword = CATEGORY_OEM_KEYWORDS[categoryName] || categoryName + ' OEM';
   const oemKeywordEnc = encodeURIComponent(oemKeyword);
 
-  // 소싱 검색바 (상단 고정)
+  // 소싱 검색바 (상단 고정) — 업종 협회 + 네이버 검색 중심
+  const assoc = CATEGORY_ASSOC[categoryName];
   const sourcingSearchBar = `
-    <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:14px;padding:15px 16px;margin-bottom:16px">
-      <div style="font-weight:800;font-size:0.85rem;color:#0369A1;margin-bottom:10px">🔍 한국 소싱처 직접 검색</div>
-      <div style="display:flex;gap:8px;margin-bottom:10px">
-        <input id="sourcingKeywordInput" type="text" value="${oemKeyword}"
-          style="flex:1;padding:8px 12px;border:1.5px solid #BAE6FD;border-radius:8px;font-size:0.85rem;outline:none;background:#fff"
-          placeholder="검색어 입력..."
+    <div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:14px;padding:15px 16px;margin-bottom:16px">
+      <div style="font-weight:800;font-size:0.85rem;color:#166534;margin-bottom:4px">🏭 한국 OEM 공장 직접 연결</div>
+      <div style="font-size:0.75rem;color:#15803D;margin-bottom:12px">실제 한국 제조사와 연결되는 가장 빠른 방법은 업종별 협회입니다</div>
+
+      ${assoc ? `
+      <a href="${assoc.url}" target="_blank"
+        style="display:flex;align-items:center;gap:10px;background:#fff;border:2px solid #22C55E;border-radius:10px;padding:12px 14px;margin-bottom:10px;text-decoration:none">
+        <span style="font-size:1.3rem">🏛️</span>
+        <div>
+          <div style="font-weight:800;font-size:0.85rem;color:#166534">${assoc.name} →</div>
+          <div style="font-size:0.72rem;color:#64748B;margin-top:2px">${assoc.tip}</div>
+        </div>
+      </a>` : ''}
+
+      <div style="font-size:0.78rem;font-weight:700;color:#374151;margin-bottom:7px">🔍 네이버에서 공장 직접 검색</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input id="sourcingKeywordInput" type="text" value="${oemKeyword} 공장"
+          style="flex:1;padding:8px 12px;border:1.5px solid #86EFAC;border-radius:8px;font-size:0.85rem;outline:none;background:#fff"
+          placeholder="예: 화장품 OEM 공장 문의"
           onkeydown="if(event.key==='Enter')searchKoreanSourcing()">
         <button onclick="searchKoreanSourcing()"
-          style="padding:8px 16px;background:#0369A1;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;white-space:nowrap">
-          🔍 전체 검색
+          style="padding:8px 14px;background:#166534;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;white-space:nowrap">
+          검색
         </button>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button onclick="openSourcing('naver')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#1D4ED8;color:#fff;font-weight:700">🔎 네이버</button>
-        <button onclick="openSourcing('tradekorea')" style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#059669;color:#fff;font-weight:700">📦 TradeKorea</button>
-        <button onclick="openSourcing('domeggook')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#7C3AED;color:#fff;font-weight:700">🏭 도매꾹</button>
-        <button onclick="openSourcing('ec21')"       style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#DC2626;color:#fff;font-weight:700">🔍 EC21</button>
-      </div>
-      <div style="font-size:0.72rem;color:#64748B;margin-top:8px">💡 검색어를 수정하면 각 버튼이 해당 키워드로 검색돼요 · 모두 국내 제조사 전용 플랫폼</div>
+      <div style="font-size:0.71rem;color:#6B7280">💡 협회 사이트에서 회원사 검색 → 직접 전화/이메일 문의가 가장 확실한 방법이에요</div>
     </div>
   `;
 
@@ -1765,10 +1787,7 @@ function searchKoreanSourcing() {
   const kw = getSourceKeyword();
   if (!kw) return;
   const kwEnc = encodeURIComponent(kw);
-  // 한국 전용 3개 사이트 동시 오픈
-  window.open(`https://search.naver.com/search.naver?query=${kwEnc}+OEM+제조사`, '_blank');
-  window.open(`https://www.tradekorea.com/product/search.do?searchWord=${kwEnc}`, '_blank');
-  window.open(`https://www.domeggook.com`, '_blank');
+  window.open(`https://search.naver.com/search.naver?query=${kwEnc}`, '_blank');
 }
 
 function certNav(dir) {
