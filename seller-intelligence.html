@@ -290,13 +290,13 @@
   <div class="stat-grid" style="margin-top:28px">
     <div class="stat-card">
       <div class="stat-label">추적 카테고리</div>
-      <div class="stat-val">47</div>
-      <div class="stat-sub">라쿠텐 전체 장르 기준</div>
+      <div class="stat-val">10</div>
+      <div class="stat-sub">🌏 JP · 동남아 · 아마존 공통</div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">오늘 베스트 상품</div>
-      <div class="stat-val" id="statProducts">300</div>
-      <div class="stat-sub">랭킹 Top 300 실시간</div>
+      <div class="stat-label">커버 시장</div>
+      <div class="stat-val stat-up">3개</div>
+      <div class="stat-sub">🇯🇵 일본 · 동남아 · 아마존</div>
     </div>
     <div class="stat-card">
       <div class="stat-label">평균 마진율 (추정)</div>
@@ -311,11 +311,67 @@
   </div>
 
   <!-- CATEGORY RANKING + CHART -->
-  <div class="section-title">📊 카테고리별 베스트셀러 순위 <span class="tag">RAKUTEN JP</span></div>
+  <div class="section-title">🌏 글로벌 카테고리 랭킹 <span class="tag">JP · 동남아 · 아마존</span></div>
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('daily',this)">일간</button>
     <button class="tab-btn" onclick="switchTab('weekly',this)">주간</button>
     <button class="tab-btn" onclick="switchTab('monthly',this)">월간</button>
+  </div>
+
+  <!-- 3 MARKET OVERVIEW CARDS -->
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px">
+
+    <!-- 🇯🇵 일본 -->
+    <div style="background:linear-gradient(135deg,#FFF8F0,#FFF3E0);border:2px solid #FB923C;border-radius:14px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span style="font-size:1.4rem">🇯🇵</span>
+        <div>
+          <div style="font-weight:900;font-size:0.92rem;color:#C2410C">일본 시장</div>
+          <div style="font-size:0.68rem;color:#9CA3AF">Rakuten · Qoo10 Japan</div>
+        </div>
+        <span style="margin-left:auto;font-size:0.63rem;background:#FB923C;color:#fff;padding:2px 8px;border-radius:99px;font-weight:700" id="jpLiveTag">LIVE</span>
+      </div>
+      <div style="font-size:0.74rem;color:#374151;line-height:1.7">
+        <div>📦 <b>K-뷰티 1위</b> 시장 — 화장품·식품·패션 강세</div>
+        <div>💴 평균 마진 <b style="color:#C2410C">38%</b> · 물류비 낮음</div>
+        <div>🏪 라쿠텐 + 큐텐 투트랙 공략 유리</div>
+      </div>
+    </div>
+
+    <!-- 🌏 동남아 -->
+    <div style="background:linear-gradient(135deg,#F0FFF4,#DCFCE7);border:2px solid #22C55E;border-radius:14px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span style="font-size:1.4rem">🌏</span>
+        <div>
+          <div style="font-weight:900;font-size:0.92rem;color:#15803D">동남아 시장</div>
+          <div style="font-size:0.68rem;color:#9CA3AF">Shopee · Lazada</div>
+        </div>
+        <span style="margin-left:auto;font-size:0.63rem;background:#22C55E;color:#fff;padding:2px 8px;border-radius:99px;font-weight:700">성장중</span>
+      </div>
+      <div style="font-size:0.74rem;color:#374151;line-height:1.7">
+        <div>📦 <b>K-뷰티·패션</b> 최고 성장세 — SG·MY·TH 중심</div>
+        <div>💵 평균 마진 <b style="color:#15803D">42%</b> · 모바일 커머스 1위</div>
+        <div>🛒 Shopee 입점 쉬움 — 한국 판매자 환영</div>
+      </div>
+    </div>
+
+    <!-- 🌎 아마존 -->
+    <div style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE);border:2px solid #3B82F6;border-radius:14px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
+        <span style="font-size:1.4rem">🌎</span>
+        <div>
+          <div style="font-weight:900;font-size:0.92rem;color:#1D4ED8">아마존 글로벌</div>
+          <div style="font-size:0.68rem;color:#9CA3AF">Amazon US · EU · JP · AU</div>
+        </div>
+        <span style="margin-left:auto;font-size:0.63rem;background:#3B82F6;color:#fff;padding:2px 8px;border-radius:99px;font-weight:700">글로벌</span>
+      </div>
+      <div style="font-size:0.74rem;color:#374151;line-height:1.7">
+        <div>📦 <b>K-스킨케어·보충제</b> 급성장 — US·EU 공략</div>
+        <div>💵 평균 마진 <b style="color:#1D4ED8">35%</b> · FBA 물류 완비</div>
+        <div>🚀 FBA 입점 시 글로벌 자동 배송 가능</div>
+      </div>
+    </div>
+
   </div>
 
   <div class="two-col">
@@ -328,6 +384,69 @@
     <div class="card">
       <div style="font-weight:700;margin-bottom:14px;font-size:0.88rem;color:var(--muted)">📈 카테고리 성장 추이 (최근 8주)</div>
       <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- SHOPEE LIVE SECTION -->
+  <div class="section-title" style="margin-top:8px">
+    🌏 Shopee 실시간 트렌드
+    <span class="tag" id="shopeeStatusTag">자동 연결 중...</span>
+  </div>
+  <div class="card" style="padding:18px 20px">
+    <div id="shopeeContent">
+      <div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.84rem;padding:12px 0">
+        <span style="animation:spin 1s linear infinite;display:inline-block">⏳</span>
+        Shopee SG 데이터 불러오는 중...
+      </div>
+    </div>
+    <div id="shopeeKeywordBar" style="display:none;margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      <span style="font-size:0.72rem;font-weight:700;color:var(--muted);align-self:center">검색어:</span>
+      <button onclick="fetchShopeeData('korean beauty','sg')" class="btn btn-outline" style="font-size:0.72rem;padding:3px 10px">K-뷰티</button>
+      <button onclick="fetchShopeeData('korean fashion','sg')" class="btn btn-outline" style="font-size:0.72rem;padding:3px 10px">K-패션</button>
+      <button onclick="fetchShopeeData('korean snack','sg')" class="btn btn-outline" style="font-size:0.72rem;padding:3px 10px">한국 식품</button>
+      <button onclick="fetchShopeeData('korean skincare','th')" class="btn btn-outline" style="font-size:0.72rem;padding:3px 10px">🇹🇭 태국</button>
+      <button onclick="fetchShopeeData('korean skincare','my')" class="btn btn-outline" style="font-size:0.72rem;padding:3px 10px">🇲🇾 말레이</button>
+      <button onclick="fetchShopeeData('korean skincare','ph')" class="btn btn-outline" style="font-size:0.72rem;padding:3px 10px">🇵🇭 필리핀</button>
+    </div>
+  </div>
+
+  <!-- AMAZON LIVE SECTION -->
+  <div class="section-title" style="margin-top:8px">
+    🌎 Amazon 글로벌
+    <span class="tag" id="amazonStatusTag">PA-API 설정 필요</span>
+  </div>
+  <div class="card" style="padding:18px 20px">
+    <div id="amazonContent">
+      <!-- Amazon API 가이드 (키 미설정 시) -->
+      <div id="amazonGuide">
+        <div style="font-weight:800;font-size:0.88rem;color:#1D4ED8;margin-bottom:12px">🔑 Amazon PA-API 연결 방법 (무료)</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-bottom:14px">
+          <div style="background:#EFF6FF;border-radius:10px;padding:12px 14px">
+            <div style="font-weight:800;font-size:0.78rem;color:#1D4ED8;margin-bottom:4px">① Amazon Associates 가입</div>
+            <div style="font-size:0.72rem;color:#374151;line-height:1.5">아마존 어소시에이츠(파트너) 계정 — 무료 가입 후 PA-API 키 자동 발급</div>
+            <a href="https://affiliate-program.amazon.com/" target="_blank" style="font-size:0.7rem;color:#1D4ED8;font-weight:700;text-decoration:none">→ affiliate-program.amazon.com</a>
+          </div>
+          <div style="background:#EFF6FF;border-radius:10px;padding:12px 14px">
+            <div style="font-weight:800;font-size:0.78rem;color:#1D4ED8;margin-bottom:4px">② Access Key 발급</div>
+            <div style="font-size:0.72rem;color:#374151;line-height:1.5">Associates Central → Tools → Product Advertising API에서 키 발급 (Access Key + Secret Key)</div>
+            <a href="https://associates.amazon.com/ss/gp/paapi/v3/CreateAccountSummary" target="_blank" style="font-size:0.7rem;color:#1D4ED8;font-weight:700;text-decoration:none">→ PA-API 키 발급</a>
+          </div>
+          <div style="background:#EFF6FF;border-radius:10px;padding:12px 14px">
+            <div style="font-weight:800;font-size:0.78rem;color:#1D4ED8;margin-bottom:4px">③ 아래에 키 입력</div>
+            <div style="font-size:0.72rem;color:#374151;line-height:1.5">Access Key + Secret Key + Partner Tag(추천인 태그)를 입력하면 실시간 US·JP·EU 데이터 연동</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+          <input type="text" id="amzAccessKey" placeholder="Access Key (AKIA...)" style="flex:1;min-width:160px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:0.78rem;background:var(--surface)">
+          <input type="password" id="amzSecretKey" placeholder="Secret Key" style="flex:1;min-width:160px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:0.78rem;background:var(--surface)">
+          <input type="text" id="amzPartnerTag" placeholder="Partner Tag (trybayer-20)" style="flex:1;min-width:160px;padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:0.78rem;background:var(--surface)">
+          <button onclick="connectAmazon()" class="btn btn-primary" style="padding:7px 16px;font-size:0.78rem">연결</button>
+        </div>
+        <div id="amazonApiStatus" style="font-size:0.72rem;color:var(--muted);margin-top:4px"></div>
+      </div>
+
+      <!-- Amazon 실시간 결과 (키 설정 후) -->
+      <div id="amazonLiveResults" style="display:none"></div>
     </div>
   </div>
 
@@ -1331,6 +1450,70 @@ const PARTNER_DATA = {
   ],
 };
 
+// ── 카테고리별 업종 협회 (실제 한국 제조사 연결 최단경로) ──────
+const CATEGORY_ASSOC = {
+  '스킨케어 / 화장품': {
+    name:'셀프코스 — 화장품 OEM 매칭',
+    url:'https://www.selfcos.com/index/company_list/cosmetic',
+    tip:'국내 화장품 OEM/ODM 제조사 비교견적 — 소량 가능 공장만 필터, 임상시험까지 원스톱',
+    jpTip:'🇯🇵 일본 약사법: 전성분 일본어 표기 필수 · 자외선차단제·미백은 의약부외품 별도 허가 필요'
+  },
+  '건강식품 / 보충제': {
+    name:'칼렛링크 — 소량 건강식품 제조',
+    url:'https://www.caretlink.com/',
+    tip:'100개부터 가능한 소량 다품종 플랫폼 — 허가·제조·물류·판매까지 원스톱 대행',
+    jpTip:'🇯🇵 일본은 건강기능식품 별도 허가 불필요 — 단, 특정 기능성 표시 시 소비자청 신고 필수'
+  },
+  '여성 패션 / 의류': {
+    name:'오슬 — 봉제공장 매칭 플랫폼',
+    url:'https://osle.co.kr/',
+    tip:'조건 맞는 봉제·자수·나염 공장 직접 매칭 — 동대문 소량 생산 공장 포함',
+    jpTip:'🇯🇵 일본 품질표시법: 소재·혼용률·세탁 방법 일본어 표시 의무 · 라쿠텐 등록 시 필수 확인'
+  },
+  '게임 / 피규어': {
+    name:'아이팩토리허브 — 완구 공장 리스트',
+    url:'https://ifactoryhub.com/',
+    tip:'"완구" "피규어" 검색 → 전국 소량 OEM 제조공장 리스트 — 직접 연락 가능',
+    jpTip:'🇯🇵 일본 ST마크(완구안전) 필수 · 전동·배터리 제품은 PSE 인증 추가 필요'
+  },
+  '일본 식품 / 과자': {
+    name:'팩토리플랫폼 — 식품 OEM 매칭',
+    url:'https://www.factory-platform.com/manufacturer?tpf=product/list&category_code=10',
+    tip:'HACCP 인증 식품 제조사 1:1 매칭 — 소량 OEM 의뢰 가능 공장만 등록',
+    jpTip:'🇯🇵 일본 식품위생법: 수입 신고 필수 · 첨가물 기준 한국과 달라 성분 사전 확인 필수'
+  },
+  '생활용품 / 주방': {
+    name:'아이팩토리허브 — 생활용품 공장',
+    url:'https://ifactoryhub.com/',
+    tip:'"주방" "생활용품" 검색 → 전국 소량 OEM 제조공장 리스트 직접 열람 가능',
+    jpTip:'🇯🇵 전열기·전동제품 PSE 마크 필수 · 칼·조리기구 일부 PSC 마크 대상 — 사전 확인 필요'
+  },
+  '의약품 / 위생용품': {
+    name:'한국제약바이오협회 — 인증 제조사',
+    url:'https://www.kpbma.or.kr/',
+    tip:'의약외품·위생용품 인증 OEM 제조사 검색 — 수출 실적 있는 공장 우선 문의',
+    jpTip:'🇯🇵 마스크·소독제는 일본 의약부외품 허가 필요 — 허가 없이 라쿠텐 판매 불가, 반드시 확인'
+  },
+  '스마트폰 액세서리': {
+    name:'JFACK — 폰케이스 OEM 전문',
+    url:'https://jfack.com/',
+    tip:'폰케이스·그립톡·키링 소량 OEM 전문 — 소량 1개부터 주문제작 가능',
+    jpTip:'🇯🇵 배터리 내장 액세서리는 PSE 인증 필수 · 폰케이스 단독은 규제 없어 진입 장벽 낮음'
+  },
+  '반려동물 용품': {
+    name:'팩토리펫 — 반려동물 OEM 전문',
+    url:'https://www.factorypet.co.kr/48',
+    tip:'반려동물 간식·용품 OEM/ODM 전문 — 동결건조·열풍건조·젤리·영양제 소량 가능, 패키지 디자인까지 원스톱',
+    jpTip:'🇯🇵 일반 반려동물 용품·간식은 규제 적음 — 단, 동물용 의약품·의약부외품은 농림수산성 별도 허가 필요'
+  },
+  '스포츠 / 아웃도어': {
+    name:'아이팩토리허브 — 스포츠 공장',
+    url:'https://ifactoryhub.com/',
+    tip:'"스포츠" "아웃도어" 검색 → 전국 OEM 제조공장 리스트 — 소량 가능 여부 직접 문의',
+    jpTip:'🇯🇵 일반 스포츠용품 규제 적음 — 등산용 로프·안전장비 일부 PSC 마크 필요, 사전 확인 권장'
+  },
+};
+
 // ── 카테고리별 한국 소싱 최적 검색어 ──────────────────────────
 const CATEGORY_OEM_KEYWORDS = {
   '스킨케어 / 화장품':  '화장품 OEM 제조',
@@ -1406,6 +1589,20 @@ const DEMO_CATEGORIES = [
   { rank:10, icon:'⚽', name:'스포츠 / 아웃도어', sub:'スポーツ・アウトドア', badge:'badge-stable', badgeText:'● 안정', growth:[11,12,14,13,15,14,16,15], margin:22 },
 ];
 
+// 글로벌 시장 신호 데이터 (동남아 Shopee + 아마존 Global)
+const GLOBAL_MARKET_DATA = {
+  '스킨케어 / 화장품':  { sea:{ score:95, badge:'🔥 1위',   color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'SG·MY·TH·PH' }, amz:{ score:88, badge:'↑ 급상승', color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'US·JP·EU' } },
+  '건강식품 / 보충제':  { sea:{ score:72, badge:'↑ 성장중', color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'SG·MY·PH'    }, amz:{ score:85, badge:'🔥 인기',  color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'US·CA·AU' } },
+  '여성 패션 / 의류':   { sea:{ score:88, badge:'🔥 인기',  color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'TH·ID·VN·MY' }, amz:{ score:65, badge:'● 안정',  color:'#6B7280', bg:'#F9FAFB', border:'#D1D5DB', markets:'US·EU'    } },
+  '게임 / 피규어':      { sea:{ score:48, badge:'▽ 낮음',   color:'#9CA3AF', bg:'#F9FAFB', border:'#E5E7EB', markets:'SG·MY'        }, amz:{ score:78, badge:'↑ 성장중', color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'US·JP'    } },
+  '일본 식품 / 과자':   { sea:{ score:38, badge:'▽ 낮음',   color:'#9CA3AF', bg:'#F9FAFB', border:'#E5E7EB', markets:'SG·MY'        }, amz:{ score:50, badge:'● 보통',  color:'#6B7280', bg:'#F9FAFB', border:'#D1D5DB', markets:'US·CA'    } },
+  '생활용품 / 주방':    { sea:{ score:80, badge:'↑ 성장중', color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'ID·TH·PH·VN'  }, amz:{ score:70, badge:'● 안정',  color:'#6B7280', bg:'#F9FAFB', border:'#D1D5DB', markets:'US·EU·CA' } },
+  '의약품 / 위생용품':  { sea:{ score:65, badge:'↑ 성장중', color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'SG·MY·PH'    }, amz:{ score:60, badge:'● 보통',  color:'#6B7280', bg:'#F9FAFB', border:'#D1D5DB', markets:'US·CA'    } },
+  '스마트폰 액세서리':  { sea:{ score:90, badge:'🔥 인기',  color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'ID·TH·VN·PH'  }, amz:{ score:82, badge:'↑ 급상승', color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'US·EU·AU' } },
+  '반려동물 용품':       { sea:{ score:52, badge:'● 보통',   color:'#6B7280', bg:'#F9FAFB', border:'#E5E7EB', markets:'SG·MY·TH'    }, amz:{ score:78, badge:'↑ 성장중', color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'US·CA·AU' } },
+  '스포츠 / 아웃도어':  { sea:{ score:62, badge:'● 안정',   color:'#6B7280', bg:'#F9FAFB', border:'#E5E7EB', markets:'SG·MY·TH·ID'  }, amz:{ score:73, badge:'● 안정',  color:'#6B7280', bg:'#F9FAFB', border:'#D1D5DB', markets:'US·EU·CA' } },
+};
+
 const DEMO_PRODUCTS = [
   { rank:1, name:'프리미엄 세럼 앰플 세트', cat:'스킨케어', price:4800, score:94, scoreType:'high', margin:42, country:'🇯🇵 JP / 🇸🇬 SG', query:'serum+ampoule+set' },
   { rank:2, name:'일본산 콜라겐 드링크 30포', cat:'건강식품', price:3200, score:88, scoreType:'high', margin:38, country:'🇯🇵 JP', query:'collagen+drink+japan' },
@@ -1428,37 +1625,54 @@ function renderRankList(categories) {
   const el = document.getElementById('rankList');
   el.innerHTML = categories.map(c => {
     const marginColor = c.margin >= 40 ? 'var(--success)' : c.margin >= 30 ? 'var(--accent)' : 'var(--muted)';
+    const gm = GLOBAL_MARKET_DATA[c.name] || {};
+
+    // 3-market signal badges
+    const jpSignal = `<span style="display:inline-flex;align-items:center;gap:3px;font-size:0.66rem;padding:2px 7px;border-radius:99px;background:#FFF8F0;color:#C2410C;border:1px solid #FB923C;font-weight:700;white-space:nowrap">🇯🇵 JP ${c.badgeText}</span>`;
+    const seaSignal = gm.sea ? `<span style="display:inline-flex;align-items:center;gap:3px;font-size:0.66rem;padding:2px 7px;border-radius:99px;background:${gm.sea.bg};color:${gm.sea.color};border:1px solid ${gm.sea.border};font-weight:700;white-space:nowrap">🌏 SEA ${gm.sea.badge}</span>` : '';
+    const amzSignal = gm.amz ? `<span style="display:inline-flex;align-items:center;gap:3px;font-size:0.66rem;padding:2px 7px;border-radius:99px;background:${gm.amz.bg};color:${gm.amz.color};border:1px solid ${gm.amz.border};font-weight:700;white-space:nowrap">🌎 AMZ ${gm.amz.badge}</span>` : '';
+    const seaMarkets = gm.sea ? `<span style="font-size:0.6rem;color:#9CA3AF;margin-top:1px">${gm.sea.markets}</span>` : '';
+    const amzMarkets = gm.amz ? `<span style="font-size:0.6rem;color:#9CA3AF;margin-top:1px">${gm.amz.markets}</span>` : '';
+
     return `
     <div class="rank-item" style="cursor:default">
       <span class="rank-num ${c.rank<=3?'top':''}">${c.rank}</span>
       <span class="rank-icon">${c.icon}</span>
-      <div class="rank-info">
+      <div class="rank-info" style="flex:1;min-width:0">
         <div class="rank-name">${c.name}</div>
-        <div style="display:flex;gap:6px;margin-top:4px;flex-wrap:wrap">
+
+        <!-- 3-market signals -->
+        <div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap;align-items:center">
+          ${jpSignal}
+          ${seaSignal}
+          ${amzSignal}
+        </div>
+
+        <!-- action buttons -->
+        <div style="display:flex;gap:5px;margin-top:5px;flex-wrap:wrap">
           <span onclick="openFactoryModal('${c.name}','${c.icon}','factory')"
-            style="font-size:0.7rem;color:var(--primary);font-weight:700;cursor:pointer;padding:2px 7px;border:1px solid var(--primary);border-radius:5px;background:var(--surface)">
+            style="font-size:0.68rem;color:var(--primary);font-weight:700;cursor:pointer;padding:2px 6px;border:1px solid var(--primary);border-radius:5px;background:var(--surface)">
             🏭 공장정보
           </span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','cert')"
-            style="font-size:0.7rem;color:#D97706;font-weight:700;cursor:pointer;padding:2px 7px;border:1px solid #D97706;border-radius:5px;background:var(--surface)">
+            style="font-size:0.68rem;color:#D97706;font-weight:700;cursor:pointer;padding:2px 6px;border:1px solid #D97706;border-radius:5px;background:var(--surface)">
             🇯🇵 일본 인증
           </span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','certguide')"
-            style="font-size:0.7rem;color:#0891b2;font-weight:700;cursor:pointer;padding:2px 7px;border:1px solid #0891b2;border-radius:5px;background:var(--surface)">
+            style="font-size:0.68rem;color:#0891b2;font-weight:700;cursor:pointer;padding:2px 6px;border:1px solid #0891b2;border-radius:5px;background:var(--surface)">
             📋 인증 취득법
           </span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','partner')"
-            style="font-size:0.7rem;color:#059669;font-weight:700;cursor:pointer;padding:2px 7px;border:1px solid #059669;border-radius:5px;background:var(--surface)">
+            style="font-size:0.68rem;color:#059669;font-weight:700;cursor:pointer;padding:2px 6px;border:1px solid #059669;border-radius:5px;background:var(--surface)">
             🤝 파트너 찾기
           </span>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
+      <div style="display:flex;align-items:center;gap:8px;margin-left:10px;flex-shrink:0">
         <div style="text-align:right">
-          <div style="font-size:0.72rem;color:var(--muted);font-weight:600;letter-spacing:.3px">마진율</div>
-          <div style="font-size:0.95rem;font-weight:800;color:${marginColor}">~${c.margin}%</div>
+          <div style="font-size:0.68rem;color:var(--muted);font-weight:600;letter-spacing:.3px">마진율</div>
+          <div style="font-size:0.92rem;font-weight:800;color:${marginColor}">~${c.margin}%</div>
         </div>
-        <span class="rank-badge ${c.badge}">${c.badgeText}</span>
       </div>
     </div>
   `}).join('');
@@ -1480,27 +1694,70 @@ function openFactoryModal(categoryName, icon, activeTab) {
   const oemKeyword = CATEGORY_OEM_KEYWORDS[categoryName] || categoryName + ' OEM';
   const oemKeywordEnc = encodeURIComponent(oemKeyword);
 
-  // 소싱 검색바 (상단 고정)
+  // 소싱 검색바 (상단 고정) — 업종 협회 + 네이버 검색 중심
+  const assoc = CATEGORY_ASSOC[categoryName];
   const sourcingSearchBar = `
-    <div style="background:#F0F9FF;border:1.5px solid #BAE6FD;border-radius:14px;padding:15px 16px;margin-bottom:16px">
-      <div style="font-weight:800;font-size:0.85rem;color:#0369A1;margin-bottom:10px">🔍 한국 소싱처 직접 검색</div>
-      <div style="display:flex;gap:8px;margin-bottom:10px">
-        <input id="sourcingKeywordInput" type="text" value="${oemKeyword}"
-          style="flex:1;padding:8px 12px;border:1.5px solid #BAE6FD;border-radius:8px;font-size:0.85rem;outline:none;background:#fff"
-          placeholder="검색어 입력..."
-          onkeydown="if(event.key==='Enter')searchKoreanSourcing()">
-        <button onclick="searchKoreanSourcing()"
-          style="padding:8px 16px;background:#0369A1;color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;white-space:nowrap">
-          🔍 전체 검색
-        </button>
+    <div style="margin-bottom:14px">
+
+      <!-- ① 전문 OEM 플랫폼 메인 버튼 -->
+      <div style="font-weight:800;font-size:0.82rem;color:#166534;margin-bottom:8px;display:flex;align-items:center;gap:6px">
+        <span>🏭</span> 이 카테고리 추천 OEM 플랫폼
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button onclick="openSourcing('ownerclan')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#1D4ED8;color:#fff;font-weight:700">🇰🇷 오너클랜</button>
-        <button onclick="openSourcing('tradekorea')" style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#059669;color:#fff;font-weight:700">📦 TradeKorea</button>
-        <button onclick="openSourcing('onchannel')"  style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#7C3AED;color:#fff;font-weight:700">🏭 온채널</button>
-        <button onclick="openSourcing('ec21')"       style="font-size:0.75rem;padding:5px 11px;border-radius:7px;border:none;cursor:pointer;background:#DC2626;color:#fff;font-weight:700">🔍 EC21</button>
+      ${assoc ? `
+      <a href="${assoc.url}" target="_blank"
+        style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:2px solid #22C55E;border-radius:12px;padding:13px 15px;margin-bottom:10px;text-decoration:none;box-shadow:0 2px 6px #22c55e22">
+        <span style="font-size:1.5rem">🏭</span>
+        <div style="flex:1">
+          <div style="font-weight:900;font-size:0.88rem;color:#15803D">${assoc.name} →</div>
+          <div style="font-size:0.72rem;color:#4B5563;margin-top:3px;line-height:1.4">${assoc.tip}</div>
+        </div>
+        <span style="font-size:0.7rem;background:#16A34A;color:#fff;padding:3px 8px;border-radius:99px;font-weight:700;white-space:nowrap">바로가기</span>
+      </a>` : ''}
+
+      <!-- ② 일본 수출 주의사항 -->
+      ${assoc?.jpTip ? `
+      <div style="background:#FFF7ED;border:1.5px solid #FB923C;border-radius:10px;padding:10px 13px;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px">
+        <span style="font-size:1rem;margin-top:1px">⚠️</span>
+        <div>
+          <div style="font-weight:800;font-size:0.75rem;color:#C2410C;margin-bottom:2px">일본 수출 시 꼭 확인하세요</div>
+          <div style="font-size:0.72rem;color:#7C2D12;line-height:1.5">${assoc.jpTip}</div>
+        </div>
+      </div>` : ''}
+
+      <!-- ③ 보조 플랫폼 2개 -->
+      <div style="display:flex;gap:7px;margin-bottom:10px">
+        <a href="https://ifactoryhub.com/" target="_blank"
+          style="flex:1;display:flex;align-items:center;gap:7px;background:#F8FAFC;border:1.5px solid #CBD5E1;border-radius:9px;padding:9px 10px;text-decoration:none">
+          <span style="font-size:1rem">🗂️</span>
+          <div>
+            <div style="font-weight:800;font-size:0.74rem;color:#1E40AF">아이팩토리허브 →</div>
+            <div style="font-size:0.65rem;color:#64748B;margin-top:1px">전국 공장 카테고리별 리스트</div>
+          </div>
+        </a>
+        <a href="https://www.caretlink.com/" target="_blank"
+          style="flex:1;display:flex;align-items:center;gap:7px;background:#F8FAFC;border:1.5px solid #CBD5E1;border-radius:9px;padding:9px 10px;text-decoration:none">
+          <span style="font-size:1rem">⚗️</span>
+          <div>
+            <div style="font-weight:800;font-size:0.74rem;color:#7C3AED">칼렛링크 →</div>
+            <div style="font-size:0.65rem;color:#64748B;margin-top:1px">소량 소비재 OEM 원스톱</div>
+          </div>
+        </a>
       </div>
-      <div style="font-size:0.72rem;color:#64748B;margin-top:8px">💡 검색어를 수정하면 각 버튼이 해당 키워드로 검색돼요 · 모두 국내 제조사 전용 플랫폼</div>
+
+      <!-- ④ 네이버 직접 검색 -->
+      <div style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;padding:11px 13px">
+        <div style="font-size:0.75rem;font-weight:700;color:#374151;margin-bottom:7px">🔍 네이버에서 공장 직접 검색</div>
+        <div style="display:flex;gap:7px">
+          <input id="sourcingKeywordInput" type="text" value="${oemKeyword} 소량 OEM"
+            style="flex:1;padding:7px 11px;border:1.5px solid #CBD5E1;border-radius:7px;font-size:0.82rem;outline:none;background:#fff"
+            placeholder="예: 화장품 OEM 소량 공장"
+            onkeydown="if(event.key==='Enter')searchKoreanSourcing()">
+          <button onclick="searchKoreanSourcing()"
+            style="padding:7px 13px;background:#1E40AF;color:#fff;border:none;border-radius:7px;font-weight:700;cursor:pointer;font-size:0.8rem;white-space:nowrap">
+            검색
+          </button>
+        </div>
+      </div>
     </div>
   `;
 
@@ -1727,12 +1984,12 @@ function buildLiveSourcingHTML(categoryName) {
             <span style="font-size:0.72rem;color:#64748B">¥${p.itemPrice.toLocaleString()}</span>
           </div>
           <div style="display:flex;gap:6px;flex-wrap:wrap">
-            <a href="https://www.ownerclan.com/search.asp?keyword=${catKwEnc}" target="_blank"
-              style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#1D4ED8;color:#fff;font-weight:700">🇰🇷 오너클랜</a>
+            <a href="https://search.naver.com/search.naver?query=${catKwEnc}+OEM+제조사" target="_blank"
+              style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#1D4ED8;color:#fff;font-weight:700">🔎 네이버</a>
             <a href="https://www.tradekorea.com/product/search.do?searchWord=${catKwEnc}" target="_blank"
               style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#059669;color:#fff;font-weight:700">📦 TradeKorea</a>
-            <a href="https://www.onch3.co.kr/search/search.html?query=${catKwEnc}" target="_blank"
-              style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#7C3AED;color:#fff;font-weight:700">🏭 온채널</a>
+            <a href="https://www.domeggook.com" target="_blank"
+              style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#7C3AED;color:#fff;font-weight:700">🏭 도매꾹</a>
             <a href="https://www.ec21.com/product/search/?q=${catKwEnc}+manufacturer" target="_blank"
               style="font-size:0.72rem;padding:4px 10px;border-radius:6px;text-decoration:none;background:#DC2626;color:#fff;font-weight:700">🔍 EC21</a>
             ${p.itemUrl ? `<a href="${p.itemUrl}" target="_blank"
@@ -1753,9 +2010,9 @@ function openSourcing(platform) {
   const kw = getSourceKeyword();
   const kwEnc = encodeURIComponent(kw);
   const urls = {
-    ownerclan:  `https://www.ownerclan.com/search.asp?keyword=${kwEnc}`,
+    naver:  `https://search.naver.com/search.naver?query=${kwEnc}+OEM+제조사`,
     tradekorea: `https://www.tradekorea.com/product/search.do?searchWord=${kwEnc}`,
-    onchannel:  `https://www.onch3.co.kr/search/search.html?query=${kwEnc}`,
+    domeggook:  `https://www.domeggook.com`,
     ec21:       `https://www.ec21.com/product/search/?q=${kwEnc}+korea+manufacturer`,
   };
   window.open(urls[platform] || '#', '_blank');
@@ -1765,10 +2022,7 @@ function searchKoreanSourcing() {
   const kw = getSourceKeyword();
   if (!kw) return;
   const kwEnc = encodeURIComponent(kw);
-  // 한국 전용 3개 사이트 동시 오픈
-  window.open(`https://www.ownerclan.com/search.asp?keyword=${kwEnc}`, '_blank');
-  window.open(`https://www.tradekorea.com/product/search.do?searchWord=${kwEnc}`, '_blank');
-  window.open(`https://www.onch3.co.kr/search/search.html?query=${kwEnc}`, '_blank');
+  window.open(`https://search.naver.com/search.naver?query=${kwEnc}`, '_blank');
 }
 
 function certNav(dir) {
@@ -2038,6 +2292,206 @@ function filterByCategory(name) {
   renderProductTable(filtered.length ? filtered : DEMO_PRODUCTS);
 }
 
+// ──────────────────────────────────────────
+// SHOPEE LIVE DATA
+// ──────────────────────────────────────────
+const SHOPEE_DEMO = [
+  { name:'세럼 앰플 세트 (한국)', price:'S$ 18.90', sold:'2,341', badge:'🔥 베스트', shopUrl:'https://shopee.sg/search?keyword=korean+serum', cat:'K-뷰티' },
+  { name:'쿠션 팩트 BB크림', price:'S$ 14.50', sold:'1,876', badge:'🔥 베스트', shopUrl:'https://shopee.sg/search?keyword=korean+cushion', cat:'K-뷰티' },
+  { name:'마스크팩 10매입', price:'S$ 9.90', sold:'5,120', badge:'↑ 급상승', shopUrl:'https://shopee.sg/search?keyword=korean+mask+pack', cat:'K-뷰티' },
+  { name:'한국 패션 반팔 티셔츠', price:'S$ 22.00', sold:'987', badge:'● 인기', shopUrl:'https://shopee.sg/search?keyword=korean+fashion', cat:'K-패션' },
+  { name:'한국 과자 선물세트', price:'S$ 16.80', sold:'3,210', badge:'🔥 베스트', shopUrl:'https://shopee.sg/search?keyword=korean+snack', cat:'한국식품' },
+  { name:'비타민 콜라겐 젤리', price:'S$ 24.90', sold:'1,543', badge:'↑ 성장중', shopUrl:'https://shopee.sg/search?keyword=korean+collagen', cat:'건강식품' },
+  { name:'스마트폰 케이스 (K-디자인)', price:'S$ 7.90', sold:'4,230', badge:'🔥 베스트', shopUrl:'https://shopee.sg/search?keyword=korean+phone+case', cat:'액세서리' },
+];
+
+function fetchShopeeData(keyword = 'korean beauty', country = 'sg') {
+  const tag  = document.getElementById('shopeeStatusTag');
+  const box  = document.getElementById('shopeeContent');
+  const apiBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:8000' : location.origin;
+
+  tag.textContent = '연결 중...';
+  tag.style.background = '#F59E0B';
+  box.innerHTML = `<div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.84rem;padding:12px 0">
+    <span style="animation:spin 1s linear infinite;display:inline-block">⏳</span>
+    Shopee ${country.toUpperCase()} · "${keyword}" 불러오는 중...
+  </div>`;
+
+  fetch(`${apiBase}/api/shopee?keyword=${encodeURIComponent(keyword)}&country=${country}&limit=20`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.fallback || !data.items || data.items.length === 0) {
+        renderShopeeDemo(keyword, country, '비공식 API 응답 없음 — 데모 데이터 표시');
+        return;
+      }
+      renderShopeeItems(data.items, keyword, country);
+    })
+    .catch(() => {
+      renderShopeeDemo(keyword, country, '서버 미실행 — 데모 데이터 표시');
+    });
+}
+
+function renderShopeeItems(items, keyword, country) {
+  const tag = document.getElementById('shopeeStatusTag');
+  const box = document.getElementById('shopeeContent');
+  const bar = document.getElementById('shopeeKeywordBar');
+
+  tag.textContent = `🟢 LIVE · Shopee ${country.toUpperCase()}`;
+  tag.style.background = '#22C55E';
+  bar.style.display = 'flex';
+
+  const cards = items.slice(0, 12).map(raw => {
+    const item  = raw.item_basic || raw;
+    const name  = (item.name || '').substring(0, 45);
+    const price = item.price ? `S$ ${(item.price / 100000).toFixed(2)}` : '—';
+    const sold  = item.historical_sold ? item.historical_sold.toLocaleString() : (item.sold || '—');
+    const shop  = `https://shopee.${country}/search?keyword=${encodeURIComponent(item.name || keyword)}`;
+    return `
+    <a href="${shop}" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;text-decoration:none;background:var(--surface);transition:box-shadow 0.15s" onmouseover="this.style.boxShadow='0 2px 8px #22c55e33'" onmouseout="this.style.boxShadow=''">
+      <span style="font-size:1.3rem">🛍️</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}</div>
+        <div style="display:flex;gap:8px;margin-top:3px">
+          <span style="font-size:0.7rem;color:#15803D;font-weight:700">${price}</span>
+          <span style="font-size:0.7rem;color:var(--muted)">판매 ${sold}+</span>
+        </div>
+      </div>
+      <span style="font-size:0.65rem;color:#059669;font-weight:700;white-space:nowrap">→ Shopee</span>
+    </a>`;
+  }).join('');
+
+  box.innerHTML = `
+    <div style="font-size:0.75rem;color:var(--muted);margin-bottom:10px">
+      🌏 Shopee <b>${country.toUpperCase()}</b> · 검색어: <b>"${keyword}"</b> · 판매순 TOP ${Math.min(items.length,12)}
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px">${cards}</div>`;
+}
+
+function renderShopeeDemo(keyword, country, reason) {
+  const tag = document.getElementById('shopeeStatusTag');
+  const box = document.getElementById('shopeeContent');
+  const bar = document.getElementById('shopeeKeywordBar');
+
+  tag.textContent = '데모 데이터';
+  tag.style.background = '#6B7280';
+  bar.style.display = 'flex';
+
+  const cards = SHOPEE_DEMO.map(p => `
+    <a href="${p.shopUrl}" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;text-decoration:none;background:var(--surface)">
+      <span style="font-size:1.1rem">🛍️</span>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:0.8rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.name}</div>
+        <div style="display:flex;gap:8px;margin-top:3px">
+          <span style="font-size:0.7rem;color:#15803D;font-weight:700">${p.price}</span>
+          <span style="font-size:0.7rem;color:var(--muted)">판매 ${p.sold}+</span>
+          <span style="font-size:0.65rem;padding:0 5px;background:#F0FDF4;color:#15803D;border-radius:4px;font-weight:700">${p.badge}</span>
+        </div>
+      </div>
+      <span style="font-size:0.65rem;color:#059669;font-weight:700;white-space:nowrap">→ Shopee</span>
+    </a>`).join('');
+
+  box.innerHTML = `
+    <div style="font-size:0.72rem;color:#9CA3AF;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+      <span>ℹ️</span> ${reason} · <a href="https://shopee.sg/search?keyword=korean+beauty" target="_blank" style="color:#22C55E;font-weight:700">Shopee SG 직접 보기 →</a>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px">${cards}</div>`;
+}
+
+// ──────────────────────────────────────────
+// AMAZON PA-API
+// ──────────────────────────────────────────
+function connectAmazon() {
+  const accessKey  = document.getElementById('amzAccessKey')?.value.trim();
+  const secretKey  = document.getElementById('amzSecretKey')?.value.trim();
+  const partnerTag = document.getElementById('amzPartnerTag')?.value.trim();
+  const statusEl   = document.getElementById('amazonApiStatus');
+
+  if (!accessKey || !secretKey || !partnerTag) {
+    if (statusEl) statusEl.textContent = '⚠️ Access Key · Secret Key · Partner Tag 모두 입력해주세요.';
+    return;
+  }
+
+  // 키 저장
+  localStorage.setItem('trybayer_amz_ak', accessKey);
+  localStorage.setItem('trybayer_amz_sk', secretKey);
+  localStorage.setItem('trybayer_amz_pt', partnerTag);
+
+  if (statusEl) statusEl.textContent = '연결 시도 중...';
+  fetchAmazonData('korean beauty', 'www.amazon.com');
+}
+
+function fetchAmazonData(keyword = 'korean beauty', marketplace = 'www.amazon.com') {
+  const ak = localStorage.getItem('trybayer_amz_ak') || document.getElementById('amzAccessKey')?.value.trim();
+  const sk = localStorage.getItem('trybayer_amz_sk') || document.getElementById('amzSecretKey')?.value.trim();
+  const pt = localStorage.getItem('trybayer_amz_pt') || document.getElementById('amzPartnerTag')?.value.trim();
+
+  if (!ak || !sk || !pt) return; // 키 없으면 스킵
+
+  const tag = document.getElementById('amazonStatusTag');
+  const apiBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:8000' : location.origin;
+
+  if (tag) { tag.textContent = '연결 중...'; tag.style.background = '#F59E0B'; }
+
+  const params = new URLSearchParams({
+    accessKey: ak, secretKey: sk, partnerTag: pt,
+    keyword, marketplace
+  });
+
+  fetch(`${apiBase}/api/amazon?${params}`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.needsSetup || data.error) {
+        const statusEl = document.getElementById('amazonApiStatus');
+        if (statusEl) statusEl.textContent = `오류: ${data.error}`;
+        if (tag) { tag.textContent = 'API 오류'; tag.style.background = '#EF4444'; }
+        return;
+      }
+      renderAmazonResults(data, keyword, marketplace);
+    })
+    .catch(() => {
+      const statusEl = document.getElementById('amazonApiStatus');
+      if (statusEl) statusEl.innerHTML = '⚠️ server.py가 실행 중인지 확인해주세요.<br><small>터미널에서: python server.py</small>';
+    });
+}
+
+function renderAmazonResults(data, keyword, marketplace) {
+  const tag = document.getElementById('amazonStatusTag');
+  const liveEl = document.getElementById('amazonLiveResults');
+  const guideEl = document.getElementById('amazonGuide');
+
+  if (tag) { tag.textContent = '🟢 LIVE · Amazon'; tag.style.background = '#3B82F6'; }
+  if (guideEl) guideEl.style.display = 'none';
+  if (liveEl) {
+    liveEl.style.display = '';
+    const items = data.SearchResult?.Items || [];
+    const cards = items.slice(0, 10).map(item => {
+      const title  = (item.ItemInfo?.Title?.DisplayValue || '').substring(0, 50);
+      const price  = item.Offers?.Listings?.[0]?.Price?.DisplayAmount || '가격 미표시';
+      const url    = item.DetailPageURL || '#';
+      const brand  = item.ItemInfo?.ByLineInfo?.Brand?.DisplayValue || '';
+      return `
+      <a href="${url}" target="_blank" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;text-decoration:none;background:var(--surface)">
+        <span style="font-size:1.3rem">📦</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:0.8rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${title}</div>
+          <div style="display:flex;gap:8px;margin-top:3px">
+            <span style="font-size:0.7rem;color:#1D4ED8;font-weight:700">${price}</span>
+            ${brand ? `<span style="font-size:0.7rem;color:var(--muted)">${brand}</span>` : ''}
+          </div>
+        </div>
+        <span style="font-size:0.65rem;color:#1D4ED8;font-weight:700;white-space:nowrap">→ Amazon</span>
+      </a>`;
+    }).join('');
+    liveEl.innerHTML = `
+      <div style="font-size:0.75rem;color:var(--muted);margin-bottom:10px">
+        🌎 <b>${marketplace}</b> · 검색: <b>"${keyword}"</b> · TOP ${Math.min(items.length,10)}
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px">${cards}</div>`;
+  }
+}
+
 // ── 초기 로드: 저장된 키 있으면 자동 연결, 없으면 데모
 (function init() {
   const { key, accessKey } = getSavedKeys();
@@ -2053,6 +2507,19 @@ function filterByCategory(name) {
     document.getElementById('statusText').textContent = '데모 모드';
   }
   document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('ko-KR');
+
+  // Shopee 자동 연결 시도 (키 불필요)
+  setTimeout(() => fetchShopeeData('korean beauty', 'sg'), 800);
+
+  // Amazon 저장된 키 있으면 자동 연결
+  const amzAk = localStorage.getItem('trybayer_amz_ak');
+  const amzSk = localStorage.getItem('trybayer_amz_sk');
+  const amzPt = localStorage.getItem('trybayer_amz_pt');
+  if (amzAk && amzSk && amzPt) {
+    if (document.getElementById('amzAccessKey')) document.getElementById('amzAccessKey').value = amzAk;
+    if (document.getElementById('amzPartnerTag')) document.getElementById('amzPartnerTag').value = amzPt;
+    setTimeout(() => fetchAmazonData('korean beauty', 'www.amazon.com'), 1200);
+  }
 })();
 </script>
 </body>
