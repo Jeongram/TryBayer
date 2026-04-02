@@ -2694,7 +2694,11 @@ function loadDmgMore() {
 
 function fetchDmgPage(key, catName, page, append) {
   const kw = DMG_KEYWORDS[catName] || catName;
-  const url = `/api/domeggook?aid=${encodeURIComponent(key)}&kw=${encodeURIComponent(kw)}&sz=12&pg=${page}&so=ha&org=kr`;
+
+  // 직접 API 호출 URL (CORS 허용 여부에 따라 동작)
+  const directUrl = `https://domeggook.com/ssl/api/?ver=4.1&mode=getItemList&aid=${encodeURIComponent(key)}&market=dome&om=json&kw=${encodeURIComponent(kw)}&sz=12&pg=${page}&so=rd`;
+  // server.py 프록시 URL (로컬 실행 시)
+  const proxyUrl  = `/api/domeggook?aid=${encodeURIComponent(key)}&kw=${encodeURIComponent(kw)}&sz=12&pg=${page}&so=rd`;
 
   const statusEl = document.getElementById('dmgStatusMsg');
   const gridEl   = document.getElementById('dmgProductGrid');
@@ -2703,48 +2707,114 @@ function fetchDmgPage(key, catName, page, append) {
   if (!append) {
     statusEl.style.display = '';
     statusEl.innerHTML = '<span style="opacity:.6">⏳ 도매꾹에서 상품을 불러오는 중...</span>';
-    gridEl.style.display  = 'none';
+    gridEl.style.display   = 'none';
     moreWrap.style.display = 'none';
     gridEl.innerHTML = '';
   } else {
     document.getElementById('dmgMoreBtn').textContent = '⏳ 불러오는 중...';
   }
 
-  fetch(url)
-    .then(r => r.json())
-    .then(data => {
-      const items = (data.list && data.list.item)
-        ? (Array.isArray(data.list.item) ? data.list.item : [data.list.item])
-        : [];
-
-      if (items.length === 0 && !append) {
-        statusEl.innerHTML = '<span style="color:var(--muted)">검색 결과가 없습니다.</span>';
-        return;
-      }
-
-      statusEl.style.display = 'none';
-      gridEl.style.display   = '';
-
-      items.forEach(item => {
-        gridEl.insertAdjacentHTML('beforeend', renderDmgCard(item));
+  // 공통 파싱 함수 — XML / JSON 모두 처리
+  function parseResponse(text) {
+    text = text.trim();
+    // XML 응답인 경우
+    if (text.startsWith('<?xml') || text.startsWith('<domeggook')) {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(text, 'text/xml');
+      const header = doc.querySelector('header');
+      const itemEls = doc.querySelectorAll('item');
+      const items = Array.from(itemEls).map(el => {
+        const g = t => { const n = el.querySelector(t); return n ? n.textContent.trim() : ''; };
+        const deliEl = el.querySelector('deli');
+        return {
+          no:      g('no'),
+          title:   g('title'),
+          price:   g('price'),
+          thumb:   g('thumb'),
+          unitQty: g('unitQty'),
+          nick:    g('nick') || g('id'),
+          url:     g('url'),
+          deli: {
+            who: deliEl ? (deliEl.querySelector('who')?.textContent.trim() || '') : '',
+            fee: deliEl ? (deliEl.querySelector('fee')?.textContent.trim() || '') : '',
+          }
+        };
       });
+      const totalPages = header ? parseInt(header.querySelector('numberOfPages')?.textContent || '1') : 1;
+      return { items, totalPages };
+    }
+    // JSON 응답인 경우
+    const data = JSON.parse(text);
+    // 도매꾹 JSON은 루트가 "domeggook" 또는 직접 list 올 수 있음
+    const root = data.domeggook || data;
+    const listData = root.list || {};
+    const raw = listData.item || [];
+    const items = Array.isArray(raw) ? raw : [raw];
+    const totalPages = (root.header && root.header.numberOfPages) ? root.header.numberOfPages : 1;
+    return { items, totalPages };
+  }
 
-      // 더보기 버튼
-      const totalPages = data.header ? data.header.numberOfPages : 1;
-      if (page < totalPages) {
-        moreWrap.style.display = '';
-        document.getElementById('dmgMoreBtn').textContent = '더보기 ↓';
-      } else {
-        moreWrap.style.display = 'none';
-      }
-    })
-    .catch(err => {
+  function handleSuccess(text) {
+    let parsed;
+    try {
+      parsed = parseResponse(text);
+    } catch(e) {
       if (!append) {
-        statusEl.innerHTML = `<span style="color:#ef4444">❌ 오류: ${err.message}</span><br>
-          <span style="font-size:0.78rem">server.py 가 실행 중인지 확인해주세요 (python server.py)</span>`;
+        statusEl.innerHTML = `<span style="color:#ef4444">❌ 응답 파싱 오류: ${e.message}</span>
+          <details style="margin-top:6px;font-size:0.72rem;color:var(--muted)">
+            <summary>응답 미리보기</summary>
+            <pre style="overflow:auto;max-height:120px">${text.slice(0,400)}</pre>
+          </details>`;
+      }
+      return;
+    }
+    const { items, totalPages } = parsed;
+
+    if (items.length === 0 && !append) {
+      statusEl.innerHTML = '<span style="color:var(--muted)">검색 결과가 없습니다. 다른 카테고리를 시도해보세요.</span>';
+      return;
+    }
+
+    statusEl.style.display = 'none';
+    gridEl.style.display   = '';
+    items.forEach(item => gridEl.insertAdjacentHTML('beforeend', renderDmgCard(item)));
+
+    if (page < totalPages) {
+      moreWrap.style.display = '';
+      document.getElementById('dmgMoreBtn').textContent = '더보기 ↓';
+    } else {
+      moreWrap.style.display = 'none';
+    }
+  }
+
+  function handleError(errMsg, isProxy) {
+    if (isProxy) {
+      // 프록시도 실패 → 최종 오류 표시
+      if (!append) {
+        statusEl.innerHTML = `
+          <div style="color:#ef4444;font-weight:700">❌ 도매꾹 API 연결 실패</div>
+          <div style="font-size:0.78rem;margin-top:6px;color:var(--muted);line-height:1.7">
+            <b>해결 방법:</b><br>
+            1. 터미널에서 <code style="background:var(--surface2);padding:1px 5px;border-radius:4px">python server.py</code> 실행 후 새로고침<br>
+            2. API 키가 올바른지 확인 (현재: ${key.slice(0,8)}...)<br>
+            오류: ${errMsg}
+          </div>`;
       } else {
         document.getElementById('dmgMoreBtn').textContent = '다시 시도 ↓';
       }
+    }
+  }
+
+  // 1단계: 직접 API 호출 시도
+  fetch(directUrl)
+    .then(r => r.text())
+    .then(text => handleSuccess(text))
+    .catch(() => {
+      // 2단계: 직접 실패 → server.py 프록시 시도
+      fetch(proxyUrl)
+        .then(r => r.text())
+        .then(text => handleSuccess(text))
+        .catch(err => handleError(err.message, true));
     });
 }
 
