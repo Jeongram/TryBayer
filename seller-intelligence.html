@@ -247,6 +247,16 @@
       font-size: 0.78rem; color: var(--muted); text-align: center;
       padding: 12px; border-top: 1px solid var(--border); margin-top: 4px;
     }
+    /* ── 도매꾹 카테고리 그룹 ── */
+    .dmg-group { margin-bottom:14px; }
+    .dmg-group-label {
+      font-size:0.7rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+      color:var(--muted); margin-bottom:7px; display:flex; align-items:center; gap:6px;
+    }
+    .dmg-group-label::after {
+      content:''; flex:1; height:1px; background:var(--border);
+    }
+    .dmg-chips { display:flex; gap:6px; flex-wrap:wrap; }
     /* ── 도매꾹 소싱 섹션 ── */
     .dmg-key-bar {
       display:flex; gap:10px; align-items:center; margin-bottom:16px;
@@ -383,18 +393,120 @@
       <button class="dmg-cat-btn reset" onclick="resetDmgKey()" style="font-size:0.72rem;padding:3px 9px">키 변경</button>
     </div>
 
-    <!-- 카테고리 필터 -->
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="dmgCatFilter">
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('스킨케어 / 화장품',this)">🧴 스킨케어</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('건강식품 / 보충제',this)">💊 건강식품</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('여성 패션 / 의류',this)">👗 여성패션</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('게임 / 피규어',this)">🎮 게임/피규어</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('일본 식품 / 과자',this)">🍱 식품/과자</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('생활용품 / 주방',this)">🍳 생활/주방</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('의약품 / 위생용품',this)">🩺 위생용품</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('스마트폰 액세서리',this)">📱 폰 액세서리</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('반려동물 용품',this)">🐾 반려동물</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('스포츠 / 아웃도어',this)">🏃 스포츠</button>
+    <!-- 카테고리 필터 (그룹별) -->
+    <div id="dmgCatFilter" style="margin-bottom:16px">
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">🧴 뷰티 &amp; 헬스</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('스킨케어 / 기초화장품',this)">🧴 스킨케어</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('색조화장품 / 메이크업',this)">💄 색조/메이크업</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('헤어케어 / 샴푸',this)">💇 헤어케어</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('바디케어 / 목욕용품',this)">🛁 바디케어</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('향수 / 방향제',this)">🌸 향수/방향제</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('건강기능식품 / 보충제',this)">💊 건강식품</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('다이어트 / 슬리밍',this)">⚖️ 다이어트</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('의약외품 / 위생용품',this)">🩺 의약외품</button>
+        </div>
+      </div>
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">👗 패션 &amp; 잡화</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('여성 패션 / 의류',this)">👗 여성의류</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('남성 패션 / 의류',this)">👔 남성의류</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('아동 / 유아 의류',this)">🧒 아동의류</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('신발 / 슈즈',this)">👟 신발</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('가방 / 백팩',this)">👜 가방</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('주얼리 / 액세서리',this)">💍 주얼리</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('언더웨어 / 잠옷',this)">🩲 이너웨어</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('모자 / 스카프',this)">🧢 모자/스카프</button>
+        </div>
+      </div>
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">📱 전자 &amp; IT</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('스마트폰 액세서리',this)">📱 폰 액세서리</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('이어폰 / 블루투스 스피커',this)">🎧 이어폰/스피커</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('소형 가전 / 생활가전',this)">🔌 소형가전</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('스마트홈 / IoT',this)">🏠 스마트홈</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('카메라 / 촬영용품',this)">📷 카메라</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('컴퓨터 주변기기',this)">🖱️ PC주변기기</button>
+        </div>
+      </div>
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">🍱 식품 &amp; 음료</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('라면 / 즉석식품',this)">🍜 라면/즉석</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('과자 / 스낵',this)">🍪 과자/스낵</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('음료 / 차 / 커피',this)">☕ 음료/차</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('건강음료 / 건강분말',this)">🥤 건강음료</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('김치 / 장류 / 소스',this)">🌶️ 김치/소스</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('수산물 / 건어물',this)">🐟 수산/건어물</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('정육 / 축산',this)">🥩 정육/축산</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('베이커리 / 떡 / 한과',this)">🍡 베이커리/한과</button>
+        </div>
+      </div>
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">🏠 홈 &amp; 생활</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('주방용품 / 쿡웨어',this)">🍳 주방/쿡웨어</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('생활잡화 / 생활용품',this)">🪣 생활잡화</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('침구 / 수면용품',this)">🛏️ 침구/수면</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('인테리어 / 소품',this)">🖼️ 인테리어</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('청소 / 세탁용품',this)">🧹 청소/세탁</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('수납 / 정리용품',this)">📦 수납/정리</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('욕실용품',this)">🚿 욕실용품</button>
+        </div>
+      </div>
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">🏃 스포츠 &amp; 레저</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('스포츠 / 아웃도어',this)">🏃 스포츠/아웃도어</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('피트니스 / 헬스용품',this)">💪 피트니스</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('등산 / 캠핑용품',this)">⛺ 등산/캠핑</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('골프용품',this)">⛳ 골프</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('수영 / 수상 레저',this)">🏊 수영/레저</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('자전거 / 킥보드',this)">🚴 자전거</button>
+        </div>
+      </div>
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">🎮 취미 &amp; 엔터</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('피규어 / 프라모델',this)">🎮 피규어/프라모델</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('K-팝 굿즈 / 아이돌',this)">🎤 K-팝 굿즈</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('보드게임 / 완구',this)">🎲 보드게임</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('아트 / 공예 / DIY',this)">🎨 아트/공예</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('악기 / 음악용품',this)">🎸 악기</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('낚시 / 캠핑 취미',this)">🎣 낚시</button>
+        </div>
+      </div>
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">🐾 유아 &amp; 반려동물</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('반려동물 용품',this)">🐾 반려동물</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('반려동물 사료 / 간식',this)">🦴 펫 사료/간식</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('유아 / 베이비 용품',this)">👶 유아/베이비</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('아동 완구 / 교육용품',this)">🧸 완구/교육</button>
+        </div>
+      </div>
+
+      <div class="dmg-group">
+        <div class="dmg-group-label">🚗 자동차 &amp; 문구</div>
+        <div class="dmg-chips">
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('자동차 용품 / 튜닝',this)">🚗 자동차용품</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('문구 / 학용품',this)">✏️ 문구/학용품</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('사무용품 / 오피스',this)">📎 사무용품</button>
+          <button class="dmg-cat-btn" onclick="loadDmgProducts('원단 / 부자재',this)">🧵 원단/부자재</button>
+        </div>
+      </div>
+
     </div>
 
     <!-- 상태 메시지 -->
@@ -2630,18 +2742,74 @@ let _dmgCurrentCat  = '';
 let _dmgCurrentPage = 1;
 let _dmgCurrentBtn  = null;
 
-// 카테고리별 검색 키워드 매핑
+// 카테고리별 검색 키워드 매핑 (도매꾹 최적화)
 const DMG_KEYWORDS = {
-  '스킨케어 / 화장품': '화장품',
-  '건강식품 / 보충제': '건강기능식품',
-  '여성 패션 / 의류':  '여성의류',
-  '게임 / 피규어':     '피규어',
-  '일본 식품 / 과자':  '식품',
-  '생활용품 / 주방':   '주방용품',
-  '의약품 / 위생용품': '위생용품',
-  '스마트폰 액세서리': '스마트폰케이스',
-  '반려동물 용품':     '반려동물',
-  '스포츠 / 아웃도어': '스포츠용품',
+  // 뷰티 & 헬스
+  '스킨케어 / 기초화장품':   '스킨케어',
+  '색조화장품 / 메이크업':   '색조화장품',
+  '헤어케어 / 샴푸':         '샴푸',
+  '바디케어 / 목욕용품':     '바디로션',
+  '향수 / 방향제':           '향수',
+  '건강기능식품 / 보충제':   '건강기능식품',
+  '다이어트 / 슬리밍':       '다이어트',
+  '의약외품 / 위생용품':     '위생용품',
+  // 패션 & 잡화
+  '여성 패션 / 의류':        '여성의류',
+  '남성 패션 / 의류':        '남성의류',
+  '아동 / 유아 의류':        '아동의류',
+  '신발 / 슈즈':             '운동화',
+  '가방 / 백팩':             '가방',
+  '주얼리 / 액세서리':       '귀걸이',
+  '언더웨어 / 잠옷':         '속옷',
+  '모자 / 스카프':           '모자',
+  // 전자 & IT
+  '스마트폰 액세서리':       '스마트폰케이스',
+  '이어폰 / 블루투스 스피커':'이어폰',
+  '소형 가전 / 생활가전':    '소형가전',
+  '스마트홈 / IoT':          '스마트홈',
+  '카메라 / 촬영용품':       '카메라',
+  '컴퓨터 주변기기':         '마우스',
+  // 식품 & 음료
+  '라면 / 즉석식품':         '라면',
+  '과자 / 스낵':             '과자',
+  '음료 / 차 / 커피':        '커피',
+  '건강음료 / 건강분말':     '건강음료',
+  '김치 / 장류 / 소스':      '김치',
+  '수산물 / 건어물':         '건어물',
+  '정육 / 축산':             '소고기',
+  '베이커리 / 떡 / 한과':    '떡',
+  // 홈 & 생활
+  '주방용품 / 쿡웨어':       '주방용품',
+  '생활잡화 / 생활용품':     '생활용품',
+  '침구 / 수면용품':         '침대커버',
+  '인테리어 / 소품':         '인테리어소품',
+  '청소 / 세탁용품':         '청소용품',
+  '수납 / 정리용품':         '수납함',
+  '욕실용품':                '욕실용품',
+  // 스포츠 & 레저
+  '스포츠 / 아웃도어':       '스포츠용품',
+  '피트니스 / 헬스용품':     '운동기구',
+  '등산 / 캠핑용품':         '캠핑용품',
+  '골프용품':                '골프용품',
+  '수영 / 수상 레저':        '수영복',
+  '자전거 / 킥보드':         '자전거',
+  // 취미 & 엔터
+  '피규어 / 프라모델':       '피규어',
+  'K-팝 굿즈 / 아이돌':      '아이돌굿즈',
+  '보드게임 / 완구':         '보드게임',
+  '아트 / 공예 / DIY':       '공예재료',
+  '악기 / 음악용품':         '기타',
+  '낚시 / 캠핑 취미':        '낚시용품',
+  // 유아 & 반려
+  '반려동물 용품':            '반려동물',
+  '반려동물 사료 / 간식':    '반려동물사료',
+  '유아 / 베이비 용품':      '유아용품',
+  '아동 완구 / 교육용품':    '장난감',
+  // 자동차 & 문구
+  '자동차 용품 / 튜닝':      '자동차용품',
+  '문구 / 학용품':           '문구',
+  '사무용품 / 오피스':       '사무용품',
+  '원단 / 부자재':           '원단',
 };
 
 function saveDmgKey() {
