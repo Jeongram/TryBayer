@@ -247,6 +247,61 @@
       font-size: 0.78rem; color: var(--muted); text-align: center;
       padding: 12px; border-top: 1px solid var(--border); margin-top: 4px;
     }
+    /* ── 도매꾹 소싱 섹션 ── */
+    .dmg-key-bar {
+      display:flex; gap:10px; align-items:center; margin-bottom:16px;
+      padding:12px 14px; background:var(--surface2); border-radius:10px;
+      border:1px dashed var(--border);
+    }
+    .dmg-key-bar input {
+      flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:8px;
+      font-size:0.85rem; background:var(--bg); color:var(--text); font-family:monospace;
+    }
+    .dmg-key-bar button {
+      padding:8px 16px; border-radius:8px; border:none; font-weight:700;
+      font-size:0.83rem; cursor:pointer; background:var(--primary); color:#fff;
+      white-space:nowrap;
+    }
+    .dmg-key-bar button.reset { background:var(--surface2); color:var(--muted); border:1px solid var(--border); }
+    .dmg-cat-btn {
+      font-size:0.75rem; padding:5px 11px; border-radius:99px; border:1px solid var(--border);
+      background:var(--surface2); color:var(--text); cursor:pointer; font-weight:600;
+      transition:all .15s; white-space:nowrap;
+    }
+    .dmg-cat-btn:hover { border-color:var(--primary); color:var(--primary); }
+    .dmg-cat-btn.active { background:var(--primary); color:#fff; border-color:var(--primary); }
+    .dmg-product-grid {
+      display:grid; grid-template-columns:repeat(auto-fill,minmax(168px,1fr)); gap:12px;
+    }
+    .dmg-card {
+      background:var(--bg); border:1px solid var(--border); border-radius:12px;
+      overflow:hidden; transition:box-shadow .2s, border-color .2s;
+    }
+    .dmg-card:hover { border-color:var(--primary); box-shadow:0 4px 16px rgba(99,102,241,.12); }
+    .dmg-thumb {
+      width:100%; aspect-ratio:1/1; object-fit:cover; background:var(--surface2);
+      display:block;
+    }
+    .dmg-thumb-placeholder {
+      width:100%; aspect-ratio:1/1; background:var(--surface2); display:flex;
+      align-items:center; justify-content:center; font-size:2rem;
+    }
+    .dmg-body { padding:10px 10px 12px; }
+    .dmg-title {
+      font-size:0.78rem; font-weight:700; line-height:1.35;
+      display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+      overflow:hidden; margin-bottom:8px; color:var(--text);
+    }
+    .dmg-price { font-size:0.95rem; font-weight:900; color:var(--primary); margin-bottom:4px; }
+    .dmg-meta { font-size:0.7rem; color:var(--muted); margin-bottom:8px; line-height:1.6; }
+    .dmg-link {
+      display:block; text-align:center; padding:5px 0; border-radius:7px;
+      font-size:0.75rem; font-weight:700; text-decoration:none;
+      background:var(--primary); color:#fff; transition:opacity .15s;
+    }
+    .dmg-link:hover { opacity:.85; }
+    .dmg-shipping-free { color:#16a34a; font-weight:700; }
+    .dmg-status-msg { text-align:center; padding:28px 0; color:var(--muted); font-size:0.9rem; }
   </style>
 </head>
 <body>
@@ -436,6 +491,50 @@
         <!-- JS로 렌더링 -->
       </tbody>
     </table>
+  </div>
+
+  <!-- DOMEGGOOK SOURCING SECTION -->
+  <div class="section-title" style="margin-top:32px">
+    🏭 한국 공장 소싱 <span class="tag">도매꾹 실시간</span>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <!-- API 키 입력 바 -->
+    <div class="dmg-key-bar" id="dmgKeyBar">
+      <span style="font-size:0.82rem;font-weight:700;white-space:nowrap">🔑 도매꾹 API 키</span>
+      <input type="text" id="dmgKeyInput" placeholder="발급받은 API 키를 입력하세요 (예: 22e0289a...)" />
+      <button onclick="saveDmgKey()">저장</button>
+    </div>
+    <div id="dmgKeySet" style="display:none;margin-bottom:12px;font-size:0.8rem;color:var(--muted);display:flex;align-items:center;gap:8px">
+      <span style="color:var(--success);font-weight:700">✅ 도매꾹 API 연결됨</span>
+      <button class="dmg-cat-btn reset" onclick="resetDmgKey()" style="font-size:0.72rem;padding:3px 9px">키 변경</button>
+    </div>
+
+    <!-- 카테고리 필터 -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="dmgCatFilter">
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('스킨케어 / 화장품',this)">🧴 스킨케어</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('건강식품 / 보충제',this)">💊 건강식품</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('여성 패션 / 의류',this)">👗 여성패션</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('게임 / 피규어',this)">🎮 게임/피규어</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('일본 식품 / 과자',this)">🍱 식품/과자</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('생활용품 / 주방',this)">🍳 생활/주방</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('의약품 / 위생용품',this)">🩺 위생용품</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('스마트폰 액세서리',this)">📱 폰 액세서리</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('반려동물 용품',this)">🐾 반려동물</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('스포츠 / 아웃도어',this)">🏃 스포츠</button>
+    </div>
+
+    <!-- 상태 메시지 -->
+    <div id="dmgStatusMsg" class="dmg-status-msg">
+      카테고리를 선택하면 도매꾹 실시간 소싱 상품이 나타납니다
+    </div>
+    <!-- 상품 그리드 -->
+    <div class="dmg-product-grid" id="dmgProductGrid" style="display:none"></div>
+    <!-- 더보기 -->
+    <div id="dmgMoreWrap" style="display:none;text-align:center;margin-top:16px">
+      <button class="dmg-cat-btn" id="dmgMoreBtn" onclick="loadDmgMore()" style="padding:8px 24px">
+        더보기 ↓
+      </button>
+    </div>
   </div>
 
   <!-- MARGIN CALCULATOR -->
@@ -2524,6 +2623,170 @@ function renderAmazonResults(data, keyword, marketplace) {
   }
 }
 
+// ═══════════════════════════════════════════════════
+// 🏭 도매꾹 소싱 기능
+// ═══════════════════════════════════════════════════
+let _dmgCurrentCat  = '';
+let _dmgCurrentPage = 1;
+let _dmgCurrentBtn  = null;
+
+// 카테고리별 검색 키워드 매핑
+const DMG_KEYWORDS = {
+  '스킨케어 / 화장품': '화장품',
+  '건강식품 / 보충제': '건강기능식품',
+  '여성 패션 / 의류':  '여성의류',
+  '게임 / 피규어':     '피규어',
+  '일본 식품 / 과자':  '식품',
+  '생활용품 / 주방':   '주방용품',
+  '의약품 / 위생용품': '위생용품',
+  '스마트폰 액세서리': '스마트폰케이스',
+  '반려동물 용품':     '반려동물',
+  '스포츠 / 아웃도어': '스포츠용품',
+};
+
+function saveDmgKey() {
+  const val = document.getElementById('dmgKeyInput').value.trim();
+  if (!val) { alert('API 키를 입력해주세요.'); return; }
+  localStorage.setItem('trybayer_dmg_key', val);
+  showDmgKeySet(val);
+}
+
+function resetDmgKey() {
+  localStorage.removeItem('trybayer_dmg_key');
+  document.getElementById('dmgKeyBar').style.display = '';
+  document.getElementById('dmgKeySet').style.display  = 'none';
+  document.getElementById('dmgKeyInput').value = '';
+}
+
+function showDmgKeySet(key) {
+  document.getElementById('dmgKeyBar').style.display  = 'none';
+  const setEl = document.getElementById('dmgKeySet');
+  setEl.style.display = 'flex';
+  setEl.style.removeProperty('display'); // flex override
+  setEl.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:12px;font-size:0.8rem;color:var(--muted)';
+}
+
+function loadDmgProducts(catName, btnEl) {
+  const key = localStorage.getItem('trybayer_dmg_key');
+  if (!key) {
+    document.getElementById('dmgStatusMsg').style.display = '';
+    document.getElementById('dmgStatusMsg').innerHTML =
+      '<span style="color:var(--accent)">⚠️ 도매꾹 API 키를 먼저 입력하고 저장해주세요.</span>';
+    document.getElementById('dmgProductGrid').style.display = 'none';
+    document.getElementById('dmgMoreWrap').style.display    = 'none';
+    return;
+  }
+  // 버튼 active 상태
+  if (_dmgCurrentBtn) _dmgCurrentBtn.classList.remove('active');
+  if (btnEl) { btnEl.classList.add('active'); _dmgCurrentBtn = btnEl; }
+
+  _dmgCurrentCat  = catName;
+  _dmgCurrentPage = 1;
+  fetchDmgPage(key, catName, 1, false);
+}
+
+function loadDmgMore() {
+  const key = localStorage.getItem('trybayer_dmg_key');
+  if (!key || !_dmgCurrentCat) return;
+  _dmgCurrentPage++;
+  fetchDmgPage(key, _dmgCurrentCat, _dmgCurrentPage, true);
+}
+
+function fetchDmgPage(key, catName, page, append) {
+  const kw = DMG_KEYWORDS[catName] || catName;
+  const url = `/api/domeggook?aid=${encodeURIComponent(key)}&kw=${encodeURIComponent(kw)}&sz=12&pg=${page}&so=ha&org=kr`;
+
+  const statusEl = document.getElementById('dmgStatusMsg');
+  const gridEl   = document.getElementById('dmgProductGrid');
+  const moreWrap = document.getElementById('dmgMoreWrap');
+
+  if (!append) {
+    statusEl.style.display = '';
+    statusEl.innerHTML = '<span style="opacity:.6">⏳ 도매꾹에서 상품을 불러오는 중...</span>';
+    gridEl.style.display  = 'none';
+    moreWrap.style.display = 'none';
+    gridEl.innerHTML = '';
+  } else {
+    document.getElementById('dmgMoreBtn').textContent = '⏳ 불러오는 중...';
+  }
+
+  fetch(url)
+    .then(r => r.json())
+    .then(data => {
+      const items = (data.list && data.list.item)
+        ? (Array.isArray(data.list.item) ? data.list.item : [data.list.item])
+        : [];
+
+      if (items.length === 0 && !append) {
+        statusEl.innerHTML = '<span style="color:var(--muted)">검색 결과가 없습니다.</span>';
+        return;
+      }
+
+      statusEl.style.display = 'none';
+      gridEl.style.display   = '';
+
+      items.forEach(item => {
+        gridEl.insertAdjacentHTML('beforeend', renderDmgCard(item));
+      });
+
+      // 더보기 버튼
+      const totalPages = data.header ? data.header.numberOfPages : 1;
+      if (page < totalPages) {
+        moreWrap.style.display = '';
+        document.getElementById('dmgMoreBtn').textContent = '더보기 ↓';
+      } else {
+        moreWrap.style.display = 'none';
+      }
+    })
+    .catch(err => {
+      if (!append) {
+        statusEl.innerHTML = `<span style="color:#ef4444">❌ 오류: ${err.message}</span><br>
+          <span style="font-size:0.78rem">server.py 가 실행 중인지 확인해주세요 (python server.py)</span>`;
+      } else {
+        document.getElementById('dmgMoreBtn').textContent = '다시 시도 ↓';
+      }
+    });
+}
+
+function renderDmgCard(item) {
+  const title   = item.title  || '(제목 없음)';
+  const price   = Number(item.price   || 0).toLocaleString();
+  const moq     = item.unitQty || '1';
+  const seller  = item.nick   || item.id || '';
+  const thumb   = item.thumb  || '';
+  const url     = item.url    || '#';
+  const deliWho = item.deli   ? item.deli.who   : '';
+  const deliFee = item.deli   ? item.deli.fee   : '';
+
+  const deliText = deliWho === 'S'
+    ? '<span class="dmg-shipping-free">무료배송</span>'
+    : deliWho === 'P'
+    ? `배송비 ₩${Number(deliFee||0).toLocaleString()} 선결제`
+    : deliWho === 'B'
+    ? `배송비 ₩${Number(deliFee||0).toLocaleString()} 착불`
+    : deliFee ? `배송비 ₩${Number(deliFee).toLocaleString()}` : '';
+
+  const imgEl = thumb
+    ? `<img class="dmg-thumb" src="${thumb}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+    : '';
+  const placeholderEl = `<div class="dmg-thumb-placeholder" style="${thumb?'display:none':''}">🏭</div>`;
+
+  return `
+  <div class="dmg-card">
+    ${imgEl}${placeholderEl}
+    <div class="dmg-body">
+      <div class="dmg-title">${title}</div>
+      <div class="dmg-price">₩${price}</div>
+      <div class="dmg-meta">
+        최소수량: <b>${moq}개</b><br>
+        ${deliText ? deliText + '<br>' : ''}
+        ${seller ? '판매자: ' + seller : ''}
+      </div>
+      <a class="dmg-link" href="${url}" target="_blank" rel="noopener">도매꾹 보기 →</a>
+    </div>
+  </div>`;
+}
+
 // ── 초기 로드: 저장된 키 있으면 자동 연결, 없으면 데모
 (function init() {
   const { key, accessKey } = getSavedKeys();
@@ -2539,6 +2802,13 @@ function renderAmazonResults(data, keyword, marketplace) {
     document.getElementById('statusText').textContent = '데모 모드';
   }
   document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('ko-KR');
+
+  // 도매꾹 저장된 키 있으면 UI 표시
+  const dmgKey = localStorage.getItem('trybayer_dmg_key');
+  if (dmgKey) {
+    document.getElementById('dmgKeyInput').value = dmgKey;
+    showDmgKeySet(dmgKey);
+  }
 
   // Shopee 자동 연결 시도 (키 불필요)
   setTimeout(() => fetchShopeeData('korean beauty', 'sg'), 800);

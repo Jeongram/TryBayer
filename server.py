@@ -32,6 +32,9 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         # ── /api/amazon → Amazon PA-API 프록시
         elif self.path.startswith('/api/amazon'):
             self.proxy_amazon()
+        # ── /api/domeggook → 도매꾹 상품조회 API 프록시
+        elif self.path.startswith('/api/domeggook'):
+            self.proxy_domeggook()
         else:
             # 정적 파일 서빙 (HTML, CSS, JS 등)
             super().do_GET()
@@ -235,6 +238,70 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             req.add_header('Authorization', authorization)
 
             with urllib.request.urlopen(req, timeout=15) as res:
+                raw = res.read()
+
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(raw)
+
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode('utf-8', errors='ignore')
+            self.send_response(e.code)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(err_body.encode())
+
+        except Exception as e:
+            self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': str(e)}).encode())
+
+    def proxy_domeggook(self):
+        """도매꾹 OpenAPI 상품조회 프록시 (ver 4.1)"""
+        try:
+            parsed = urllib.parse.urlparse(self.path)
+            params = urllib.parse.parse_qs(parsed.query)
+
+            api_key = params.get('aid', [''])[0]
+            keyword = params.get('kw', [''])[0]
+            size    = params.get('sz', ['20'])[0]
+            page    = params.get('pg', ['1'])[0]
+            sort    = params.get('so', ['rd'])[0]
+            org     = params.get('org', [''])[0]   # kr=국내산, fr=국외산
+            market  = params.get('market', ['dome'])[0]
+
+            if not api_key:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'aid(API Key) 가 필요합니다.', 'needsSetup': True}).encode())
+                return
+
+            # 도매꾹 API URL 구성
+            url = (
+                f"https://domeggook.com/ssl/api/"
+                f"?ver=4.1&mode=getItemList"
+                f"&aid={urllib.parse.quote(api_key)}"
+                f"&market={market}"
+                f"&om=json"
+                f"&sz={size}&pg={page}&so={sort}"
+            )
+            if keyword:
+                url += f"&kw={urllib.parse.quote(keyword)}"
+            if org:
+                url += f"&org={org}"
+
+            req = urllib.request.Request(url)
+            req.add_header('User-Agent', 'TryBayer/1.0')
+            req.add_header('Accept', 'application/json')
+
+            with urllib.request.urlopen(req, timeout=12) as res:
                 raw = res.read()
 
             self.send_response(200)
