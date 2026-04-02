@@ -367,6 +367,50 @@
     </div>
   </div>
 
+  <!-- DOMEGGOOK SOURCING SECTION -->
+  <div class="section-title" style="margin-top:28px">
+    🏭 한국 공장 소싱 <span class="tag">도매꾹 실시간</span>
+  </div>
+  <div class="card" style="margin-bottom:20px">
+    <!-- API 키 입력 바 -->
+    <div class="dmg-key-bar" id="dmgKeyBar">
+      <span style="font-size:0.82rem;font-weight:700;white-space:nowrap">🔑 도매꾹 API 키</span>
+      <input type="text" id="dmgKeyInput" placeholder="발급받은 API 키를 입력하세요 (예: 22e0289a...)" />
+      <button onclick="saveDmgKey()">저장</button>
+    </div>
+    <div id="dmgKeySet" style="display:none;margin-bottom:12px;font-size:0.8rem;color:var(--muted);display:flex;align-items:center;gap:8px">
+      <span style="color:var(--success);font-weight:700">✅ 도매꾹 API 연결됨</span>
+      <button class="dmg-cat-btn reset" onclick="resetDmgKey()" style="font-size:0.72rem;padding:3px 9px">키 변경</button>
+    </div>
+
+    <!-- 카테고리 필터 -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="dmgCatFilter">
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('스킨케어 / 화장품',this)">🧴 스킨케어</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('건강식품 / 보충제',this)">💊 건강식품</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('여성 패션 / 의류',this)">👗 여성패션</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('게임 / 피규어',this)">🎮 게임/피규어</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('일본 식품 / 과자',this)">🍱 식품/과자</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('생활용품 / 주방',this)">🍳 생활/주방</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('의약품 / 위생용품',this)">🩺 위생용품</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('스마트폰 액세서리',this)">📱 폰 액세서리</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('반려동물 용품',this)">🐾 반려동물</button>
+      <button class="dmg-cat-btn" onclick="loadDmgProducts('스포츠 / 아웃도어',this)">🏃 스포츠</button>
+    </div>
+
+    <!-- 상태 메시지 -->
+    <div id="dmgStatusMsg" class="dmg-status-msg">
+      카테고리를 선택하면 도매꾹 실시간 소싱 상품이 나타납니다
+    </div>
+    <!-- 상품 그리드 -->
+    <div class="dmg-product-grid" id="dmgProductGrid" style="display:none"></div>
+    <!-- 더보기 -->
+    <div id="dmgMoreWrap" style="display:none;text-align:center;margin-top:16px">
+      <button class="dmg-cat-btn" id="dmgMoreBtn" onclick="loadDmgMore()" style="padding:8px 24px">
+        더보기 ↓
+      </button>
+    </div>
+  </div>
+
   <!-- CATEGORY RANKING + CHART -->
   <div class="section-title">🌏 글로벌 카테고리 랭킹 <span class="tag">JP · 동남아 · 아마존</span></div>
   <div class="tabs">
@@ -491,50 +535,6 @@
         <!-- JS로 렌더링 -->
       </tbody>
     </table>
-  </div>
-
-  <!-- DOMEGGOOK SOURCING SECTION -->
-  <div class="section-title" style="margin-top:32px">
-    🏭 한국 공장 소싱 <span class="tag">도매꾹 실시간</span>
-  </div>
-  <div class="card" style="margin-bottom:20px">
-    <!-- API 키 입력 바 -->
-    <div class="dmg-key-bar" id="dmgKeyBar">
-      <span style="font-size:0.82rem;font-weight:700;white-space:nowrap">🔑 도매꾹 API 키</span>
-      <input type="text" id="dmgKeyInput" placeholder="발급받은 API 키를 입력하세요 (예: 22e0289a...)" />
-      <button onclick="saveDmgKey()">저장</button>
-    </div>
-    <div id="dmgKeySet" style="display:none;margin-bottom:12px;font-size:0.8rem;color:var(--muted);display:flex;align-items:center;gap:8px">
-      <span style="color:var(--success);font-weight:700">✅ 도매꾹 API 연결됨</span>
-      <button class="dmg-cat-btn reset" onclick="resetDmgKey()" style="font-size:0.72rem;padding:3px 9px">키 변경</button>
-    </div>
-
-    <!-- 카테고리 필터 -->
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px" id="dmgCatFilter">
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('스킨케어 / 화장품',this)">🧴 스킨케어</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('건강식품 / 보충제',this)">💊 건강식품</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('여성 패션 / 의류',this)">👗 여성패션</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('게임 / 피규어',this)">🎮 게임/피규어</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('일본 식품 / 과자',this)">🍱 식품/과자</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('생활용품 / 주방',this)">🍳 생활/주방</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('의약품 / 위생용품',this)">🩺 위생용품</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('스마트폰 액세서리',this)">📱 폰 액세서리</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('반려동물 용품',this)">🐾 반려동물</button>
-      <button class="dmg-cat-btn" onclick="loadDmgProducts('스포츠 / 아웃도어',this)">🏃 스포츠</button>
-    </div>
-
-    <!-- 상태 메시지 -->
-    <div id="dmgStatusMsg" class="dmg-status-msg">
-      카테고리를 선택하면 도매꾹 실시간 소싱 상품이 나타납니다
-    </div>
-    <!-- 상품 그리드 -->
-    <div class="dmg-product-grid" id="dmgProductGrid" style="display:none"></div>
-    <!-- 더보기 -->
-    <div id="dmgMoreWrap" style="display:none;text-align:center;margin-top:16px">
-      <button class="dmg-cat-btn" id="dmgMoreBtn" onclick="loadDmgMore()" style="padding:8px 24px">
-        더보기 ↓
-      </button>
-    </div>
   </div>
 
   <!-- MARGIN CALCULATOR -->
