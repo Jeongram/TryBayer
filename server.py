@@ -188,6 +188,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
 
             req = urllib.request.Request(search_url)
             req.add_header('User-Agent', 'TryBayer/1.0')
+            req.add_header('Referer', 'https://trybayer.onrender.com/')
 
             with urllib.request.urlopen(req, timeout=10) as res:
                 data = res.read()
