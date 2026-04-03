@@ -1896,10 +1896,88 @@ const RAKUTEN_GENRE_IDS = Object.fromEntries(Object.entries(RAKUTEN_GENRE_MAP).m
 // 카테고리별 실시간 라쿠텐 데이터 저장소
 let _liveJPData = {};  // { catName: { itemName, itemPrice, itemUrl, thumb, rank } }
 
+// ── 라쿠텐 장르 자동 탐색 ──────────────────────────────────────
+// 한국 카테고리명 → 일본어 매칭 키워드
+const GENRE_MATCH_TERMS = {
+  '스킨케어 / 화장품':    ['スキンケア', '基礎化粧品'],
+  '색조화장품 / 메이크업': ['メイクアップ', 'メイク'],
+  '헤어케어 / 샴푸':       ['ヘアケア', 'シャンプー'],
+  'K-팝 굿즈':            ['K-POP', 'アイドル', 'K-POPグッズ'],
+  '건강식품 / 보충제':     ['サプリ', '健康食品', 'プロテイン'],
+  '여성 패션 / 의류':      ['レディース'],
+  '게임 / 피규어':         ['フィギュア', 'プラモデル'],
+  '일본 식품 / 과자':      ['スイーツ', 'お菓子', '和菓子'],
+  '생활용품 / 주방':       ['キッチン用品', '調理器具', '食器'],
+  '의약품 / 위생용품':     ['医薬品', 'マスク', '消毒'],
+  '스마트폰 액세서리':     ['スマートフォン', 'スマホ'],
+  '반려동물 용품':         ['ペット'],
+  '스포츠 / 아웃도어':     ['スポーツ', 'アウトドア'],
+  '남성 패션 / 의류':      ['メンズ'],
+  '주얼리 / 액세서리':     ['アクセサリー', 'ジュエリー'],
+  '이어폰 / 스피커':       ['イヤホン', 'ヘッドホン', 'スピーカー'],
+  '침구 / 수면용품':       ['布団', '寝具', '枕', 'ベッド'],
+  '바디케어 / 목욕용품':   ['ボディケア', '入浴剤', 'ボディソープ'],
+  '유아 / 베이비 용품':    ['ベビー', '赤ちゃん', 'キッズ'],
+  '인테리어 / 소품':       ['インテリア', '雑貨', 'デコレーション'],
+};
+
+// 탐색된 장르 ID 캐시
+let _discoveredGenreIds = {};
+
+async function autoDiscoverGenres(appId) {
+  try {
+    // 1단계: 최상위 장르 목록 가져오기
+    const topRes  = await fetch(`/api/genre?applicationId=${encodeURIComponent(appId)}&genreId=0`);
+    const topData = await topRes.json();
+    const topGenres = topData.children || [];
+
+    // 2단계: 각 최상위 장르의 하위 장르 가져오기 (병렬)
+    const subGenrePromises = topGenres.map(async g => {
+      try {
+        const r = await fetch(`/api/genre?applicationId=${encodeURIComponent(appId)}&genreId=${g.genreId}`);
+        const d = await r.json();
+        return { parent: g, children: d.children || [] };
+      } catch { return { parent: g, children: [] }; }
+    });
+    const allGenres = await Promise.all(subGenrePromises);
+
+    // 모든 장르 (최상위 + 하위) 평탄화
+    const flatGenres = [];
+    for (const { parent, children } of allGenres) {
+      flatGenres.push(parent);
+      flatGenres.push(...children);
+    }
+
+    // 3단계: 한국 카테고리 ↔ 일본 장르 매칭
+    for (const [catName, terms] of Object.entries(GENRE_MATCH_TERMS)) {
+      for (const g of flatGenres) {
+        const name = g.genreName || '';
+        if (terms.some(t => name.includes(t))) {
+          _discoveredGenreIds[catName] = String(g.genreId);
+          break;
+        }
+      }
+    }
+
+    console.log('✅ 장르 자동탐색 완료:', _discoveredGenreIds);
+    return _discoveredGenreIds;
+  } catch(e) {
+    console.warn('장르 탐색 실패, 기본값 사용:', e.message);
+    return {};
+  }
+}
+
 // ── 라쿠텐 카테고리 실시간 랭킹 로딩 ──────────────────────────
 async function loadRealJPRankings(appId, accessKey) {
-  const fetched = {};  // cacheKey → items (중복 API 호출 방지)
+  const fetched = {};
   const tag = document.getElementById('jpRankTag');
+  if (tag) { tag.textContent = '🔴 장르 탐색중...'; tag.style.background = '#F59E0B'; }
+
+  // 장르 자동탐색 먼저 실행 (이미 탐색된 경우 스킵)
+  if (Object.keys(_discoveredGenreIds).length === 0) {
+    await autoDiscoverGenres(appId);
+  }
+
   if (tag) { tag.textContent = '🔴 LIVE 로딩중...'; tag.style.background = '#EF4444'; }
 
   let loaded = 0;
@@ -1907,7 +1985,8 @@ async function loadRealJPRankings(appId, accessKey) {
 
   for (const cat of DEMO_CATEGORIES) {
     const mapping  = RAKUTEN_GENRE_MAP[cat.name] || {};
-    const genreId  = mapping.genreId || '';
+    // 자동탐색 ID 우선, 없으면 하드코딩 fallback
+    const genreId  = _discoveredGenreIds[cat.name] || mapping.genreId || '';
     const keyword  = mapping.keyword || '';
     // keyword 있으면 검색 API, 없으면 랭킹 API (genreId 기준)
     const useSearch = keyword.length > 0;

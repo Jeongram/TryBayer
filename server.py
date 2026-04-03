@@ -29,6 +29,9 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         # ── /api/search → 라쿠텐 상품검색 API 프록시
         elif self.path.startswith('/api/search'):
             self.proxy_rakuten_search()
+        # ── /api/genre → 라쿠텐 장르 탐색 API 프록시
+        elif self.path.startswith('/api/genre'):
+            self.proxy_rakuten_genre()
         # ── /api/shopee → Shopee 비공식 프론트엔드 API 프록시
         elif self.path.startswith('/api/shopee'):
             self.proxy_shopee()
@@ -84,6 +87,53 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 data = res.read()
 
             # CORS 헤더 추가 후 응답
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json; charset=utf-8')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(data)
+
+        except urllib.error.HTTPError as e:
+            err_body = e.read().decode('utf-8', errors='ignore')
+            self.send_response(e.code)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(err_body.encode())
+
+        except Exception as e:
+            self.send_response(500)
+            self.send_header('Content-Type', 'application/json')
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            self.wfile.write(json.dumps({'error': str(e)}).encode())
+
+    def proxy_rakuten_genre(self):
+        """라쿠텐 장르 탐색 API 프록시 (applicationId만 필요)"""
+        try:
+            parsed = urllib.parse.urlparse(self.path)
+            params = urllib.parse.parse_qs(parsed.query)
+            app_id   = params.get('applicationId', [''])[0]
+            genre_id = params.get('genreId', ['0'])[0]
+
+            if not app_id:
+                self.send_response(400)
+                self.send_header('Content-Type', 'application/json')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(json.dumps({'error': 'applicationId 필요'}).encode())
+                return
+
+            url = (
+                f"https://app.rakuten.co.jp/services/api/IchibaGenre/Search/20120723"
+                f"?format=json&applicationId={urllib.parse.quote(app_id)}&genreId={genre_id}"
+            )
+            req = urllib.request.Request(url)
+            req.add_header('User-Agent', 'TryBayer/1.0')
+
+            with urllib.request.urlopen(req, timeout=10) as res:
+                data = res.read()
+
             self.send_response(200)
             self.send_header('Content-Type', 'application/json; charset=utf-8')
             self.send_header('Access-Control-Allow-Origin', '*')
