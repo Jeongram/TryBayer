@@ -1876,7 +1876,7 @@ const RAKUTEN_GENRE_MAP = {
   '스킨케어 / 화장품':    { genreId: '100944', keyword: '' }, // スキンケア (시트마스크・화장수)
   '색조화장품 / 메이크업': { genreId: '204233', keyword: '' }, // ベースメイク・メイクアップ
   '헤어케어 / 샴푸':       { genreId: '100940', keyword: '' }, // ヘアケア・スタイリング
-  '세제 / 청소용품':       { genreId: '100656', keyword: '' }, // 掃除用品 (스폰지・청소용품)
+  '세제 / 청소용품':       { genreId: '216011', keyword: '' }, // 洗剤・柔軟剤・クリーナー (세탁세제/유연제)
   '건강식품 / 보충제':     { genreId: '100938', keyword: '' }, // ダイエット・健康
   '여성 패션 / 의류':      { genreId: '100371', keyword: '' }, // レディースファッション
   '게임 / 피규어':         { genreId: '101165', keyword: '' }, // コレクション (フィギュア・ドラゴンボール等)
@@ -3253,89 +3253,4 @@ function fetchDmgPage(key, catName, page, append) {
     .then(r => r.text())
     .then(text => handleSuccess(text))
     .catch(() => {
-      // 2단계: 직접 실패 → server.py 프록시 시도
-      fetch(proxyUrl)
-        .then(r => r.text())
-        .then(text => handleSuccess(text))
-        .catch(err => handleError(err.message, true));
-    });
-}
-
-function renderDmgCard(item) {
-  const title   = item.title  || '(제목 없음)';
-  const price   = Number(item.price   || 0).toLocaleString();
-  const moq     = item.unitQty || '1';
-  const seller  = item.nick   || item.id || '';
-  const thumb   = item.thumb  || '';
-  const url     = item.url    || '#';
-  const deliWho = item.deli   ? item.deli.who   : '';
-  const deliFee = item.deli   ? item.deli.fee   : '';
-
-  const deliText = deliWho === 'S'
-    ? '<span class="dmg-shipping-free">무료배송</span>'
-    : deliWho === 'P'
-    ? `배송비 ₩${Number(deliFee||0).toLocaleString()} 선결제`
-    : deliWho === 'B'
-    ? `배송비 ₩${Number(deliFee||0).toLocaleString()} 착불`
-    : deliFee ? `배송비 ₩${Number(deliFee).toLocaleString()}` : '';
-
-  const imgEl = thumb
-    ? `<img class="dmg-thumb" src="${thumb}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
-    : '';
-  const placeholderEl = `<div class="dmg-thumb-placeholder" style="${thumb?'display:none':''}">🏭</div>`;
-
-  return `
-  <div class="dmg-card">
-    ${imgEl}${placeholderEl}
-    <div class="dmg-body">
-      <div class="dmg-title">${title}</div>
-      <div class="dmg-price">₩${price}</div>
-      <div class="dmg-meta">
-        최소수량: <b>${moq}개</b><br>
-        ${deliText ? deliText + '<br>' : ''}
-        ${seller ? '판매자: ' + seller : ''}
-      </div>
-      <a class="dmg-link" href="${url}" target="_blank" rel="noopener">도매꾹 보기 →</a>
-    </div>
-  </div>`;
-}
-
-// ── 초기 로드: 저장된 키 있으면 자동 연결, 없으면 데모
-(function init() {
-  const { key, accessKey } = getSavedKeys();
-  if (key && accessKey) {
-    // 저장된 키로 자동 연결 시도
-    connectAPI(true);
-    renderRankList(DEMO_CATEGORIES); // 연결 중 임시 렌더
-    renderTrendChart(DEMO_CATEGORIES);
-  } else {
-    // 키 없으면 데모 + 배너 표시
-    loadDemo();
-    document.getElementById('demoBanner').style.display = '';
-    document.getElementById('statusText').textContent = '데모 모드';
-  }
-  document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('ko-KR');
-
-  // 도매꾹 저장된 키 있으면 UI 표시
-  const dmgKey = localStorage.getItem('trybayer_dmg_key');
-  if (dmgKey) {
-    document.getElementById('dmgKeyInput').value = dmgKey;
-    showDmgKeySet(dmgKey);
-  }
-
-  // Shopee 자동 연결 시도 (키 불필요)
-  setTimeout(() => fetchShopeeData('korean beauty', 'sg'), 800);
-
-  // Amazon 저장된 키 있으면 자동 연결
-  const amzAk = localStorage.getItem('trybayer_amz_ak');
-  const amzSk = localStorage.getItem('trybayer_amz_sk');
-  const amzPt = localStorage.getItem('trybayer_amz_pt');
-  if (amzAk && amzSk && amzPt) {
-    if (document.getElementById('amzAccessKey')) document.getElementById('amzAccessKey').value = amzAk;
-    if (document.getElementById('amzPartnerTag')) document.getElementById('amzPartnerTag').value = amzPt;
-    setTimeout(() => fetchAmazonData('korean beauty', 'www.amazon.com'), 1200);
-  }
-})();
-</script>
-</body>
-</html>
+      // 2단계: 직접 실패 → server.py 프록시 시도
