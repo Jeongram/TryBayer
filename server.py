@@ -448,8 +448,11 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(json.dumps({'error': str(e)}).encode())
 
     def log_message(self, format, *args):
-        # 깔끔한 로그 출력
-        print(f"  {args[0]} {args[1]}")
+        # 깔끔한 로그 출력 (args 개수 안전하게 처리)
+        try:
+            print(f"  {' '.join(str(a) for a in args)}")
+        except Exception:
+            pass
 
 
 if __name__ == '__main__':
