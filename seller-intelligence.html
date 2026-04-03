@@ -1864,6 +1864,89 @@ const DEMO_PRODUCTS = [
 ];
 
 // ──────────────────────────────────────────
+// 🇯🇵 라쿠텐 장르 ID 매핑 (실제 API 카테고리)
+// ──────────────────────────────────────────
+const RAKUTEN_GENRE_IDS = {
+  '스킨케어 / 화장품':    '100533',  // コスメ・美容
+  '색조화장품 / 메이크업': '100533',  // コスメ・美容
+  '헤어케어 / 샴푸':       '100533',  // コスメ・美容 (하위)
+  'K-팝 굿즈':            '100895',  // おもちゃ・ホビー・ゲーム
+  '건강식품 / 보충제':     '100804',  // ダイエット・健康
+  '여성 패션 / 의류':      '100371',  // レディースファッション
+  '게임 / 피규어':         '100895',  // おもちゃ・ホビー・ゲーム
+  '일본 식품 / 과자':      '551167',  // スイーツ・お菓子
+  '생활용품 / 주방':       '215104',  // インテリア・寝具・収納
+  '의약품 / 위생용품':     '100433',  // 医薬品・介護・美容・ダイエット
+  '스마트폰 액세서리':     '215099',  // スマートフォン・タブレット
+  '반려동물 용품':         '215783',  // ペット・ペットグッズ
+  '스포츠 / 아웃도어':     '100316',  // スポーツ・アウトドア
+  '남성 패션 / 의류':      '551177',  // メンズファッション
+  '주얼리 / 액세서리':     '100039',  // アクセサリー・ジュエリー
+  '이어폰 / 스피커':       '100938',  // 家電
+  '침구 / 수면용품':       '215104',  // インテリア・寝具・収納
+  '바디케어 / 목욕용품':   '100533',  // コスメ・美容 (하위)
+  '유아 / 베이비 용품':    '558885',  // ベビー・キッズ
+  '인테리어 / 소품':       '215104',  // インテリア・寝具・収納
+};
+
+// 카테고리별 실시간 라쿠텐 데이터 저장소
+let _liveJPData = {};  // { catName: { itemName, itemPrice, itemUrl, thumb, rank } }
+
+// ── 라쿠텐 카테고리 실시간 랭킹 로딩 ──────────────────────────
+async function loadRealJPRankings(appId, accessKey) {
+  // 중복 장르ID는 한 번만 호출
+  const fetched = {};
+  const tag = document.getElementById('jpRankTag');
+  if (tag) { tag.textContent = '🔴 LIVE 로딩중...'; tag.style.background = '#EF4444'; }
+
+  let loaded = 0;
+  const total = DEMO_CATEGORIES.length;
+
+  for (const cat of DEMO_CATEGORIES) {
+    const genreId = RAKUTEN_GENRE_IDS[cat.name] || '';
+    const cacheKey = genreId || '_all_';
+
+    try {
+      let items;
+      if (fetched[cacheKey]) {
+        items = fetched[cacheKey];
+      } else {
+        const url = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=5${genreId ? '&genreId=' + genreId : ''}`;
+        const res = await fetch(url);
+        const data = await res.json();
+        items = data.Items || [];
+        fetched[cacheKey] = items;
+        // 라쿠텐 API 부하 방지 (300ms 간격)
+        await new Promise(r => setTimeout(r, 300));
+      }
+
+      if (items.length > 0) {
+        const top = items[0];
+        // formatVersion=2 이면 바로 필드, 아니면 .Item 중첩
+        const item = top.Item || top;
+        _liveJPData[cat.name] = {
+          itemName:  item.itemName  || '',
+          itemPrice: item.itemPrice || 0,
+          itemUrl:   item.itemUrl   || '',
+          thumb:     (item.smallImageUrls && item.smallImageUrls[0]) ? item.smallImageUrls[0].imageUrl || item.smallImageUrls[0] : '',
+          rank:      item.rank || 1,
+        };
+      }
+    } catch(e) {
+      console.warn('라쿠텐 랭킹 로드 실패:', cat.name, e.message);
+    }
+
+    loaded++;
+    if (tag) tag.textContent = `🔴 LIVE ${loaded}/${total}`;
+    // 화면 업데이트
+    renderRankList(DEMO_CATEGORIES);
+  }
+
+  if (tag) { tag.textContent = '🔴 LIVE'; tag.style.background = '#EF4444'; }
+  document.getElementById('updateSub').textContent = '라쿠텐 실시간';
+}
+
+// ──────────────────────────────────────────
 // RENDER FUNCTIONS
 // ──────────────────────────────────────────
 let trendChart = null;
@@ -1874,32 +1957,50 @@ function renderRankList(categories) {
   const el = document.getElementById('rankList');
   el.innerHTML = categories.map(c => {
     const marginColor = c.margin >= 40 ? 'var(--success)' : c.margin >= 30 ? 'var(--accent)' : 'var(--muted)';
+    const live = _liveJPData[c.name];
+
+    // 실시간 데이터 섹션 (있을 때만)
+    const liveHtml = live ? `
+      <div style="margin-top:5px;padding:5px 7px;background:linear-gradient(90deg,#FFF8F0,#fff);border-left:2px solid #FB923C;border-radius:0 6px 6px 0">
+        <div style="font-size:0.62rem;color:#C2410C;font-weight:700;margin-bottom:2px">🔴 라쿠텐 실시간 1위</div>
+        <div style="font-size:0.72rem;font-weight:600;color:var(--text);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${live.itemName}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+          <span style="font-size:0.78rem;font-weight:800;color:#C2410C">¥${Number(live.itemPrice).toLocaleString()}</span>
+          <a href="${live.itemUrl}" target="_blank" rel="noopener"
+            style="font-size:0.6rem;padding:1px 6px;background:#FB923C;color:#fff;border-radius:99px;text-decoration:none;font-weight:700">보기 →</a>
+        </div>
+      </div>` : `
+      <div style="margin-top:4px;font-size:0.62rem;color:var(--muted);font-style:italic">— 라쿠텐 API 연결 후 실시간 표시 —</div>`;
+
     return `
-    <div class="rank-item" style="cursor:default;padding:8px 4px">
-      <span class="rank-num ${c.rank<=3?'top':''}">${c.rank}</span>
-      <span class="rank-icon" style="font-size:1.1rem">${c.icon}</span>
-      <div class="rank-info" style="flex:1;min-width:0">
-        <div class="rank-name" style="font-size:0.82rem">${c.name}</div>
-        <div style="display:flex;gap:4px;margin-top:3px;flex-wrap:wrap">
-          <span style="font-size:0.63rem;padding:1px 6px;border-radius:99px;background:#FFF8F0;color:#C2410C;border:1px solid #FB923C;font-weight:700;white-space:nowrap">${c.badgeText}</span>
+    <div class="rank-item" style="cursor:default;padding:8px 4px;flex-wrap:wrap">
+      <div style="display:flex;align-items:flex-start;width:100%">
+        <span class="rank-num ${c.rank<=3?'top':''}">${c.rank}</span>
+        <span class="rank-icon" style="font-size:1.1rem">${c.icon}</span>
+        <div class="rank-info" style="flex:1;min-width:0">
+          <div class="rank-name" style="font-size:0.82rem">${c.name}</div>
+          <div style="display:flex;gap:4px;margin-top:3px;flex-wrap:wrap">
+            <span style="font-size:0.63rem;padding:1px 6px;border-radius:99px;background:#FFF8F0;color:#C2410C;border:1px solid #FB923C;font-weight:700;white-space:nowrap">${c.badgeText}</span>
+          </div>
+          <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
+            <span onclick="openFactoryModal('${c.name}','${c.icon}','factory')"
+              style="font-size:0.63rem;color:var(--primary);font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid var(--primary);border-radius:4px;background:var(--surface)">🏭 공장</span>
+            <span onclick="openFactoryModal('${c.name}','${c.icon}','cert')"
+              style="font-size:0.63rem;color:#D97706;font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid #D97706;border-radius:4px;background:var(--surface)">🇯🇵 인증</span>
+            <span onclick="openFactoryModal('${c.name}','${c.icon}','certguide')"
+              style="font-size:0.63rem;color:#0891b2;font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid #0891b2;border-radius:4px;background:var(--surface)">📋 취득법</span>
+            <span onclick="openFactoryModal('${c.name}','${c.icon}','partner')"
+              style="font-size:0.63rem;color:#059669;font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid #059669;border-radius:4px;background:var(--surface)">🤝 파트너</span>
+          </div>
         </div>
-        <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
-          <span onclick="openFactoryModal('${c.name}','${c.icon}','factory')"
-            style="font-size:0.63rem;color:var(--primary);font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid var(--primary);border-radius:4px;background:var(--surface)">🏭 공장</span>
-          <span onclick="openFactoryModal('${c.name}','${c.icon}','cert')"
-            style="font-size:0.63rem;color:#D97706;font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid #D97706;border-radius:4px;background:var(--surface)">🇯🇵 인증</span>
-          <span onclick="openFactoryModal('${c.name}','${c.icon}','certguide')"
-            style="font-size:0.63rem;color:#0891b2;font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid #0891b2;border-radius:4px;background:var(--surface)">📋 취득법</span>
-          <span onclick="openFactoryModal('${c.name}','${c.icon}','partner')"
-            style="font-size:0.63rem;color:#059669;font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid #059669;border-radius:4px;background:var(--surface)">🤝 파트너</span>
+        <div style="text-align:right;margin-left:6px;flex-shrink:0">
+          <div style="font-size:0.62rem;color:var(--muted);font-weight:600">마진</div>
+          <div style="font-size:0.88rem;font-weight:800;color:${marginColor}">~${c.margin}%</div>
         </div>
       </div>
-      <div style="text-align:right;margin-left:6px;flex-shrink:0">
-        <div style="font-size:0.62rem;color:var(--muted);font-weight:600">마진</div>
-        <div style="font-size:0.88rem;font-weight:800;color:${marginColor}">~${c.margin}%</div>
-      </div>
-    </div>
-  `}).join('');
+      <div style="width:100%;padding-left:28px">${liveHtml}</div>
+    </div>`
+  }).join('');
 }
 
 function renderSeaList(categories) {
@@ -2498,6 +2599,12 @@ function connectAPI(silent = false) {
       document.getElementById('updateSub').textContent = '라쿠텐 실시간';
       document.getElementById('statProducts').textContent = items.length;
       closeApiModal();
+
+      // 🔴 카테고리별 라쿠텐 실시간 랭킹 로딩 시작
+      const { key: _appId, accessKey: _ak } = getSavedKeys();
+      if (_appId && _ak) {
+        loadRealJPRankings(_appId, _ak).catch(e => console.warn('JP 랭킹 로드 오류:', e));
+      }
     })
     .catch(err => {
       document.getElementById('statusText').textContent = '데모 모드';

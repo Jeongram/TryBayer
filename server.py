@@ -53,6 +53,11 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(400, 'applicationId와 accessKey가 필요합니다.')
                 return
 
+            # 추가 파라미터
+            genre_id = params.get('genreId', [''])[0]
+            sex      = params.get('sex',     [''])[0]   # 0=전체,1=남,2=여
+            age      = params.get('age',     [''])[0]
+
             # 라쿠텐 API 호출
             rakuten_url = (
                 f"https://openapi.rakuten.co.jp/ichibaranking/api/IchibaItem/Ranking/20220601"
@@ -60,6 +65,12 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
                 f"&accessKey={urllib.parse.quote(access_key)}"
                 f"&hits={hits}&formatVersion=2"
             )
+            if genre_id:
+                rakuten_url += f"&genreId={urllib.parse.quote(genre_id)}"
+            if sex:
+                rakuten_url += f"&sex={urllib.parse.quote(sex)}"
+            if age:
+                rakuten_url += f"&age={urllib.parse.quote(age)}"
 
             req = urllib.request.Request(rakuten_url)
             req.add_header('User-Agent', 'TryBayer/1.0')
