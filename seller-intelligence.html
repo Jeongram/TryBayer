@@ -1878,7 +1878,7 @@ const RAKUTEN_GENRE_MAP = {
   '게임 / 피규어':         { genreId: '100895', keyword: 'フィギュア ゲーム プラモデル' },
   '일본 식품 / 과자':      { genreId: '551167', keyword: '' },
   '생활용품 / 주방':       { genreId: '215104', keyword: 'キッチン 調理 日用品' },
-  '의약품 / 위생용품':     { genreId: '100433', keyword: '' },
+  '의약품 / 위생용품':     { genreId: '100433', keyword: '医薬品 衛生用品 マスク 消毒' },
   '스마트폰 액세서리':     { genreId: '215099', keyword: '' },
   '반려동물 용품':         { genreId: '215783', keyword: '' },
   '스포츠 / 아웃도어':     { genreId: '100316', keyword: '' },
@@ -1918,20 +1918,31 @@ async function loadRealJPRankings(appId, accessKey) {
       if (fetched[cacheKey]) {
         items = fetched[cacheKey];
       } else {
+        // 1차 시도: 키워드 검색 or 랭킹 API
         let url;
         if (useSearch) {
-          // 키워드 검색 API: 리뷰수 내림차순 = 인기 상품 순
           url = `/api/search?applicationId=${encodeURIComponent(appId)}&keyword=${encodeURIComponent(keyword)}&hits=5&sort=${encodeURIComponent('-reviewCount')}${genreId ? '&genreId=' + genreId : ''}`;
         } else {
-          // 랭킹 API: 실판매 순위
           url = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=5${genreId ? '&genreId=' + genreId : ''}`;
         }
-        const res  = await fetch(url);
-        const data = await res.json();
-        // 랭킹 API → data.Items, 검색 API → data.Items
-        items = data.Items || [];
+        try {
+          const res  = await fetch(url);
+          const data = await res.json();
+          items = data.Items || [];
+        } catch(e) { items = []; }
+
+        // 2차 폴백: 키워드 검색 실패 or 결과 0개 → genreId로 랭킹 API 재시도
+        if (items.length === 0 && genreId) {
+          const fallbackUrl = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=5&genreId=${genreId}`;
+          try {
+            const fbRes  = await fetch(fallbackUrl);
+            const fbData = await fbRes.json();
+            items = fbData.Items || [];
+          } catch(e2) { items = []; }
+        }
+
         fetched[cacheKey] = items;
-        await new Promise(r => setTimeout(r, 300));
+        await new Promise(r => setTimeout(r, 350));
       }
 
       if (items.length > 0) {
