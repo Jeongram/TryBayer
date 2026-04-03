@@ -1864,38 +1864,41 @@ const DEMO_PRODUCTS = [
 ];
 
 // ──────────────────────────────────────────
-// 🇯🇵 라쿠텐 장르 ID 매핑 (실제 API 카테고리)
+// 🇯🇵 라쿠텐 장르 ID + 키워드 매핑
+// genreId만 있으면 → 랭킹 API 사용 (실판매 순위)
+// keyword가 있으면 → 검색 API 사용 (키워드 내 인기순)
 // ──────────────────────────────────────────
-const RAKUTEN_GENRE_IDS = {
-  '스킨케어 / 화장품':    '100533',  // コスメ・美容
-  '색조화장품 / 메이크업': '100533',  // コスメ・美容
-  '헤어케어 / 샴푸':       '100533',  // コスメ・美容 (하위)
-  'K-팝 굿즈':            '100895',  // おもちゃ・ホビー・ゲーム
-  '건강식품 / 보충제':     '100804',  // ダイエット・健康
-  '여성 패션 / 의류':      '100371',  // レディースファッション
-  '게임 / 피규어':         '100895',  // おもちゃ・ホビー・ゲーム
-  '일본 식품 / 과자':      '551167',  // スイーツ・お菓子
-  '생활용품 / 주방':       '215104',  // インテリア・寝具・収納
-  '의약품 / 위생용품':     '100433',  // 医薬品・介護・美容・ダイエット
-  '스마트폰 액세서리':     '215099',  // スマートフォン・タブレット
-  '반려동물 용품':         '215783',  // ペット・ペットグッズ
-  '스포츠 / 아웃도어':     '100316',  // スポーツ・アウトドア
-  '남성 패션 / 의류':      '551177',  // メンズファッション
-  '주얼리 / 액세서리':     '100039',  // アクセサリー・ジュエリー
-  '이어폰 / 스피커':       '100938',  // 家電
-  '침구 / 수면용품':       '215104',  // インテリア・寝具・収納
-  '바디케어 / 목욕용품':   '100533',  // コスメ・美容 (하위)
-  '유아 / 베이비 용품':    '558885',  // ベビー・キッズ
-  '인테리어 / 소품':       '215104',  // インテリア・寝具・収納
+const RAKUTEN_GENRE_MAP = {
+  '스킨케어 / 화장품':    { genreId: '100533', keyword: 'スキンケア 化粧水 美容液' },
+  '색조화장품 / 메이크업': { genreId: '100533', keyword: 'メイクアップ ファンデーション リップ' },
+  '헤어케어 / 샴푸':       { genreId: '100533', keyword: 'シャンプー ヘアケア トリートメント' },
+  'K-팝 굿즈':            { genreId: '100895', keyword: 'K-POP グッズ アルバム' },
+  '건강식품 / 보충제':     { genreId: '100804', keyword: '' },
+  '여성 패션 / 의류':      { genreId: '100371', keyword: '' },
+  '게임 / 피규어':         { genreId: '100895', keyword: 'フィギュア ゲーム プラモデル' },
+  '일본 식품 / 과자':      { genreId: '551167', keyword: '' },
+  '생활용품 / 주방':       { genreId: '215104', keyword: 'キッチン 調理 日用品' },
+  '의약품 / 위생용품':     { genreId: '100433', keyword: '' },
+  '스마트폰 액세서리':     { genreId: '215099', keyword: '' },
+  '반려동물 용품':         { genreId: '215783', keyword: '' },
+  '스포츠 / 아웃도어':     { genreId: '100316', keyword: '' },
+  '남성 패션 / 의류':      { genreId: '551177', keyword: '' },
+  '주얼리 / 액세서리':     { genreId: '100039', keyword: '' },
+  '이어폰 / 스피커':       { genreId: '100938', keyword: 'イヤホン スピーカー ワイヤレス' },
+  '침구 / 수면용품':       { genreId: '215104', keyword: '布団 枕 寝具 ベッド' },
+  '바디케어 / 목욕용품':   { genreId: '100533', keyword: 'ボディケア 入浴剤 ボディローション' },
+  '유아 / 베이비 용품':    { genreId: '558885', keyword: '' },
+  '인테리어 / 소품':       { genreId: '215104', keyword: 'インテリア 雑貨 置物 デコレーション' },
 };
+// 하위 호환용 (기존 코드에서 RAKUTEN_GENRE_IDS 참조 시)
+const RAKUTEN_GENRE_IDS = Object.fromEntries(Object.entries(RAKUTEN_GENRE_MAP).map(([k,v])=>[k,v.genreId]));
 
 // 카테고리별 실시간 라쿠텐 데이터 저장소
 let _liveJPData = {};  // { catName: { itemName, itemPrice, itemUrl, thumb, rank } }
 
 // ── 라쿠텐 카테고리 실시간 랭킹 로딩 ──────────────────────────
 async function loadRealJPRankings(appId, accessKey) {
-  // 중복 장르ID는 한 번만 호출
-  const fetched = {};
+  const fetched = {};  // cacheKey → items (중복 API 호출 방지)
   const tag = document.getElementById('jpRankTag');
   if (tag) { tag.textContent = '🔴 LIVE 로딩중...'; tag.style.background = '#EF4444'; }
 
@@ -1903,42 +1906,54 @@ async function loadRealJPRankings(appId, accessKey) {
   const total = DEMO_CATEGORIES.length;
 
   for (const cat of DEMO_CATEGORIES) {
-    const genreId = RAKUTEN_GENRE_IDS[cat.name] || '';
-    const cacheKey = genreId || '_all_';
+    const mapping  = RAKUTEN_GENRE_MAP[cat.name] || {};
+    const genreId  = mapping.genreId || '';
+    const keyword  = mapping.keyword || '';
+    // keyword 있으면 검색 API, 없으면 랭킹 API (genreId 기준)
+    const useSearch = keyword.length > 0;
+    const cacheKey  = useSearch ? `search_${keyword}` : (genreId || '_all_');
 
     try {
       let items;
       if (fetched[cacheKey]) {
         items = fetched[cacheKey];
       } else {
-        const url = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=5${genreId ? '&genreId=' + genreId : ''}`;
-        const res = await fetch(url);
+        let url;
+        if (useSearch) {
+          // 키워드 검색 API: 리뷰수 내림차순 = 인기 상품 순
+          url = `/api/search?applicationId=${encodeURIComponent(appId)}&keyword=${encodeURIComponent(keyword)}&hits=5&sort=${encodeURIComponent('-reviewCount')}${genreId ? '&genreId=' + genreId : ''}`;
+        } else {
+          // 랭킹 API: 실판매 순위
+          url = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=5${genreId ? '&genreId=' + genreId : ''}`;
+        }
+        const res  = await fetch(url);
         const data = await res.json();
+        // 랭킹 API → data.Items, 검색 API → data.Items
         items = data.Items || [];
         fetched[cacheKey] = items;
-        // 라쿠텐 API 부하 방지 (300ms 간격)
         await new Promise(r => setTimeout(r, 300));
       }
 
       if (items.length > 0) {
-        const top = items[0];
-        // formatVersion=2 이면 바로 필드, 아니면 .Item 중첩
+        const top  = items[0];
         const item = top.Item || top;
         _liveJPData[cat.name] = {
           itemName:  item.itemName  || '',
           itemPrice: item.itemPrice || 0,
           itemUrl:   item.itemUrl   || '',
-          thumb:     (item.smallImageUrls && item.smallImageUrls[0]) ? item.smallImageUrls[0].imageUrl || item.smallImageUrls[0] : '',
+          thumb:     (item.smallImageUrls && item.smallImageUrls[0])
+                       ? (item.smallImageUrls[0].imageUrl || item.smallImageUrls[0])
+                       : '',
           rank:      item.rank || 1,
+          isSearch:  useSearch,
         };
       }
     } catch(e) {
-      console.warn('라쿠텐 랭킹 로드 실패:', cat.name, e.message);
+      console.warn('라쿠텐 로드 실패:', cat.name, e.message);
     }
 
     loaded++;
     if (tag) tag.textContent = `🔴 LIVE ${loaded}/${total}`;
-    // 화면 업데이트
     renderRankList(DEMO_CATEGORIES);
   }
 
@@ -2597,7 +2612,7 @@ function connectAPI(silent = false) {
       document.getElementById('demoBanner').style.display = 'none';
       document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('ko-KR');
       document.getElementById('updateSub').textContent = '라쿠텐 실시간';
-      document.getElementById('statProducts').textContent = items.length;
+      const statEl = document.getElementById('statProducts'); if (statEl) statEl.textContent = items.length;
       closeApiModal();
 
       // 🔴 카테고리별 라쿠텐 실시간 랭킹 로딩 시작
