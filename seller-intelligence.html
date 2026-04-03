@@ -1761,7 +1761,7 @@ const DEMO_CATEGORIES = [
   { rank:1,  icon:'🧴', name:'스킨케어 / 화장품',    sub:'コスメ・美容',           badge:'badge-hot',    badgeText:'🔥 급상승', growth:[12,15,14,18,22,28,31,35], margin:42 },
   { rank:2,  icon:'💄', name:'색조화장품 / 메이크업', sub:'メイクアップ',           badge:'badge-hot',    badgeText:'🔥 인기',   growth:[10,13,15,17,21,26,29,33], margin:45 },
   { rank:3,  icon:'💇', name:'헤어케어 / 샴푸',       sub:'ヘアケア',               badge:'badge-up',     badgeText:'↑ 급상승', growth:[8,10,12,14,18,22,26,30],  margin:38 },
-  { rank:4,  icon:'🎤', name:'K-팝 굿즈',             sub:'K-POPグッズ',            badge:'badge-hot',    badgeText:'🔥 폭발적', growth:[6,9,14,20,28,36,45,55],  margin:50 },
+  { rank:4,  icon:'🧹', name:'세제 / 청소용품',         sub:'掃除・洗剤',              badge:'badge-up',     badgeText:'↑ 성장중', growth:[6,8,10,12,14,16,18,20],  margin:32 },
   { rank:5,  icon:'🍜', name:'건강식품 / 보충제',     sub:'健康食品',               badge:'badge-up',     badgeText:'↑ 성장중', growth:[8,10,12,14,16,15,18,20],  margin:38 },
   { rank:6,  icon:'👗', name:'여성 패션 / 의류',      sub:'レディースファッション', badge:'badge-stable', badgeText:'● 안정',   growth:[20,19,21,22,20,21,23,22], margin:31 },
   { rank:7,  icon:'🎮', name:'게임 / 피규어',         sub:'おもちゃ・ホビー',       badge:'badge-new',    badgeText:'★ 신규',   growth:[5,6,8,9,12,15,19,24],    margin:28 },
@@ -1786,7 +1786,7 @@ const SEA_CATEGORIES = [
   { rank:2,  icon:'💄', name:'색조화장품 / 메이크업', sub:'K-Makeup',       badge:'badge-hot',    badgeText:'🔥 급상승', growth:[15,19,23,27,33,39,46,54], margin:45, markets:'TH·ID·VN·PH',    shopUrl:'https://shopee.sg/search?keyword=korean+makeup' },
   { rank:3,  icon:'📱', name:'스마트폰 액세서리',     sub:'Phone Acc.',     badge:'badge-hot',    badgeText:'🔥 급상승', growth:[10,14,18,22,28,34,40,48], margin:55, markets:'ID·TH·VN·PH',    shopUrl:'https://shopee.sg/search?keyword=korean+phone+case' },
   { rank:4,  icon:'👗', name:'여성 패션 / 의류',      sub:'K-Fashion',      badge:'badge-hot',    badgeText:'🔥 인기',   growth:[18,20,22,25,28,30,33,36], margin:38, markets:'TH·ID·VN·MY',    shopUrl:'https://shopee.sg/search?keyword=korean+fashion' },
-  { rank:5,  icon:'🎤', name:'K-팝 굿즈',             sub:'K-POP Merch',    badge:'badge-hot',    badgeText:'🔥 폭발적', growth:[8,12,18,25,34,44,55,65],  margin:50, markets:'TH·ID·PH·MY',    shopUrl:'https://shopee.sg/search?keyword=kpop+merchandise' },
+  { rank:5,  icon:'🧹', name:'세제 / 청소용품',         sub:'Cleaning',       badge:'badge-up',     badgeText:'↑ 성장중', growth:[6,7,9,11,13,15,17,20],   margin:32, markets:'ID·TH·VN·MY',    shopUrl:'https://shopee.sg/search?keyword=korean+cleaning' },
   { rank:6,  icon:'💇', name:'헤어케어 / 샴푸',       sub:'Hair Care',      badge:'badge-up',     badgeText:'↑ 급상승', growth:[9,11,13,16,19,23,27,31],  margin:38, markets:'ID·TH·VN·MY',    shopUrl:'https://shopee.sg/search?keyword=korean+shampoo' },
   { rank:7,  icon:'🏠', name:'생활용품 / 주방',       sub:'Home & Kitchen', badge:'badge-up',     badgeText:'↑ 성장중', growth:[8,10,12,14,16,18,21,24],  margin:30, markets:'ID·TH·PH·VN',    shopUrl:'https://shopee.sg/search?keyword=korean+kitchen' },
   { rank:8,  icon:'🍜', name:'건강식품 / 보충제',     sub:'Health Food',    badge:'badge-up',     badgeText:'↑ 성장중', growth:[7,9,11,13,15,17,19,22],   margin:35, markets:'SG·MY·PH',       shopUrl:'https://shopee.sg/search?keyword=korean+health+supplement' },
@@ -1815,7 +1815,7 @@ const AMAZON_CATEGORIES = [
   { rank:7,  icon:'⚽', name:'스포츠 / 아웃도어',     sub:'Sports',          badge:'badge-stable', badgeText:'● 안정',   growth:[10,11,12,13,14,14,15,15], margin:28, markets:'US·EU·CA',    amzUrl:'https://www.amazon.com/s?k=korean+sports' },
   { rank:8,  icon:'💪', name:'피트니스 / 헬스용품',   sub:'Fitness',         badge:'badge-up',     badgeText:'↑ 성장중', growth:[7,9,11,13,16,19,22,26],   margin:35, markets:'US·CA·AU',    amzUrl:'https://www.amazon.com/s?k=korean+fitness' },
   { rank:9,  icon:'🏠', name:'생활용품 / 주방',       sub:'Home & Kitchen',  badge:'badge-stable', badgeText:'● 안정',   growth:[9,10,10,11,11,12,12,13],  margin:26, markets:'US·EU·CA',    amzUrl:'https://www.amazon.com/s?k=korean+kitchen' },
-  { rank:10, icon:'🎤', name:'K-팝 굿즈',             sub:'K-POP Merch',     badge:'badge-hot',    badgeText:'🔥 폭발적', growth:[5,8,12,17,24,32,41,50],   margin:50, markets:'US·EU·JP',    amzUrl:'https://www.amazon.com/s?k=kpop+merchandise' },
+  { rank:10, icon:'🧹', name:'세제 / 청소용품',         sub:'Cleaning',        badge:'badge-up',     badgeText:'↑ 성장중', growth:[5,6,8,10,12,14,16,18],    margin:32, markets:'US·EU·CA',    amzUrl:'https://www.amazon.com/s?k=korean+cleaning+products' },
   { rank:11, icon:'👗', name:'여성 패션 / 의류',      sub:'K-Fashion',       badge:'badge-stable', badgeText:'● 안정',   growth:[8,8,9,9,10,10,11,11],     margin:30, markets:'US·EU',       amzUrl:'https://www.amazon.com/s?k=korean+fashion' },
   { rank:12, icon:'🎮', name:'게임 / 피규어',         sub:'Toys & Hobby',    badge:'badge-up',     badgeText:'↑ 성장중', growth:[4,5,6,8,10,13,16,19],     margin:24, markets:'US·JP',       amzUrl:'https://www.amazon.com/s?k=korean+figure+toy' },
   { rank:13, icon:'🛁', name:'바디케어 / 목욕용품',   sub:'Body Care',       badge:'badge-up',     badgeText:'↑ 성장중', growth:[6,7,8,10,12,14,17,20],    margin:36, markets:'US·EU·CA',    amzUrl:'https://www.amazon.com/s?k=korean+body+care' },
@@ -1833,7 +1833,7 @@ const GLOBAL_MARKET_DATA = {
   '스킨케어 / 화장품':    { sea:{ score:95, badge:'🔥 1위',    color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'SG·MY·TH·PH'    }, amz:{ score:92, badge:'🔥 1위',    color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'US·EU·JP·AU' } },
   '색조화장품 / 메이크업':{ sea:{ score:90, badge:'🔥 급상승', color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'TH·ID·VN·PH'    }, amz:{ score:88, badge:'🔥 급상승', color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'US·EU·JP'    } },
   '헤어케어 / 샴푸':      { sea:{ score:82, badge:'↑ 급상승',  color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'ID·TH·VN·MY'    }, amz:{ score:85, badge:'↑ 급상승',  color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'US·EU·CA'    } },
-  'K-팝 굿즈':            { sea:{ score:88, badge:'🔥 폭발적', color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'TH·ID·PH·MY'    }, amz:{ score:85, badge:'🔥 폭발적', color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'US·EU·JP'    } },
+  '세제 / 청소용품':       { sea:{ score:68, badge:'↑ 성장중',  color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'ID·TH·VN·MY'    }, amz:{ score:65, badge:'● 안정',    color:'#6B7280', bg:'#F9FAFB', border:'#D1D5DB', markets:'US·EU·CA'    } },
   '건강식품 / 보충제':    { sea:{ score:72, badge:'↑ 성장중',  color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'SG·MY·PH'       }, amz:{ score:85, badge:'🔥 인기',   color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'US·CA·AU'    } },
   '여성 패션 / 의류':     { sea:{ score:88, badge:'🔥 인기',   color:'#EF4444', bg:'#FEF2F2', border:'#FCA5A5', markets:'TH·ID·VN·MY'    }, amz:{ score:65, badge:'● 안정',    color:'#6B7280', bg:'#F9FAFB', border:'#D1D5DB', markets:'US·EU'       } },
   '게임 / 피규어':        { sea:{ score:48, badge:'▽ 낮음',    color:'#9CA3AF', bg:'#F9FAFB', border:'#E5E7EB', markets:'SG·MY·PH'       }, amz:{ score:78, badge:'↑ 성장중',  color:'#D97706', bg:'#FFFBEB', border:'#FCD34D', markets:'US·JP'       } },
@@ -1876,7 +1876,7 @@ const RAKUTEN_GENRE_MAP = {
   '스킨케어 / 화장품':    { genreId: '100944', keyword: '' }, // スキンケア (시트마스크・화장수)
   '색조화장품 / 메이크업': { genreId: '204233', keyword: '' }, // ベースメイク・メイクアップ
   '헤어케어 / 샴푸':       { genreId: '100940', keyword: '' }, // ヘアケア・スタイリング
-  'K-팝 굿즈':            { genreId: '101240', keyword: '' }, // CD・DVD
+  '세제 / 청소용품':       { genreId: '100656', keyword: '' }, // 掃除用品 (스폰지・청소용품)
   '건강식품 / 보충제':     { genreId: '100938', keyword: '' }, // ダイエット・健康
   '여성 패션 / 의류':      { genreId: '100371', keyword: '' }, // レディースファッション
   '게임 / 피규어':         { genreId: '101165', keyword: '' }, // コレクション (フィギュア・ドラゴンボール等)
@@ -1906,7 +1906,7 @@ const GENRE_MATCH_TERMS = {
   '스킨케어 / 화장품':    ['スキンケア', '基礎化粧品'],
   '색조화장품 / 메이크업': ['メイクアップ', 'メイク'],
   '헤어케어 / 샴푸':       ['ヘアケア', 'シャンプー'],
-  'K-팝 굿즈':            ['K-POP', 'アイドル', 'K-POPグッズ'],
+  '세제 / 청소용품':       ['掃除', '洗剤', 'クリーナー', 'スポンジ'],
   '건강식품 / 보충제':     ['サプリ', '健康食品', 'プロテイン'],
   '여성 패션 / 의류':      ['レディース'],
   '게임 / 피규어':         ['フィギュア', 'プラモデル'],
