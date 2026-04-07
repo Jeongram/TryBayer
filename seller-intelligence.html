@@ -2007,9 +2007,9 @@ async function loadRealJPRankings(appId, accessKey) {
         // 1차 시도: 키워드 검색 or 랭킹 API
         let url;
         if (useSearch) {
-          url = `/api/search?applicationId=${encodeURIComponent(searchId)}&keyword=${encodeURIComponent(keyword)}&hits=5&sort=${encodeURIComponent('-reviewCount')}${genreId ? '&genreId=' + genreId : ''}`;
+          url = `/api/search?applicationId=${encodeURIComponent(searchId)}&keyword=${encodeURIComponent(keyword)}&hits=10&sort=${encodeURIComponent('-reviewCount')}${genreId ? '&genreId=' + genreId : ''}`;
         } else {
-          url = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=5${genreId ? '&genreId=' + genreId : ''}`;
+          url = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=10${genreId ? '&genreId=' + genreId : ''}`;
         }
         try {
           const res  = await fetch(url);
@@ -2019,7 +2019,7 @@ async function loadRealJPRankings(appId, accessKey) {
 
         // 2차 폴백: 키워드 검색 실패 or 결과 0개 → genreId로 랭킹 API 재시도
         if (items.length === 0 && genreId) {
-          const fallbackUrl = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=5&genreId=${genreId}`;
+          const fallbackUrl = `/api/ranking?applicationId=${encodeURIComponent(appId)}&accessKey=${encodeURIComponent(accessKey)}&hits=10&genreId=${genreId}`;
           try {
             const fbRes  = await fetch(fallbackUrl);
             const fbData = await fbRes.json();
@@ -2032,18 +2032,20 @@ async function loadRealJPRankings(appId, accessKey) {
       }
 
       if (items.length > 0) {
-        const top  = items[0];
-        const item = top.Item || top;
-        _liveJPData[cat.name] = {
-          itemName:  item.itemName  || '',
-          itemPrice: item.itemPrice || 0,
-          itemUrl:   item.itemUrl   || '',
-          thumb:     (item.smallImageUrls && item.smallImageUrls[0])
-                       ? (item.smallImageUrls[0].imageUrl || item.smallImageUrls[0])
-                       : '',
-          rank:      item.rank || 1,
-          isSearch:  useSearch,
-        };
+        // 상위 10개 배열로 저장
+        _liveJPData[cat.name] = items.slice(0, 10).map((top, idx) => {
+          const item = top.Item || top;
+          return {
+            itemName:  item.itemName  || '',
+            itemPrice: item.itemPrice || 0,
+            itemUrl:   item.itemUrl   || '',
+            thumb:     (item.smallImageUrls && item.smallImageUrls[0])
+                         ? (item.smallImageUrls[0].imageUrl || item.smallImageUrls[0])
+                         : '',
+            rank:      idx + 1,
+            isSearch:  useSearch,
+          };
+        });
       }
     } catch(e) {
       console.warn('라쿠텐 로드 실패:', cat.name, e.message);
@@ -2071,18 +2073,29 @@ function renderRankList(categories) {
     const marginColor = c.margin >= 40 ? 'var(--success)' : c.margin >= 30 ? 'var(--accent)' : 'var(--muted)';
     const live = _liveJPData[c.name];
 
-    // 실시간 데이터 섹션 (있을 때만)
-    const liveHtml = live ? `
-      <div style="margin-top:5px;padding:5px 7px;background:linear-gradient(90deg,#FFF8F0,#fff);border-left:2px solid #FB923C;border-radius:0 6px 6px 0">
-        <div style="font-size:0.62rem;color:#C2410C;font-weight:700;margin-bottom:2px">🔴 라쿠텐 실시간 1위</div>
-        <div style="font-size:0.72rem;font-weight:600;color:var(--text);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${live.itemName}</div>
-        <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
-          <span style="font-size:0.78rem;font-weight:800;color:#C2410C">¥${Number(live.itemPrice).toLocaleString()}</span>
-          <a href="${live.itemUrl}" target="_blank" rel="noopener"
-            style="font-size:0.6rem;padding:1px 6px;background:#FB923C;color:#fff;border-radius:99px;text-decoration:none;font-weight:700">보기 →</a>
-        </div>
-      </div>` : `
-      <div style="margin-top:4px;font-size:0.62rem;color:var(--muted);font-style:italic">— 라쿠텐 API 연결 후 실시간 표시 —</div>`;
+    // 실시간 캐러셀 (최대 10개)
+    const catId = 'carousel_' + c.name.replace(/[^a-zA-Z0-9]/g,'_');
+    const liveHtml = (live && live.length > 0) ? (() => {
+      const cards = live.map((p, i) => `
+        <a href="${p.itemUrl}" target="_blank" rel="noopener"
+          style="min-width:110px;max-width:110px;background:#fff;border:1px solid #FFE0C8;border-radius:8px;padding:6px;text-decoration:none;flex-shrink:0;display:flex;flex-direction:column;gap:3px">
+          ${p.thumb ? `<img src="${p.thumb}" style="width:100%;height:72px;object-fit:cover;border-radius:5px" onerror="this.style.display='none'">` : `<div style="width:100%;height:72px;background:#FFF0E6;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:1.4rem">📦</div>`}
+          <div style="font-size:0.58rem;color:#C2410C;font-weight:700">🏆 ${i+1}위</div>
+          <div style="font-size:0.6rem;font-weight:600;color:#1A1917;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">${p.itemName}</div>
+          <div style="font-size:0.68rem;font-weight:800;color:#C2410C">¥${Number(p.itemPrice).toLocaleString()}</div>
+        </a>`).join('');
+      return `
+        <div style="margin-top:6px">
+          <div style="font-size:0.6rem;color:#C2410C;font-weight:700;margin-bottom:4px">🔴 라쿠텐 실시간 TOP ${live.length}</div>
+          <div style="position:relative">
+            <button onclick="carouselScroll('${catId}',-1)" style="position:absolute;left:-8px;top:50%;transform:translateY(-50%);z-index:2;background:#FB923C;border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.15)">‹</button>
+            <div id="${catId}" style="display:flex;gap:6px;overflow-x:hidden;scroll-behavior:smooth;padding:2px 4px">
+              ${cards}
+            </div>
+            <button onclick="carouselScroll('${catId}',1)" style="position:absolute;right:-8px;top:50%;transform:translateY(-50%);z-index:2;background:#FB923C;border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.15)">›</button>
+          </div>
+        </div>`;
+    })() : `<div style="margin-top:4px;font-size:0.62rem;color:var(--muted);font-style:italic">— 라쿠텐 API 연결 후 실시간 표시 —</div>`;
 
     return `
     <div class="rank-item" style="cursor:default;padding:8px 4px;flex-wrap:wrap">
@@ -3350,5 +3363,10 @@ function renderDmgCard(item) {
     setTimeout(() => fetchAmazonData('korean beauty', 'www.amazon.com'), 1200);
   }
 })();
+
+function carouselScroll(id, dir) {
+  const el = document.getElementById(id);
+  if (el) el.scrollLeft += dir * 360;
+}
 </script>
 </body>
