@@ -103,6 +103,7 @@
       display: flex; align-items: center; gap: 12px; padding: 10px 0;
       border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s;
       border-radius: 8px; padding: 10px 10px; margin: 0 -10px;
+      min-width: 0; overflow: hidden;
     }
     .rank-item:hover { background: var(--surface2); }
     .rank-item:last-child { border-bottom: none; }
@@ -594,7 +595,7 @@
   <div class="three-col">
 
     <!-- 🇯🇵 일본 TOP 20 -->
-    <div class="card" style="padding:16px 14px">
+    <div class="card" style="padding:16px 14px;min-width:0;overflow:hidden">
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
         <span style="font-size:1.1rem">🇯🇵</span>
         <span style="font-weight:800;font-size:0.88rem;color:#C2410C">일본 TOP 20</span>
@@ -604,7 +605,7 @@
     </div>
 
     <!-- 🌏 동남아 TOP 20 -->
-    <div class="card" style="padding:16px 14px">
+    <div class="card" style="padding:16px 14px;min-width:0;overflow:hidden">
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
         <span style="font-size:1.1rem">🌏</span>
         <span style="font-weight:800;font-size:0.88rem;color:#15803D">동남아 TOP 20</span>
@@ -614,7 +615,7 @@
     </div>
 
     <!-- 🌎 아마존 TOP 20 -->
-    <div class="card" style="padding:16px 14px">
+    <div class="card" style="padding:16px 14px;min-width:0;overflow:hidden">
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
         <span style="font-size:1.1rem">🌎</span>
         <span style="font-weight:800;font-size:0.88rem;color:#1D4ED8">아마존 TOP 20</span>
