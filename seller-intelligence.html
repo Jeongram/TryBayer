@@ -3120,8 +3120,10 @@ function showDmgKeySet(key) {
 }
 
 function loadDmgProducts(catName, btnEl) {
-  const key = localStorage.getItem('trybayer_dmg_key');
-  if (!key) {
+  const key = localStorage.getItem('trybayer_dmg_key') || '';
+  // 로컬 키가 없어도 서버 환경변수 키(DOMEGGOOK_API_KEY)가 있으면 동작
+  // → 빈 key('')를 넘기면 server.py가 환경변수 키로 대체
+  if (!key && !window._serverHasDmgKey) {
     document.getElementById('dmgStatusMsg').style.display = '';
     document.getElementById('dmgStatusMsg').innerHTML =
       '<span style="color:var(--accent)">⚠️ 도매꾹 API 키를 먼저 입력하고 저장해주세요.</span>';
@@ -3258,17 +3260,11 @@ function fetchDmgPage(key, catName, page, append) {
     }
   }
 
-  // 1단계: 직접 API 호출 시도
-  fetch(directUrl)
+  // 직접 호출은 CORS로 항상 차단 → 바로 서버 프록시로 요청
+  fetch(proxyUrl)
     .then(r => r.text())
     .then(text => handleSuccess(text))
-    .catch(() => {
-      // 2단계: 직접 실패 → server.py 프록시 시도      // 2단계: 직접 실패 → server.py 프록시 시도
-      fetch(proxyUrl)
-        .then(r => r.text())
-        .then(text => handleSuccess(text))
-        .catch(err => handleError(err.message, true));
-    });
+    .catch(err => handleError(err.message, true));
 }
 
 function renderDmgCard(item) {
@@ -3322,6 +3318,8 @@ function renderDmgCard(item) {
   fetch('/api/status')
     .then(r => r.json())
     .then(status => {
+      // 도매꾹 서버 키 여부를 전역 변수에 저장
+      window._serverHasDmgKey = !!status.hasDomeggookKey;
       if (status.hasRakutenKeys || (key && accessKey)) {
         // 서버 키 or 로컬 키 있으면 자동 연결
         connectAPI(true);

@@ -16,6 +16,9 @@ PORT = int(os.environ.get('PORT', 8000))
 RAKUTEN_APP_ID    = os.environ.get('RAKUTEN_APP_ID', '')
 RAKUTEN_ACCESS_KEY = os.environ.get('RAKUTEN_ACCESS_KEY', '')
 
+# ── 서버 환경변수에서 도매꾹 API 키 읽기 (Render에 등록된 키)
+DOMEGGOOK_API_KEY = os.environ.get('DOMEGGOOK_API_KEY', '')
+
 class ProxyHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_OPTIONS(self):
@@ -52,8 +55,11 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             super().do_GET()
 
     def send_status(self):
-        """서버에 라쿠텐 API 키가 등록되어 있는지 알려주는 엔드포인트"""
-        status = {'hasRakutenKeys': bool(RAKUTEN_APP_ID and RAKUTEN_ACCESS_KEY)}
+        """서버에 API 키가 등록되어 있는지 알려주는 엔드포인트"""
+        status = {
+            'hasRakutenKeys':   bool(RAKUTEN_APP_ID and RAKUTEN_ACCESS_KEY),
+            'hasDomeggookKey':  bool(DOMEGGOOK_API_KEY),
+        }
         self.send_response(200)
         self.send_header('Content-Type', 'application/json')
         self.send_header('Access-Control-Allow-Origin', '*')
@@ -406,7 +412,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             parsed = urllib.parse.urlparse(self.path)
             params = urllib.parse.parse_qs(parsed.query)
 
-            api_key = params.get('aid', [''])[0]
+            api_key = params.get('aid', [''])[0] or DOMEGGOOK_API_KEY
             keyword = params.get('kw', [''])[0]
             size    = params.get('sz', ['20'])[0]
             page    = params.get('pg', ['1'])[0]
