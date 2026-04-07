@@ -12,6 +12,10 @@ import os
 
 PORT = int(os.environ.get('PORT', 8000))
 
+# ── 서버 환경변수에서 라쿠텐 API 키 읽기 (Render에 등록된 키)
+RAKUTEN_APP_ID    = os.environ.get('RAKUTEN_APP_ID', '')
+RAKUTEN_ACCESS_KEY = os.environ.get('RAKUTEN_ACCESS_KEY', '')
+
 class ProxyHandler(http.server.SimpleHTTPRequestHandler):
 
     def do_OPTIONS(self):
@@ -41,9 +45,20 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         # ── /api/domeggook → 도매꾹 상품조회 API 프록시
         elif self.path.startswith('/api/domeggook'):
             self.proxy_domeggook()
+        elif self.path.startswith('/api/status'):
+            self.send_status()
         else:
             # 정적 파일 서빙 (HTML, CSS, JS 등)
             super().do_GET()
+
+    def send_status(self):
+        """서버에 라쿠텐 API 키가 등록되어 있는지 알려주는 엔드포인트"""
+        status = {'hasRakutenKeys': bool(RAKUTEN_APP_ID and RAKUTEN_ACCESS_KEY)}
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json')
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.end_headers()
+        self.wfile.write(json.dumps(status).encode())
 
     def proxy_rakuten(self):
         try:
@@ -51,9 +66,10 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             parsed = urllib.parse.urlparse(self.path)
             params = urllib.parse.parse_qs(parsed.query)
 
-            app_id    = params.get('applicationId', [''])[0]
-            access_key = params.get('accessKey', [''])[0]
-            hits      = params.get('hits', ['30'])[0]
+            # 프론트에서 키를 안 보내면 서버 환경변수 사용
+            app_id     = params.get('applicationId', [''])[0] or RAKUTEN_APP_ID
+            access_key = params.get('accessKey',     [''])[0] or RAKUTEN_ACCESS_KEY
+            hits       = params.get('hits', ['30'])[0]
 
             if not app_id or not access_key:
                 self.send_error(400, 'applicationId와 accessKey가 필요합니다.')
@@ -113,7 +129,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
         try:
             parsed = urllib.parse.urlparse(self.path)
             params = urllib.parse.parse_qs(parsed.query)
-            app_id   = params.get('applicationId', [''])[0]
+            app_id   = params.get('applicationId', [''])[0] or RAKUTEN_APP_ID
             genre_id = params.get('genreId', ['0'])[0]
 
             if not app_id:
@@ -161,7 +177,7 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
             parsed = urllib.parse.urlparse(self.path)
             params = urllib.parse.parse_qs(parsed.query)
 
-            app_id   = params.get('applicationId', [''])[0]
+            app_id   = params.get('applicationId', [''])[0] or RAKUTEN_APP_ID
             keyword  = params.get('keyword', [''])[0]
             hits     = params.get('hits', ['5'])[0]
             sort     = params.get('sort', ['-reviewCount'])[0]

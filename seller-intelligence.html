@@ -2661,10 +2661,9 @@ function connectAPI(silent = false) {
   // searchAppId 저장
   if (searchAppId) localStorage.setItem('trybayer_searchAppId', searchAppId);
 
-  if (!key || !accessKey) {
-    loadDemo();
-    document.getElementById('demoBanner').style.display = '';
-    return;
+  // 로컬 키 없어도 서버 환경변수로 동작 가능하므로 바로 시도
+  if (!key && !accessKey) {
+    key = '__server__'; accessKey = '__server__'; // 서버가 env var 사용
   }
 
   document.getElementById('statusText').textContent = '연결 중...';
@@ -3300,20 +3299,38 @@ function renderDmgCard(item) {
   </div>`;
 }
 
-// ── 초기 로드: 저장된 키 있으면 자동 연결, 없으면 데모
+// ── 초기 로드: 서버 키 or 저장된 키 있으면 자동 연결, 없으면 데모
 (function init() {
   const { key, accessKey } = getSavedKeys();
-  if (key && accessKey) {
-    // 저장된 키로 자동 연결 시도
-    connectAPI(true);
-    renderRankList(DEMO_CATEGORIES); // 연결 중 임시 렌더
-    renderTrendChart(DEMO_CATEGORIES);
-  } else {
-    // 키 없으면 데모 + 배너 표시
-    loadDemo();
-    document.getElementById('demoBanner').style.display = '';
-    document.getElementById('statusText').textContent = '데모 모드';
-  }
+
+  // 임시로 데모 렌더 (연결 완료 전 화면 채우기)
+  renderRankList(DEMO_CATEGORIES);
+  renderTrendChart(DEMO_CATEGORIES);
+
+  // 서버에 환경변수 키가 있는지 먼저 확인
+  fetch('/api/status')
+    .then(r => r.json())
+    .then(status => {
+      if (status.hasRakutenKeys || (key && accessKey)) {
+        // 서버 키 or 로컬 키 있으면 자동 연결
+        connectAPI(true);
+      } else {
+        // 키 없으면 데모 모드
+        loadDemo();
+        document.getElementById('demoBanner').style.display = '';
+        document.getElementById('statusText').textContent = '데모 모드';
+      }
+    })
+    .catch(() => {
+      // /api/status 실패 시 로컬 키로 시도
+      if (key && accessKey) {
+        connectAPI(true);
+      } else {
+        loadDemo();
+        document.getElementById('demoBanner').style.display = '';
+        document.getElementById('statusText').textContent = '데모 모드';
+      }
+    });
   document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('ko-KR');
 
   // 도매꾹 저장된 키 있으면 UI 표시
