@@ -2661,10 +2661,9 @@ function connectAPI(silent = false) {
   // searchAppId 저장
   if (searchAppId) localStorage.setItem('trybayer_searchAppId', searchAppId);
 
-  // 로컬 키 없어도 서버 환경변수로 동작 가능하므로 바로 시도
-  if (!key && !accessKey) {
-    key = '__server__'; accessKey = '__server__'; // 서버가 env var 사용
-  }
+  // 로컬 키 없어도 서버 환경변수로 동작 가능 (빈 문자열 전송 → 서버가 env var 사용)
+  if (!key) key = '';
+  if (!accessKey) accessKey = '';
 
   document.getElementById('statusText').textContent = '연결 중...';
   document.getElementById('statusDot').classList.remove('live');
@@ -2724,11 +2723,9 @@ function connectAPI(silent = false) {
       const statEl = document.getElementById('statProducts'); if (statEl) statEl.textContent = items.length;
       closeApiModal();
 
-      // 🔴 카테고리별 라쿠텐 실시간 랭킹 로딩 시작
+      // 🔴 카테고리별 라쿠텐 실시간 랭킹 로딩 시작 (로컬 키 없으면 빈 문자열 → 서버 env var 사용)
       const { key: _appId, accessKey: _ak } = getSavedKeys();
-      if (_appId && _ak) {
-        loadRealJPRankings(_appId, _ak).catch(e => console.warn('JP 랭킹 로드 오류:', e));
-      }
+      loadRealJPRankings(_appId || '', _ak || '').catch(e => console.warn('JP 랭킹 로드 오류:', e));
     })
     .catch(err => {
       document.getElementById('statusText').textContent = '데모 모드';
