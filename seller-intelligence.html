@@ -2651,9 +2651,9 @@ function getSearchAppId() {
 // API 연동 (실제 Rakuten API 호출)
 // ──────────────────────────────────────────
 function connectAPI(silent = false) {
-  const key = document.getElementById('apiKeyInput')?.value.trim()
+  let key = document.getElementById('apiKeyInput')?.value.trim()
             || localStorage.getItem('trybayer_appId') || '';
-  const accessKey = document.getElementById('accessKeyInput')?.value.trim()
+  let accessKey = document.getElementById('accessKeyInput')?.value.trim()
                   || localStorage.getItem('trybayer_accessKey') || '';
   const searchAppId = document.getElementById('searchAppIdInput')?.value.trim()
                     || localStorage.getItem('trybayer_searchAppId') || '';
