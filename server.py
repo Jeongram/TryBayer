@@ -96,8 +96,8 @@ class ProxyHandler(http.server.SimpleHTTPRequestHandler):
 
             req = urllib.request.Request(rakuten_url)
             req.add_header('User-Agent', 'TryBayer/1.0')
-            req.add_header('Referer', 'https://test.com')
-            req.add_header('Origin', 'https://test.com')
+            req.add_header('Referer', 'https://trybayer.onrender.com')
+            req.add_header('Origin', 'https://trybayer.onrender.com')
 
             with urllib.request.urlopen(req, timeout=10) as res:
                 data = res.read()
