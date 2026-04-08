@@ -609,7 +609,7 @@
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
         <span style="font-size:1.1rem">🌏</span>
         <span style="font-weight:800;font-size:0.88rem;color:#15803D">동남아 TOP 20</span>
-        <span style="margin-left:auto;font-size:0.62rem;background:#22C55E;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700">Shopee</span>
+        <span style="margin-left:auto;font-size:0.62rem;background:#15803D;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700">📊 시장 인사이트</span>
       </div>
       <div id="seaRankList" style="max-height:680px;overflow-y:auto;scrollbar-width:thin"></div>
     </div>
@@ -1783,26 +1783,26 @@ const DEMO_CATEGORIES = [
 
 // 동남아 Shopee 카테고리 랭킹
 const SEA_CATEGORIES = [
-  { rank:1,  icon:'🧴', name:'스킨케어 / 화장품',    sub:'K-Beauty',       badge:'badge-hot',    badgeText:'🔥 1위',    growth:[20,25,28,32,38,44,50,58], margin:42, markets:'SG·MY·TH·PH·VN', shopUrl:'https://shopee.sg/search?keyword=korean+skincare' },
-  { rank:2,  icon:'💄', name:'색조화장품 / 메이크업', sub:'K-Makeup',       badge:'badge-hot',    badgeText:'🔥 급상승', growth:[15,19,23,27,33,39,46,54], margin:45, markets:'TH·ID·VN·PH',    shopUrl:'https://shopee.sg/search?keyword=korean+makeup' },
-  { rank:3,  icon:'📱', name:'스마트폰 액세서리',     sub:'Phone Acc.',     badge:'badge-hot',    badgeText:'🔥 급상승', growth:[10,14,18,22,28,34,40,48], margin:55, markets:'ID·TH·VN·PH',    shopUrl:'https://shopee.sg/search?keyword=korean+phone+case' },
-  { rank:4,  icon:'👗', name:'여성 패션 / 의류',      sub:'K-Fashion',      badge:'badge-hot',    badgeText:'🔥 인기',   growth:[18,20,22,25,28,30,33,36], margin:38, markets:'TH·ID·VN·MY',    shopUrl:'https://shopee.sg/search?keyword=korean+fashion' },
-  { rank:5,  icon:'🧹', name:'세제 / 청소용품',         sub:'Cleaning',       badge:'badge-up',     badgeText:'↑ 성장중', growth:[6,7,9,11,13,15,17,20],   margin:32, markets:'ID·TH·VN·MY',    shopUrl:'https://shopee.sg/search?keyword=korean+cleaning' },
-  { rank:6,  icon:'💇', name:'헤어케어 / 샴푸',       sub:'Hair Care',      badge:'badge-up',     badgeText:'↑ 급상승', growth:[9,11,13,16,19,23,27,31],  margin:38, markets:'ID·TH·VN·MY',    shopUrl:'https://shopee.sg/search?keyword=korean+shampoo' },
-  { rank:7,  icon:'🏠', name:'생활용품 / 주방',       sub:'Home & Kitchen', badge:'badge-up',     badgeText:'↑ 성장중', growth:[8,10,12,14,16,18,21,24],  margin:30, markets:'ID·TH·PH·VN',    shopUrl:'https://shopee.sg/search?keyword=korean+kitchen' },
-  { rank:8,  icon:'🍜', name:'건강식품 / 보충제',     sub:'Health Food',    badge:'badge-up',     badgeText:'↑ 성장중', growth:[7,9,11,13,15,17,19,22],   margin:35, markets:'SG·MY·PH',       shopUrl:'https://shopee.sg/search?keyword=korean+health+supplement' },
-  { rank:9,  icon:'👟', name:'신발 / 슈즈',           sub:'Footwear',       badge:'badge-up',     badgeText:'↑ 성장중', growth:[6,8,10,12,14,17,20,23],   margin:40, markets:'ID·TH·VN·PH',    shopUrl:'https://shopee.sg/search?keyword=korean+shoes' },
-  { rank:10, icon:'🛁', name:'바디케어 / 목욕용품',   sub:'Body Care',      badge:'badge-up',     badgeText:'↑ 성장중', growth:[7,8,9,11,13,15,17,20],    margin:36, markets:'SG·MY·TH',       shopUrl:'https://shopee.sg/search?keyword=korean+body+lotion' },
-  { rank:11, icon:'💊', name:'의약품 / 위생용품',     sub:'Health & Hygiene',badge:'badge-up',    badgeText:'↑ 성장중', growth:[6,8,9,10,12,13,15,17],   margin:28, markets:'SG·MY·PH',       shopUrl:'https://shopee.sg/search?keyword=korean+mask+sanitizer' },
-  { rank:12, icon:'🎧', name:'이어폰 / 스피커',       sub:'Audio',          badge:'badge-up',     badgeText:'↑ 성장중', growth:[5,6,8,10,13,16,20,24],    margin:42, markets:'ID·PH·VN·TH',    shopUrl:'https://shopee.sg/search?keyword=korean+earphone' },
-  { rank:13, icon:'🍜', name:'라면 / 즉석식품',       sub:'K-Food',         badge:'badge-hot',    badgeText:'🔥 인기',   growth:[12,14,16,18,21,24,27,30], margin:32, markets:'SG·MY·TH·ID·VN', shopUrl:'https://shopee.sg/search?keyword=korean+ramen' },
-  { rank:14, icon:'👔', name:'남성 패션 / 의류',      sub:'Menswear',       badge:'badge-up',     badgeText:'↑ 성장중', growth:[5,6,7,9,11,13,15,17],     margin:32, markets:'ID·TH·VN',       shopUrl:'https://shopee.sg/search?keyword=korean+men+fashion' },
-  { rank:15, icon:'⚽', name:'스포츠 / 아웃도어',     sub:'Sports',         badge:'badge-stable', badgeText:'● 안정',   growth:[10,11,12,12,13,13,14,14], margin:25, markets:'SG·MY·TH·ID',    shopUrl:'https://shopee.sg/search?keyword=korean+sports' },
-  { rank:16, icon:'👶', name:'유아 / 베이비 용품',    sub:'Baby',           badge:'badge-up',     badgeText:'↑ 성장중', growth:[4,5,6,7,9,11,13,15],      margin:34, markets:'ID·TH·VN·PH',    shopUrl:'https://shopee.sg/search?keyword=korean+baby' },
-  { rank:17, icon:'💍', name:'주얼리 / 액세서리',     sub:'Jewelry',        badge:'badge-stable', badgeText:'● 안정',   growth:[6,6,7,7,8,8,9,9],         margin:48, markets:'SG·MY·TH',       shopUrl:'https://shopee.sg/search?keyword=korean+jewelry' },
-  { rank:18, icon:'🐾', name:'반려동물 용품',         sub:'Pet Supplies',   badge:'badge-stable', badgeText:'● 보통',   growth:[5,5,6,6,7,7,7,8],         margin:32, markets:'SG·MY·TH',       shopUrl:'https://shopee.sg/search?keyword=korean+pet' },
-  { rank:19, icon:'🎮', name:'게임 / 피규어',         sub:'Toys & Hobby',   badge:'badge-stable', badgeText:'● 낮음',   growth:[3,3,4,4,5,5,5,5],         margin:22, markets:'SG·MY·PH',       shopUrl:'https://shopee.sg/search?keyword=korean+figure' },
-  { rank:20, icon:'🍱', name:'일본 식품 / 과자',      sub:'J-Food',         badge:'badge-stable', badgeText:'▽ 낮음',   growth:[2,2,3,3,3,3,4,4],         margin:20, markets:'SG·MY',          shopUrl:'https://shopee.sg/search?keyword=japanese+snack' },
+  { rank:1,  icon:'🧴', name:'스킨케어 / 화장품',    sub:'K-Beauty',        badge:'badge-hot',    badgeText:'🔥 1위',    growth:[20,25,28,32,38,44,50,58], margin:42, markets:'SG·MY·TH·PH·VN', priceRange:'S$8~35',  keywords:['korean skincare','k-beauty serum','수분크림'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+skincare',th:'https://shopee.co.th/search?keyword=korean+skincare',id:'https://shopee.co.id/search?keyword=korean+skincare'} },
+  { rank:2,  icon:'💄', name:'색조화장품 / 메이크업', sub:'K-Makeup',        badge:'badge-hot',    badgeText:'🔥 급상승', growth:[15,19,23,27,33,39,46,54], margin:45, markets:'TH·ID·VN·PH',    priceRange:'S$5~28',  keywords:['korean makeup','cushion bb cream','틴트 립'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+makeup',th:'https://shopee.co.th/search?keyword=korean+makeup',ph:'https://shopee.ph/search?keyword=korean+makeup'} },
+  { rank:3,  icon:'📱', name:'스마트폰 액세서리',     sub:'Phone Acc.',      badge:'badge-hot',    badgeText:'🔥 급상승', growth:[10,14,18,22,28,34,40,48], margin:55, markets:'ID·TH·VN·PH',    priceRange:'S$3~18',  keywords:['korean phone case','wireless earbuds','휴대폰케이스'], shopUrls:{sg:'https://shopee.sg/search?keyword=phone+case',id:'https://shopee.co.id/search?keyword=phone+case',th:'https://shopee.co.th/search?keyword=phone+case'} },
+  { rank:4,  icon:'👗', name:'여성 패션 / 의류',      sub:'K-Fashion',       badge:'badge-hot',    badgeText:'🔥 인기',   growth:[18,20,22,25,28,30,33,36], margin:38, markets:'TH·ID·VN·MY',    priceRange:'S$12~45', keywords:['korean fashion dress','ulzzang outfit','k-fashion'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+fashion',th:'https://shopee.co.th/search?keyword=korean+fashion',my:'https://shopee.com.my/search?keyword=korean+fashion'} },
+  { rank:5,  icon:'🧹', name:'세제 / 청소용품',       sub:'Cleaning',        badge:'badge-up',     badgeText:'↑ 성장중', growth:[6,7,9,11,13,15,17,20],    margin:32, markets:'ID·TH·VN·MY',    priceRange:'S$5~22',  keywords:['korean detergent','natural cleaner','세탁세제'], shopUrls:{id:'https://shopee.co.id/search?keyword=korean+detergent',th:'https://shopee.co.th/search?keyword=laundry+detergent',my:'https://shopee.com.my/search?keyword=korean+cleaning'} },
+  { rank:6,  icon:'💇', name:'헤어케어 / 샴푸',       sub:'Hair Care',       badge:'badge-up',     badgeText:'↑ 급상승', growth:[9,11,13,16,19,23,27,31],  margin:38, markets:'ID·TH·VN·MY',    priceRange:'S$6~25',  keywords:['korean shampoo','hair treatment','두피케어'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+shampoo',id:'https://shopee.co.id/search?keyword=korean+shampoo',vn:'https://shopee.vn/search?keyword=korean+shampoo'} },
+  { rank:7,  icon:'🏠', name:'생활용품 / 주방',       sub:'Home & Kitchen',  badge:'badge-up',     badgeText:'↑ 성장중', growth:[8,10,12,14,16,18,21,24],  margin:30, markets:'ID·TH·PH·VN',    priceRange:'S$8~30',  keywords:['korean kitchen','stainless container','주방용품'], shopUrls:{id:'https://shopee.co.id/search?keyword=korean+kitchen',ph:'https://shopee.ph/search?keyword=kitchen+organizer',th:'https://shopee.co.th/search?keyword=kitchen+tools'} },
+  { rank:8,  icon:'💊', name:'건강식품 / 보충제',     sub:'Health Food',     badge:'badge-up',     badgeText:'↑ 성장중', growth:[7,9,11,13,15,17,19,22],   margin:35, markets:'SG·MY·PH',       priceRange:'S$15~55', keywords:['korean collagen','red ginseng','홍삼 건강식품'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+supplement',my:'https://shopee.com.my/search?keyword=korean+collagen',ph:'https://shopee.ph/search?keyword=korean+health'} },
+  { rank:9,  icon:'👟', name:'신발 / 슈즈',           sub:'Footwear',        badge:'badge-up',     badgeText:'↑ 성장중', growth:[6,8,10,12,14,17,20,23],   margin:40, markets:'ID·TH·VN·PH',    priceRange:'S$20~65', keywords:['korean sneakers','platform shoes','운동화'], shopUrls:{id:'https://shopee.co.id/search?keyword=korean+shoes',th:'https://shopee.co.th/search?keyword=korean+sneakers',ph:'https://shopee.ph/search?keyword=korean+shoes'} },
+  { rank:10, icon:'🛁', name:'바디케어 / 목욕용품',   sub:'Body Care',       badge:'badge-up',     badgeText:'↑ 성장중', growth:[7,8,9,11,13,15,17,20],    margin:36, markets:'SG·MY·TH',       priceRange:'S$6~22',  keywords:['body lotion korean','body wash','바디로션'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+body+lotion',my:'https://shopee.com.my/search?keyword=korean+body+care',th:'https://shopee.co.th/search?keyword=body+lotion'} },
+  { rank:11, icon:'🎧', name:'이어폰 / 스피커',       sub:'Audio',           badge:'badge-up',     badgeText:'↑ 성장중', growth:[5,6,8,10,13,16,20,24],    margin:42, markets:'ID·PH·VN·TH',    priceRange:'S$15~80', keywords:['wireless earbuds','bluetooth speaker','무선이어폰'], shopUrls:{id:'https://shopee.co.id/search?keyword=wireless+earbuds',ph:'https://shopee.ph/search?keyword=bluetooth+earphone',vn:'https://shopee.vn/search?keyword=tai+nghe+bluetooth'} },
+  { rank:12, icon:'💊', name:'의약품 / 위생용품',     sub:'Health & Hygiene',badge:'badge-up',     badgeText:'↑ 성장중', growth:[6,8,9,10,12,13,15,17],    margin:28, markets:'SG·MY·PH',       priceRange:'S$4~18',  keywords:['korean mask','hand sanitizer','위생용품'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+health',my:'https://shopee.com.my/search?keyword=face+mask',ph:'https://shopee.ph/search?keyword=health+hygiene'} },
+  { rank:13, icon:'🍜', name:'라면 / 즉석식품',       sub:'K-Food',          badge:'badge-hot',    badgeText:'🔥 인기',   growth:[12,14,16,18,21,24,27,30], margin:32, markets:'SG·MY·TH·ID·VN', priceRange:'S$3~15',  keywords:['korean ramen','buldak noodles','불닭볶음면'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+ramen',my:'https://shopee.com.my/search?keyword=korean+ramen',id:'https://shopee.co.id/search?keyword=mie+korea'} },
+  { rank:14, icon:'👔', name:'남성 패션 / 의류',      sub:'Menswear',        badge:'badge-up',     badgeText:'↑ 성장중', growth:[5,6,7,9,11,13,15,17],     margin:32, markets:'ID·TH·VN',       priceRange:'S$10~38', keywords:['korean men fashion','oversized tshirt','남성 오버핏'], shopUrls:{id:'https://shopee.co.id/search?keyword=korean+fashion+pria',th:'https://shopee.co.th/search?keyword=korean+men',vn:'https://shopee.vn/search?keyword=ao+thun+han+quoc'} },
+  { rank:15, icon:'⚽', name:'스포츠 / 아웃도어',     sub:'Sports',          badge:'badge-stable', badgeText:'● 안정',   growth:[10,11,12,12,13,13,14,14], margin:25, markets:'SG·MY·TH·ID',    priceRange:'S$12~55', keywords:['korean sports','yoga mat','스포츠웨어'], shopUrls:{sg:'https://shopee.sg/search?keyword=sports+equipment',my:'https://shopee.com.my/search?keyword=sports',id:'https://shopee.co.id/search?keyword=olahraga'} },
+  { rank:16, icon:'👶', name:'유아 / 베이비 용품',    sub:'Baby',            badge:'badge-up',     badgeText:'↑ 성장중', growth:[4,5,6,7,9,11,13,15],      margin:34, markets:'ID·TH·VN·PH',    priceRange:'S$8~40',  keywords:['korean baby','baby skincare','아기용품'], shopUrls:{id:'https://shopee.co.id/search?keyword=korean+baby',th:'https://shopee.co.th/search?keyword=baby+product',ph:'https://shopee.ph/search?keyword=baby+care'} },
+  { rank:17, icon:'💍', name:'주얼리 / 액세서리',     sub:'Jewelry',         badge:'badge-stable', badgeText:'● 안정',   growth:[6,6,7,7,8,8,9,9],         margin:48, markets:'SG·MY·TH',       priceRange:'S$5~30',  keywords:['korean jewelry','silver necklace','귀걸이'], shopUrls:{sg:'https://shopee.sg/search?keyword=korean+jewelry',my:'https://shopee.com.my/search?keyword=korean+accessories',th:'https://shopee.co.th/search?keyword=jewelry'} },
+  { rank:18, icon:'🐾', name:'반려동물 용품',         sub:'Pet Supplies',    badge:'badge-stable', badgeText:'● 보통',   growth:[5,5,6,6,7,7,7,8],         margin:32, markets:'SG·MY·TH',       priceRange:'S$6~25',  keywords:['pet supplies','dog treat','애완동물 용품'], shopUrls:{sg:'https://shopee.sg/search?keyword=pet+supplies',my:'https://shopee.com.my/search?keyword=pet',th:'https://shopee.co.th/search?keyword=pet'} },
+  { rank:19, icon:'🎮', name:'게임 / 피규어',         sub:'Toys & Hobby',    badge:'badge-stable', badgeText:'● 낮음',   growth:[3,3,4,4,5,5,5,5],         margin:22, markets:'SG·MY·PH',       priceRange:'S$10~55', keywords:['korean figure','anime collectible','피규어'], shopUrls:{sg:'https://shopee.sg/search?keyword=figure+toy',my:'https://shopee.com.my/search?keyword=collectible',ph:'https://shopee.ph/search?keyword=figure'} },
+  { rank:20, icon:'🍱', name:'일본 식품 / 과자',      sub:'J-Food',          badge:'badge-stable', badgeText:'▽ 낮음',   growth:[2,2,3,3,3,3,4,4],         margin:20, markets:'SG·MY',          priceRange:'S$4~20',  keywords:['japanese snack','pocky','일본과자'], shopUrls:{sg:'https://shopee.sg/search?keyword=japanese+snack',my:'https://shopee.com.my/search?keyword=japanese+food'} },
 ];
 
 // 아마존 글로벌 카테고리 랭킹
@@ -2129,33 +2129,71 @@ function renderRankList(categories) {
   }).join('');
 }
 
+function seaSparkline(data) {
+  const w = 80, h = 22;
+  const min = Math.min(...data), max = Math.max(...data);
+  const range = max - min || 1;
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - min) / range) * (h - 4) - 2;
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  }).join(' ');
+  const lastX = w, lastY = (h - ((data[data.length-1] - min) / range) * (h - 4) - 2).toFixed(1);
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" style="display:block;flex-shrink:0">
+    <polyline points="${pts}" fill="none" stroke="#22C55E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${lastX}" cy="${lastY}" r="2.5" fill="#22C55E"/>
+  </svg>`;
+}
+function seaGrowthPct(data) {
+  return Math.round((data[data.length-1] - data[0]) / data[0] * 100);
+}
 function renderSeaList(categories) {
   const el = document.getElementById('seaRankList');
   if (!el) return;
   el.innerHTML = categories.map(c => {
-    const marginColor = c.margin >= 40 ? 'var(--success)' : c.margin >= 30 ? 'var(--accent)' : 'var(--muted)';
+    const marginColor = c.margin >= 40 ? '#16a34a' : c.margin >= 30 ? '#EA580C' : '#9CA3AF';
+    const growthPct   = seaGrowthPct(c.growth);
+    const sparkline   = seaSparkline(c.growth);
+    const countryBtns = Object.entries(c.shopUrls || {}).map(([cc, url]) =>
+      `<a href="${url}" target="_blank" rel="noopener"
+        style="font-size:0.58rem;color:#15803D;font-weight:700;padding:1px 5px;border:1px solid #22C55E;border-radius:4px;background:#F0FDF4;text-decoration:none;white-space:nowrap">
+        🛒 ${cc.toUpperCase()}</a>`
+    ).join('');
+    const kwTags = (c.keywords || []).slice(0,2).map(k =>
+      `<span style="font-size:0.55rem;padding:1px 5px;border-radius:99px;background:#F0F9FF;color:#0369A1;border:1px solid #BAE6FD;white-space:nowrap">${k}</span>`
+    ).join('');
     return `
-    <div class="rank-item" style="cursor:default;padding:8px 4px">
-      <span class="rank-num ${c.rank<=3?'top':''}">${c.rank}</span>
-      <span class="rank-icon" style="font-size:1.1rem">${c.icon}</span>
+    <div class="rank-item" style="cursor:default;padding:7px 4px;flex-wrap:wrap;align-items:flex-start">
+      <span class="rank-num ${c.rank<=3?'top':''}" style="margin-top:2px">${c.rank}</span>
+      <span class="rank-icon" style="font-size:1rem;margin-top:2px">${c.icon}</span>
       <div class="rank-info" style="flex:1;min-width:0">
-        <div class="rank-name" style="font-size:0.82rem">${c.name}</div>
-        <div style="display:flex;gap:4px;margin-top:3px;flex-wrap:wrap">
-          <span style="font-size:0.63rem;padding:1px 6px;border-radius:99px;background:#F0FDF4;color:#15803D;border:1px solid #22C55E;font-weight:700;white-space:nowrap">${c.badgeText}</span>
-          <span style="font-size:0.6rem;color:#9CA3AF;align-self:center">${c.markets}</span>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+          <span style="font-size:0.8rem;font-weight:700;color:#1A1917">${c.name}</span>
+          <span style="font-size:0.62rem;padding:1px 6px;border-radius:99px;background:#F0FDF4;color:#15803D;border:1px solid #22C55E;font-weight:700;white-space:nowrap">${c.badgeText}</span>
         </div>
-        <div style="display:flex;gap:4px;margin-top:4px;flex-wrap:wrap">
-          <a href="${c.shopUrl}" target="_blank"
-            style="font-size:0.63rem;color:#15803D;font-weight:700;padding:1px 5px;border:1px solid #22C55E;border-radius:4px;background:#F0FDF4;text-decoration:none;white-space:nowrap">🛒 Shopee</a>
+        <div style="font-size:0.58rem;color:#9CA3AF;margin:2px 0">${c.markets} · ${c.priceRange || ''}</div>
+
+        <div style="display:flex;align-items:center;gap:6px;margin:4px 0">
+          ${sparkline}
+          <div style="text-align:right;flex-shrink:0">
+            <div style="font-size:0.6rem;color:#9CA3AF">8주 성장</div>
+            <div style="font-size:0.78rem;font-weight:800;color:#16a34a">+${growthPct}%</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;margin-left:4px">
+            <div style="font-size:0.6rem;color:#9CA3AF">마진</div>
+            <div style="font-size:0.78rem;font-weight:800;color:${marginColor}">~${c.margin}%</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:3px;flex-wrap:wrap;margin-bottom:4px">${kwTags}</div>
+
+        <div style="display:flex;gap:3px;flex-wrap:wrap;align-items:center">
+          ${countryBtns}
           <span onclick="openFactoryModal('${c.name}','${c.icon}','factory')"
-            style="font-size:0.63rem;color:var(--primary);font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid var(--primary);border-radius:4px;background:var(--surface)">🏭 공장</span>
+            style="font-size:0.58rem;color:var(--primary);font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid var(--primary);border-radius:4px;background:var(--surface);white-space:nowrap">🏭 공장</span>
         </div>
       </div>
-      <div style="text-align:right;margin-left:6px;flex-shrink:0">
-        <div style="font-size:0.62rem;color:var(--muted);font-weight:600">마진</div>
-        <div style="font-size:0.88rem;font-weight:800;color:${marginColor}">~${c.margin}%</div>
-      </div>
-    </div>`
+    </div>`;
   }).join('');
 }
 
