@@ -7,9 +7,9 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
   <style>
     :root {
-      --primary: #7C6AF7;
+      --primary: #7C6AF7;h
       --primary-light: #9D8FF9;
-      --accent: #D97706;
+      --accent: #D97706;h
       --danger: #DC2626;
       --success: #059669;
       --bg: #F5F4EE;
@@ -599,7 +599,7 @@
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
         <span style="font-size:1.1rem">🇯🇵</span>
         <span style="font-weight:800;font-size:0.88rem;color:#C2410C">일본 TOP 20</span>
-        <span style="margin-left:auto;font-size:0.62rem;background:#FB923C;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700" id="jpRankTag">Rakuten</span>
+        <span style="margin-left:auto;font-size:0.5rem;background:#FB923C;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700" id="jpRankTag">Rakuten</span>
       </div>
       <div id="rankList" style="max-height:680px;overflow-y:auto;scrollbar-width:thin"></div>
     </div>
@@ -609,7 +609,7 @@
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
         <span style="font-size:1.1rem">🌏</span>
         <span style="font-weight:800;font-size:0.88rem;color:#15803D">동남아 TOP 20</span>
-        <span style="margin-left:auto;font-size:0.62rem;background:#15803D;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700">📊 시장 인사이트</span>
+        <span style="margin-left:auto;font-size:0.5rem;background:#15803D;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700">📊 시장 인사이트</span>
       </div>
       <div id="seaRankList" style="max-height:680px;overflow-y:auto;scrollbar-width:thin"></div>
     </div>
@@ -619,7 +619,7 @@
       <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
         <span style="font-size:1.1rem">🌎</span>
         <span style="font-weight:800;font-size:0.88rem;color:#1D4ED8">아마존 TOP 20</span>
-        <span style="margin-left:auto;font-size:0.62rem;background:#3B82F6;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700">Amazon</span>
+        <span style="margin-left:auto;font-size:0.5rem;background:#3B82F6;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700">Amazon</span>
       </div>
       <div id="amazonRankList" style="max-height:680px;overflow-y:auto;scrollbar-width:thin"></div>
     </div>
@@ -2096,7 +2096,7 @@ function renderRankList(categories) {
             <button onclick="carouselScroll('${catId}',1)" style="position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:2;background:#FB923C;border:none;color:#fff;border-radius:50%;width:22px;height:22px;font-size:0.75rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.15)">›</button>
           </div>
         </div>`;
-    })() : `<div style="margin-top:4px;font-size:0.62rem;color:var(--muted);font-style:italic">— 라쿠텐 API 연결 후 실시간 표시 —</div>`;
+    })() : `<div style="margin-top:4px;font-size:0.5rem;color:var(--muted);font-style:italic">— 라쿠텐 API 연결 후 실시간 표시 —</div>`;
 
     return `
     <div class="rank-item" style="cursor:default;padding:8px 4px;flex-wrap:wrap">
@@ -2167,7 +2167,7 @@ function renderSeaList(categories) {
       <div class="rank-info" style="flex:1;min-width:0">
         <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
           <span style="font-size:0.8rem;font-weight:700;color:#1A1917">${c.name}</span>
-          <span style="font-size:0.62rem;padding:1px 6px;border-radius:99px;background:#F0FDF4;color:#15803D;border:1px solid #22C55E;font-weight:700;white-space:nowrap">${c.badgeText}</span>
+          <span style="font-size:0.5rem;padding:1px 6px;border-radius:99px;background:#F0FDF4;color:#15803D;border:1px solid #22C55E;font-weight:700;white-space:nowrap">${c.badgeText}</span>
         </div>
         <div style="font-size:0.58rem;color:#9CA3AF;margin:2px 0">${c.markets} · ${c.priceRange || ''}</div>
 
@@ -2188,7 +2188,7 @@ function renderSeaList(categories) {
         <div style="display:flex;gap:3px;flex-wrap:wrap;align-items:center">
           ${countryBtns}
           <span onclick="openFactoryModal('${c.name}','${c.icon}','factory')"
-            style="font-size:0.58rem;color:var(--primary);font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid var(--primary);border-radius:4px;background:var(--surface);white-space:nowrap">🏭 공장</span>
+            style="font-size:0.58rem;color:var(--primary);font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid var(--primary);border-radius:4px;background:var(--surface);white-space:nowrap">🏭공장</span>
         </div>
       </div>
     </div>`;
@@ -2214,11 +2214,11 @@ function renderAmazonList(categories) {
           <a href="${c.amzUrl}" target="_blank"
             style="font-size:0.63rem;color:#1D4ED8;font-weight:700;padding:1px 5px;border:1px solid #3B82F6;border-radius:4px;background:#EFF6FF;text-decoration:none;white-space:nowrap">📦 Amazon</a>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','factory')"
-            style="font-size:0.63rem;color:var(--primary);font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid var(--primary);border-radius:4px;background:var(--surface)">🏭 공장</span>
+            style="font-size:0.63rem;color:var(--primary);font-weight:700;cursor:pointer;padding:1px 5px;border:1px solid var(--primary);border-radius:4px;background:var(--surface)">🏭공장</span>
         </div>
       </div>
       <div style="text-align:right;margin-left:6px;flex-shrink:0">
-        <div style="font-size:0.62rem;color:var(--muted);font-weight:600">마진</div>
+        <div style="font-size:0.5rem;color:var(--muted);font-weight:600">마진</div>
         <div style="font-size:0.88rem;font-weight:800;color:${marginColor}">~${c.margin}%</div>
       </div>
     </div>`
