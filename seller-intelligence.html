@@ -2872,6 +2872,7 @@ const SHOPEE_DEMO = [
 function fetchShopeeData(keyword = 'korean beauty', country = 'sg') {
   const tag  = document.getElementById('shopeeStatusTag');
   const box  = document.getElementById('shopeeContent');
+  if (!tag || !box) return;
   const apiBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'http://localhost:8000' : location.origin;
 
@@ -2900,6 +2901,7 @@ function renderShopeeItems(items, keyword, country) {
   const tag = document.getElementById('shopeeStatusTag');
   const box = document.getElementById('shopeeContent');
   const bar = document.getElementById('shopeeKeywordBar');
+  if (!tag || !box) return;
 
   tag.textContent = `🟢 LIVE · Shopee ${country.toUpperCase()}`;
   tag.style.background = '#22C55E';
@@ -2936,6 +2938,7 @@ function renderShopeeDemo(keyword, country, reason) {
   const tag = document.getElementById('shopeeStatusTag');
   const box = document.getElementById('shopeeContent');
   const bar = document.getElementById('shopeeKeywordBar');
+  if (!tag || !box) return;
 
   tag.textContent = '데모 데이터';
   tag.style.background = '#6B7280';
