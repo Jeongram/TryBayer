@@ -3351,6 +3351,9 @@ function renderDmgCard(item) {
   // 임시로 데모 렌더 (연결 완료 전 화면 채우기)
   renderRankList(DEMO_CATEGORIES);
   renderTrendChart(DEMO_CATEGORIES);
+  // 동남아·아마존은 항상 고정 인사이트 데이터로 렌더
+  renderSeaList(SEA_CATEGORIES);
+  renderAmazonList(AMAZON_CATEGORIES);
 
   // 서버에 환경변수 키가 있는지 먼저 확인
   fetch('/api/status')
