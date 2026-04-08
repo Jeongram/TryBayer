@@ -2100,27 +2100,27 @@ function renderRankList(categories) {
 
     return `
     <div class="rank-item" style="cursor:default;padding:8px 4px;flex-wrap:wrap">
-      <!-- 헤더 행: 순위 · 아이콘 · [카테고리명 배지 마진] 한 줄 -->
+      <!-- 헤더 행: 순위 · 아이콘 · 카테고리명 · 배지 · 마진 (이름 바로 옆) -->
       <div style="display:flex;align-items:center;width:100%;gap:3px;flex-wrap:nowrap;min-width:0">
         <span class="rank-num ${c.rank<=3?'top':''}" style="flex-shrink:0">${c.rank}</span>
         <span class="rank-icon" style="font-size:1rem;flex-shrink:0">${c.icon}</span>
-        <span class="rank-name" style="font-size:0.78rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1">${c.name}</span>
-        <span style="font-size:0.58rem;padding:1px 5px;border-radius:99px;background:#FFF8F0;color:#C2410C;border:1px solid #FB923C;font-weight:700;white-space:nowrap;flex-shrink:0;margin-left:2px">${c.badgeText}</span>
-        <span style="font-size:0.75rem;font-weight:800;color:${marginColor};white-space:nowrap;flex-shrink:0;margin-left:3px">~${c.margin}%</span>
+        <span class="rank-name" style="font-size:0.78rem;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex-shrink:1">${c.name}</span>
+        <span style="font-size:0.58rem;padding:1px 5px;border-radius:99px;background:#FFF8F0;color:#C2410C;border:1px solid #FB923C;font-weight:700;white-space:nowrap;flex-shrink:0">${c.badgeText}</span>
+        <span style="font-size:0.75rem;font-weight:800;color:${marginColor};white-space:nowrap;flex-shrink:0">~${c.margin}%</span>
       </div>
-      <!-- 캐러셀 + 탭 묶음 -->
-      <div style="width:100%;padding-left:28px;box-sizing:border-box">
+      <!-- 캐러셀 + 탭 묶음 (padding 제거해서 탭 전체 너비 확보) -->
+      <div style="width:100%">
         ${liveHtml}
-        <!-- 공장/인증/취득법/파트너 탭 — 캐러셀 아래 전체 너비 4등분 -->
+        <!-- 공장/인증/취득법/파트너 탭 — 전체 너비 4등분 -->
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:6px">
           <span onclick="openFactoryModal('${c.name}','${c.icon}','factory')"
-            style="font-size:0.6rem;color:var(--primary);font-weight:700;cursor:pointer;padding:4px 2px;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">🏭 공장</span>
+            style="font-size:0.62rem;color:var(--primary);font-weight:700;cursor:pointer;padding:4px 3px;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🏭 공장</span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','cert')"
-            style="font-size:0.6rem;color:#D97706;font-weight:700;cursor:pointer;padding:4px 2px;border:1px solid #D97706;border-radius:5px;background:var(--surface);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">🇯🇵 인증</span>
+            style="font-size:0.62rem;color:#D97706;font-weight:700;cursor:pointer;padding:4px 3px;border:1px solid #D97706;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🇯🇵 인증</span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','certguide')"
-            style="font-size:0.6rem;color:#0891b2;font-weight:700;cursor:pointer;padding:4px 2px;border:1px solid #0891b2;border-radius:5px;background:var(--surface);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">📋 취득법</span>
+            style="font-size:0.62rem;color:#0891b2;font-weight:700;cursor:pointer;padding:4px 3px;border:1px solid #0891b2;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📋 취득법</span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','partner')"
-            style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 2px;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">🤝 파트너</span>
+            style="font-size:0.62rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 3px;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🤝 파트너</span>
         </div>
       </div>
     </div>`
