@@ -103,7 +103,7 @@
       display: flex; align-items: center; gap: 12px; padding: 10px 0;
       border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s;
       border-radius: 8px; padding: 10px 10px; margin: 0 -10px;
-      min-width: 0; overflow: hidden;
+      min-width: 0; overflow: visible;
     }
     .rank-item:hover { background: var(--surface2); }
     .rank-item:last-child { border-bottom: none; }
@@ -2112,15 +2112,15 @@ function renderRankList(categories) {
       <div style="width:100%">
         ${liveHtml}
         <!-- 공장/인증/취득법/파트너 탭 — 전체 너비 4등분 -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin-top:6px">
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:6px;box-sizing:border-box">
           <span onclick="openFactoryModal('${c.name}','${c.icon}','factory')"
-            style="font-size:0.62rem;color:var(--primary);font-weight:700;cursor:pointer;padding:4px 3px;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🏭 공장</span>
+            style="font-size:0.6rem;color:var(--primary);font-weight:700;cursor:pointer;padding:4px 0;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">🏭공장</span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','cert')"
-            style="font-size:0.62rem;color:#D97706;font-weight:700;cursor:pointer;padding:4px 3px;border:1px solid #D97706;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🇯🇵 인증</span>
+            style="font-size:0.6rem;color:#D97706;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #D97706;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">🇯🇵인증</span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','certguide')"
-            style="font-size:0.62rem;color:#0891b2;font-weight:700;cursor:pointer;padding:4px 3px;border:1px solid #0891b2;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">📋 취득법</span>
+            style="font-size:0.6rem;color:#0891b2;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #0891b2;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">📋취득법</span>
           <span onclick="openFactoryModal('${c.name}','${c.icon}','partner')"
-            style="font-size:0.62rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 3px;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">🤝 파트너</span>
+            style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0">🤝파트너</span>
         </div>
       </div>
     </div>`
