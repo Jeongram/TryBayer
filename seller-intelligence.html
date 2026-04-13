@@ -2226,6 +2226,177 @@ function renderSeaList(categories) {
 // ──────────────────────────────────────────
 // 🌏 동남아 국가별 탭 전환
 // ──────────────────────────────────────────
+let _currentSeaCountry = 'co.id';
+
+// 국가별 인증·취득법·파트너 데이터
+const SEA_COUNTRY_CERT_DATA = {
+  'co.th': {
+    countryName:'태국', flag:'🇹🇭', agency:'FDA Thailand', agencyUrl:'https://privus.fda.moph.go.th/',
+    difficulty:'mid', period:'3~6개월', cost:'$300~$1,500', agencyShort:'Thai FDA',
+    certs:[
+      { name:'FDA 화장품 신고 (Notification)', required:true, full:'อย. Thai FDA Notification',
+        desc:'태국에서 화장품 판매 시 FDA 신고 필수. 온라인(e-Submission) 시스템으로 신청. 현지 수입업자 명의 필요.' },
+      { name:'Halal 인증', required:false, full:'Central Islamic Committee of Thailand',
+        desc:'남부 태국(말레이계) 및 무슬림 소비자 공략 시 권장. 동남아 전역에서 마케팅 효과.' },
+      { name:'태국어 라벨링', required:true, full:'Thai FDA Labeling Compliance',
+        desc:'제품명·성분·제조사·유통기한을 태국어로 표기 필수. 수입업체명 포함.' },
+    ],
+    tip:'태국 FDA 신고는 현지 수입업자(ตัวแทนนำเข้า) 명의로만 진행 가능합니다. 한국 기업 직접 신청 불가. 현지 파트너사 확보가 첫 번째 과제입니다.',
+    steps:[
+      { num:'01', title:'현지 수입업자 확보', desc:'태국 FDA 등록 수입업자가 필수. KOTRA 방콕 무역관 또는 태한 상공회의소를 통해 파트너를 확보하세요.' },
+      { num:'02', title:'제품 성분·안전성 자료 준비', desc:'전 성분표(INCI명), 안전성 평가 보고서(Safety Assessment), 제조사 GMP 인증서를 영문으로 준비합니다.' },
+      { num:'03', title:'e-Submission 온라인 신고', desc:'Thai FDA 포털(privus.fda.moph.go.th)에서 수입업자 명의로 온라인 신고. 화장품 카테고리 선택 후 서류 업로드.' },
+      { num:'04', title:'심사 및 승인 (1~3개월)', desc:'FDA 서류 심사. 보완 요청 시 신속 대응하면 기간 단축 가능. 평균 1~3개월.' },
+      { num:'05', title:'태국어 라벨 부착 및 유통 시작', desc:'승인 후 태국어 라벨 부착 필수. Shopee TH 또는 현지 H&B 채널로 판매 개시.' },
+    ],
+    partners:[
+      { name:'Thai FDA 공식 포털', url:'https://privus.fda.moph.go.th/', desc:'신고 및 허가 온라인 신청', type:'🏛️ 정부기관' },
+      { name:'DITP 태국 무역투자청', url:'https://www.ditp.go.th/', desc:'태국 시장 진출 기업 지원', type:'🤝 지원기관' },
+      { name:'KOTRA 방콕 무역관', url:'https://www.kotra.or.kr/', desc:'태국 파트너 매칭 · 컨설팅', type:'🇰🇷 한국 기관' },
+    ],
+  },
+  'co.id': {
+    countryName:'인도네시아', flag:'🇮🇩', agency:'BPOM', agencyUrl:'https://www.pom.go.id/',
+    difficulty:'high', period:'6~12개월', cost:'$500~$3,000', agencyShort:'BPOM',
+    certs:[
+      { name:'BPOM 등록', required:true, full:'Badan Pengawas Obat dan Makanan',
+        desc:'화장품·식품·건강기능식품 모두 BPOM 등록 필수. 세계 최대 무슬림 국가로 규제가 까다로움.' },
+      { name:'MUI Halal 인증', required:false, full:'Majelis Ulama Indonesia',
+        desc:'인구 87%가 무슬림. 화장품·식품은 Halal 인증이 있으면 시장 접근성이 크게 높아짐.' },
+      { name:'SNI 인증', required:false, full:'Standar Nasional Indonesia',
+        desc:'전자제품·장난감 등 일부 카테고리는 SNI 필수. 해당 카테고리 판매 시 확인 필수.' },
+    ],
+    tip:'인도네시아는 BPOM 등록이 가장 복잡하고 오래 걸립니다. 현지 법인(PT) 또는 등록된 파트너가 반드시 필요합니다.',
+    steps:[
+      { num:'01', title:'현지 법인(PT) 또는 파트너사 확보', desc:'BPOM 등록은 인도네시아 법인(PT) 명의로만 가능. 현지 수입 에이전트를 통해 진행해야 합니다.' },
+      { num:'02', title:'제품 분석 및 서류 준비', desc:'전 성분(INCI), 안전성 시험 결과, COA, 제조사 GMP 인증서, 샘플 준비. 영문 라벨 초안도 필요.' },
+      { num:'03', title:'BPOM 온라인 등록 신청', desc:'e-reg.pom.go.id에서 온라인 신청. 화장품은 Notifikasi 방식으로 일반 허가보다 간소화됨.' },
+      { num:'04', title:'Halal 인증 병행 신청 (선택)', desc:'MUI에 Halal 신청. BPOM 등록과 병행 진행 권장. 약 3~6개월 소요.' },
+      { num:'05', title:'BPOM 번호 취득 및 라벨 표기', desc:'심사 완료 후 BPOM 번호 발급. 화장품은 NA번호, 식품은 MD/ML번호. 라벨에 반드시 표기.' },
+      { num:'06', title:'인니어 라벨 및 Shopee ID 유통', desc:'bahasa Indonesia 라벨 부착 후 Shopee ID 또는 현지 유통망으로 판매 시작.' },
+    ],
+    partners:[
+      { name:'BPOM 공식 사이트', url:'https://www.pom.go.id/', desc:'식품의약청 공식 사이트', type:'🏛️ 정부기관' },
+      { name:'e-reg BPOM (등록시스템)', url:'https://e-reg.pom.go.id/', desc:'제품 온라인 등록 포털', type:'🏛️ 정부기관' },
+      { name:'KOTRA 자카르타 무역관', url:'https://www.kotra.or.kr/', desc:'인도네시아 시장 진출 지원', type:'🇰🇷 한국 기관' },
+    ],
+  },
+  'com.my': {
+    countryName:'말레이시아', flag:'🇲🇾', agency:'NPRA', agencyUrl:'https://npra.gov.my/',
+    difficulty:'mid', period:'3~6개월', cost:'$200~$1,000', agencyShort:'NPRA',
+    certs:[
+      { name:'NPRA 화장품 신고', required:true, full:'National Pharmaceutical Regulatory Agency',
+        desc:'말레이시아 화장품 판매 시 NPRA 신고 필수. ASEAN Cosmetics Directive 기준 적용.' },
+      { name:'JAKIM Halal 인증', required:false, full:'Jabatan Kemajuan Islam Malaysia',
+        desc:'인구 65%가 무슬림. JAKIM Halal 인증은 동남아 전역에서 인정받는 최고 권위 인증.' },
+    ],
+    tip:'말레이시아는 ASEAN 중 규제가 체계적이고 한국 제품에 우호적입니다. K-Beauty 인기가 높아 화장품 진입 장벽이 낮은 편입니다.',
+    steps:[
+      { num:'01', title:'QUEST 시스템 수입업체 등록', desc:'NPRA의 QUEST 온라인 시스템(quest3.npra.gov.my)에 수입업체 등록. 말레이시아 에이전트 활용 가능.' },
+      { num:'02', title:'제품 서류 준비', desc:'INCI 성분표, 안전성 평가서(CPSR), 제조사 정보, 원산지 증명서 준비.' },
+      { num:'03', title:'NPRA 온라인 신고 제출', desc:'QUEST 시스템에서 제품 카테고리 선택 후 서류 업로드. Notification 방식으로 비교적 빠름.' },
+      { num:'04', title:'JAKIM Halal 신청 (선택)', desc:'할랄 인증은 JAKIM에 별도 신청. 공장 실사 포함. 3~6개월 소요.' },
+      { num:'05', title:'영어/말레이어 라벨 및 유통', desc:'영어·Bahasa Melayu 병기 라벨 부착. Shopee MY, Watsons, Guardian 등으로 유통.' },
+    ],
+    partners:[
+      { name:'NPRA 공식 사이트', url:'https://npra.gov.my/', desc:'화장품 신고 및 의약품 허가', type:'🏛️ 정부기관' },
+      { name:'JAKIM Halal Hub', url:'https://www.halal.gov.my/', desc:'말레이시아 공식 Halal 인증', type:'🏛️ 정부기관' },
+      { name:'KOTRA 쿠알라룸푸르 무역관', url:'https://www.kotra.or.kr/', desc:'말레이시아 시장 진출 지원', type:'🇰🇷 한국 기관' },
+    ],
+  },
+  vn: {
+    countryName:'베트남', flag:'🇻🇳', agency:'DAV (약품청)', agencyUrl:'https://dav.gov.vn/',
+    difficulty:'mid', period:'3~9개월', cost:'$300~$2,000', agencyShort:'DAV/MOH',
+    certs:[
+      { name:'화장품 공고 (Công bố)', required:true, full:'Ministry of Health Cosmetics Declaration',
+        desc:'베트남에서 화장품 판매 시 보건부(MOH)에 공고 신청 필수. 현지 법인 또는 에이전트 명의.' },
+      { name:'식품 수입 검사증', required:false, full:'Ministry of Agriculture / MOIT',
+        desc:'식품류는 수입 시 농업부 또는 상공부 검사 필요. 라면·과자 등 식품 카테고리 해당.' },
+    ],
+    tip:'베트남은 최근 K-Beauty 수요가 폭발적입니다. 규제가 점차 강화되고 있지만 현지 파트너를 통하면 진입이 수월합니다.',
+    steps:[
+      { num:'01', title:'현지 파트너/에이전트 확보', desc:'베트남 법인(LLC) 또는 공인 수입에이전트 필요. KOTRA 하노이/호치민 무역관에서 파트너 매칭 지원.' },
+      { num:'02', title:'서류 베트남어 번역·공증', desc:'성분표, 안전성 자료, 원산지 증명서 등을 베트남어로 번역 및 공증. 한국 영사관 확인도 필요할 수 있음.' },
+      { num:'03', title:'보건부(MOH) 공고 신청', desc:'화장품은 MOH 온라인 포털에서 "Công bố" 신청. 식품은 해당 부처로 별도 신청.' },
+      { num:'04', title:'심사 및 승인 (1~6개월)', desc:'서류 심사 후 수리 통지 발급. 보완 요청 시 신속 대응으로 기간 단축 가능.' },
+      { num:'05', title:'베트남어 라벨 부착 및 유통', desc:'베트남어 라벨 필수(제품명·성분·수입업체). Shopee VN 또는 현지 H&B 채널로 유통.' },
+    ],
+    partners:[
+      { name:'DAV (약품청)', url:'https://dav.gov.vn/', desc:'의약품 및 화장품 허가 기관', type:'🏛️ 정부기관' },
+      { name:'KOTRA 호치민 무역관', url:'https://www.kotra.or.kr/', desc:'한국 기업 베트남 진출 지원', type:'🇰🇷 한국 기관' },
+      { name:'VCCI (상공회의소)', url:'https://www.vcci.com.vn/', desc:'베트남 무역 투자 인증 기관', type:'🤝 지원기관' },
+    ],
+  },
+  sg: {
+    countryName:'싱가포르', flag:'🇸🇬', agency:'HSA (보건과학청)', agencyUrl:'https://www.hsa.gov.sg/',
+    difficulty:'low', period:'1~2개월', cost:'$100~$500', agencyShort:'HSA',
+    certs:[
+      { name:'HSA 화장품 신고', required:true, full:'Health Sciences Authority ASEAN Cosmetics',
+        desc:'싱가포르는 ASEAN 화장품 지침 따름. HSA PRISM 시스템으로 신고. 동남아 중 가장 간단하고 빠름.' },
+      { name:'GMP 인증 보유', required:false, full:'Good Manufacturing Practice ISO 22716',
+        desc:'필수는 아니지만 있으면 신고 과정이 수월. ISO 22716 권장.' },
+    ],
+    tip:'싱가포르는 동남아에서 규제가 가장 투명하고 영어로 모든 절차 가능. 한국 기업이 직접 접근하기 가장 쉬운 시장입니다.',
+    steps:[
+      { num:'01', title:'HSA PRISM 계정 생성', desc:'HSA PRISM 시스템(eservice.hsa.gov.sg)에 회사 계정 등록. 현지 에이전트 없이 해외 기업도 직접 신청 가능.' },
+      { num:'02', title:'제품 서류 준비 (영어)', desc:'INCI 성분표, 제품 설명, 제조사 정보, 라벨 초안 준비. 모두 영어로 작성 가능.' },
+      { num:'03', title:'PRISM 온라인 신고 (즉시 발급)', desc:'제품 카테고리 선택 후 서류 업로드. 화장품은 자동 승인 방식으로 접수 즉시 신고 번호 발급.' },
+      { num:'04', title:'영어 라벨 부착 및 유통', desc:'영어 라벨만으로 판매 가능. Shopee SG, Lazada SG, Watsons·Guardian 등 채널 활용.' },
+    ],
+    partners:[
+      { name:'HSA PRISM 포털', url:'https://eservice.hsa.gov.sg/', desc:'화장품·의약품 온라인 신고', type:'🏛️ 정부기관' },
+      { name:'Enterprise Singapore', url:'https://www.enterprisesg.gov.sg/', desc:'외국 기업 시장 진출 지원', type:'🤝 지원기관' },
+      { name:'KOTRA 싱가포르 무역관', url:'https://www.kotra.or.kr/', desc:'한국 기업 싱가포르 진출 지원', type:'🇰🇷 한국 기관' },
+    ],
+  },
+  ph: {
+    countryName:'필리핀', flag:'🇵🇭', agency:'FDA Philippines', agencyUrl:'https://www.fda.gov.ph/',
+    difficulty:'mid', period:'3~9개월', cost:'$200~$1,500', agencyShort:'PFDA',
+    certs:[
+      { name:'FDA 화장품 제품 알림 (CPN)', required:true, full:'Cosmetic Product Notification FDA Philippines',
+        desc:'필리핀 FDA에 CPN 신고 의무. 현지 LTO 보유 에이전트 명의 필요.' },
+      { name:'LTO (운영 허가)', required:true, full:'License to Operate FDA Philippines',
+        desc:'화장품 수입업체는 FDA LTO 취득 필수. 현지 파트너에게 LTO가 있는지 반드시 확인.' },
+    ],
+    tip:'절차가 복잡한 편이지만 K-Beauty 인기가 매우 높아 진입 가치가 충분합니다. LTO 보유 현지 에이전트 확보가 핵심입니다.',
+    steps:[
+      { num:'01', title:'LTO 보유 현지 파트너 확보', desc:'FDA Philippines LTO를 보유한 수입업체 파트너 필수. KOTRA 마닐라 무역관이나 필리핀 한인상공회의소 통해 탐색.' },
+      { num:'02', title:'제품 서류 준비', desc:'성분표(INCI), 제조사 GMP 인증, 원산지 증명, 안전성 데이터, 영문 라벨 준비.' },
+      { num:'03', title:'CPN 온라인 신청', desc:'FDA ePortal(fda.gov.ph)에서 파트너 LTO 번호로 CPN 신청.' },
+      { num:'04', title:'심사 및 CPN 번호 취득', desc:'통상 1~3개월 소요. CPN 번호 발급 후 라벨에 표기.' },
+      { num:'05', title:'영문 라벨 및 Shopee PH 유통', desc:'필리핀은 영어 라벨 가능. Shopee PH, Lazada PH 또는 SM몰 등 오프라인 채널 병행.' },
+    ],
+    partners:[
+      { name:'FDA Philippines 공식', url:'https://www.fda.gov.ph/', desc:'허가 및 신고 공식 기관', type:'🏛️ 정부기관' },
+      { name:'FDA ePortal', url:'https://fda.gov.ph/eportal/', desc:'온라인 CPN 신청 포털', type:'🏛️ 정부기관' },
+      { name:'KOTRA 마닐라 무역관', url:'https://www.kotra.or.kr/', desc:'필리핀 시장 진출 지원', type:'🇰🇷 한국 기관' },
+    ],
+  },
+  tw: {
+    countryName:'대만', flag:'🇹🇼', agency:'TFDA (대만 식품약품청)', agencyUrl:'https://www.fda.gov.tw/',
+    difficulty:'mid', period:'2~6개월', cost:'$200~$1,000', agencyShort:'TFDA',
+    certs:[
+      { name:'TFDA 화장품 신고', required:true, full:'Taiwan FDA Cosmetic Notification',
+        desc:'2019년부터 모든 화장품 사전 신고 의무. 특별 성분 포함 제품은 별도 허가(Permit) 필요.' },
+      { name:'번체 중문 라벨링', required:true, full:'Traditional Chinese Labeling Requirement',
+        desc:'대만은 번체 중국어 라벨 의무. 제품명·성분·유통기한·수입업체를 번체로 표기.' },
+    ],
+    tip:'대만은 K-Beauty 수요가 매우 높고 규제가 명확합니다. TFDA 영문 사이트도 잘 갖춰져 있어 진입이 수월한 편입니다.',
+    steps:[
+      { num:'01', title:'대만 수입업체 확보', desc:'TFDA 신고는 대만 법인 또는 등록 수입업체 명의. TAITRA 또는 KOTRA 타이베이 무역관 통해 파트너 매칭.' },
+      { num:'02', title:'제품 분류 확인', desc:'일반 화장품(Notification) vs 특수 성분(Permit) 여부 확인. 미백·자외선차단 등 기능성은 허가 필요.' },
+      { num:'03', title:'TFDA 온라인 신고', desc:'TFDA 코스메틱 신고 시스템에서 제품 정보 입력. 번체 중국어로 작성 필요.' },
+      { num:'04', title:'번체 중문 라벨 제작', desc:'승인 후 번체 중문 라벨 제작. 주요 기재: 제품명·전성분·제조일·유통기한·수입업체명.' },
+      { num:'05', title:'Shopee TW · Momo · PChome 입점', desc:'대만은 Momo, PChome 등 현지 플랫폼도 주요 채널. 멀티 채널 전략 권장.' },
+    ],
+    partners:[
+      { name:'TFDA 공식 사이트', url:'https://www.fda.gov.tw/', desc:'화장품 허가·신고 공식 기관', type:'🏛️ 정부기관' },
+      { name:'TAITRA 대만 무역진흥청', url:'https://www.taitra.org.tw/', desc:'대만 시장 파트너 매칭', type:'🤝 지원기관' },
+      { name:'KOTRA 타이베이 무역관', url:'https://www.kotra.or.kr/', desc:'한국 기업 대만 진출 지원', type:'🇰🇷 한국 기관' },
+    ],
+  },
+};
+
 const SEA_COUNTRY_FLAGS = {
   'co.id':'🇮🇩', 'co.th':'🇹🇭', 'com.my':'🇲🇾', tw:'🇹🇼', ph:'🇵🇭',
   vn:'🇻🇳', sg:'🇸🇬', 'com.br':'🇧🇷', 'com.mx':'🇲🇽', 'com.ar':'🇦🇷',
@@ -2245,6 +2416,7 @@ const SEA_COUNTRY_NAME = {
 function switchSeaCountry(country, btn) {
   document.querySelectorAll('.sea-ctab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
+  _currentSeaCountry = country;
   fetchSeaCountryProducts(country);
 }
 
@@ -2284,61 +2456,272 @@ function renderSeaCountryItems(items, country) {
   el.innerHTML = items.slice(0, 20).map((raw, i) => {
     const item     = raw.item_basic || raw;
     const name     = (item.name || '').substring(0, 55);
+    const nameSafe = name.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
     const priceRaw = item.price || item.price_min || 0;
     const price    = priceRaw ? (priceRaw / 100000).toFixed(2) : '—';
     const rank     = i + 1;
     const isTop    = rank <= 3;
 
     // 이미지
-    const imgId  = item.image || (item.images && item.images[0]);
-    const imgUrl = imgId ? `${cdnBase}${imgId}` : '';
+    const imgId   = item.image || (item.images && item.images[0]);
+    const imgUrl  = imgId ? `${cdnBase}${imgId}` : '';
     const imgHtml = imgUrl
-      ? `<img src="${imgUrl}" style="width:62px;height:62px;object-fit:cover;border-radius:7px;flex-shrink:0;border:1px solid #E5E7EB" onerror="this.style.display='none'">`
-      : `<div style="width:62px;height:62px;border-radius:7px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;border:1px solid #E5E7EB">🛍️</div>`;
+      ? `<img src="${imgUrl}" style="width:66px;height:66px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid #E5E7EB" loading="lazy" onerror="this.outerHTML='<div style=\'width:66px;height:66px;border-radius:8px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;border:1px solid #E5E7EB\'>🛍️</div>'">`
+      : `<div style="width:66px;height:66px;border-radius:8px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;font-size:1.8rem;flex-shrink:0;border:1px solid #E5E7EB">🛍️</div>`;
 
     // 평점
-    const rating  = item.item_rating?.rating_star || 0;
+    const rating     = item.item_rating?.rating_star || 0;
     const ratingHtml = rating > 0
-      ? `<span style="font-size:0.62rem;color:#F59E0B;font-weight:700">★ ${rating.toFixed(1)}</span>`
+      ? `<span style="font-size:0.65rem;color:#F59E0B;font-weight:700">★ ${rating.toFixed(1)}</span>`
       : '';
 
-    // 판매량
-    const soldNum = item.historical_sold || item.sold || 0;
+    // 판매순위 뱃지
+    const soldNum  = item.historical_sold || item.sold || 0;
     const soldHtml = soldNum > 0
       ? `<span style="font-size:0.62rem;color:#9CA3AF">판매 ${soldNum.toLocaleString()}+</span>`
-      : `<span style="font-size:0.6rem;padding:1px 5px;border-radius:99px;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;font-weight:700">판매순 TOP${rank}</span>`;
+      : `<span style="font-size:0.6rem;padding:1px 5px;border-radius:99px;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;font-weight:700">TOP ${rank}</span>`;
 
-    // 순위 뱃지
+    // 순위 색상
     const rankColor = isTop ? '#EF4444' : rank <= 10 ? '#D97706' : '#6B7280';
-    const shopUrl   = `https://shopee.${country}/search?keyword=${encodeURIComponent(item.name || 'best sellers')}`;
+
+    // 직접 상품 링크 (shopid+itemid 있으면 상품 페이지, 없으면 검색)
+    const productUrl = (item.shopid && item.itemid)
+      ? `https://shopee.${country}/i.${item.shopid}.${item.itemid}`
+      : `https://shopee.${country}/search?keyword=${encodeURIComponent(item.name || '')}`;
+
+    // 인증 버튼 색 (SEA_COUNTRY_CERT_DATA 있는 나라만 파란색, 없으면 회색)
+    const hasCert   = !!SEA_COUNTRY_CERT_DATA[country];
+    const certColor = hasCert ? '#0891b2' : '#9CA3AF';
 
     return `
-    <div class="rank-item" style="cursor:default;padding:8px 4px;align-items:flex-start;gap:8px">
+    <div class="rank-item" style="cursor:default;padding:9px 4px;align-items:flex-start;gap:9px">
       ${imgHtml}
       <div style="flex:1;min-width:0">
-        <!-- 순위 + 이름 -->
-        <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
-          <span style="font-size:0.65rem;font-weight:800;color:#fff;background:${rankColor};padding:1px 6px;border-radius:99px;flex-shrink:0">${rank}위</span>
-          <span style="font-size:0.78rem;font-weight:700;color:#1A1917;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>
+        <!-- 순위 뱃지 + 상품명 (클릭 시 상품 페이지) -->
+        <div style="display:flex;align-items:flex-start;gap:5px;margin-bottom:4px">
+          <span style="font-size:0.62rem;font-weight:800;color:#fff;background:${rankColor};padding:2px 6px;border-radius:99px;flex-shrink:0;margin-top:1px">${rank}위</span>
+          <a href="${productUrl}" target="_blank" rel="noopener"
+            style="font-size:0.78rem;font-weight:700;color:#1A1917;text-decoration:none;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden"
+            onmouseover="this.style.color='#15803D'" onmouseout="this.style.color='#1A1917'">${name}</a>
         </div>
-        <!-- 가격 + 평점 + 판매 -->
-        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px">
-          <span style="font-size:0.75rem;color:#15803D;font-weight:800">${flag} ${price}</span>
+        <!-- 가격 + 평점 + 판매순위 -->
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+          <span style="font-size:0.78rem;color:#15803D;font-weight:800">${flag} ${price}</span>
           ${ratingHtml}
           ${soldHtml}
         </div>
-        <!-- 버튼 -->
-        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px">
-          <a href="${shopUrl}" target="_blank" rel="noopener"
-            style="font-size:0.6rem;color:#15803D;font-weight:700;padding:3px 0;border:1px solid #22C55E;border-radius:5px;background:#F0FDF4;text-decoration:none;text-align:center;white-space:nowrap">🛒 보기</a>
-          <span onclick="openFactoryModal('${name}','🛍️','factory')"
-            style="font-size:0.6rem;color:var(--primary);font-weight:700;cursor:pointer;padding:3px 0;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center;white-space:nowrap">🏭 공장</span>
-          <span onclick="openFactoryModal('${name}','🛍️','partner')"
-            style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:3px 0;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center;white-space:nowrap">🤝 파트너</span>
+        <!-- 버튼 2×2 그리드 -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
+          <a href="${productUrl}" target="_blank" rel="noopener"
+            style="font-size:0.6rem;color:#15803D;font-weight:700;padding:4px 0;border:1px solid #22C55E;border-radius:5px;background:#F0FDF4;text-decoration:none;text-align:center">🛒 상품보기</a>
+          <span onclick="openSeaModal('${nameSafe}','factory')"
+            style="font-size:0.6rem;color:var(--primary);font-weight:700;cursor:pointer;padding:4px 0;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center">🏭 공장</span>
+          <span onclick="openSeaModal('${nameSafe}','cert')"
+            style="font-size:0.6rem;color:${certColor};font-weight:700;cursor:pointer;padding:4px 0;border:1px solid ${certColor};border-radius:5px;background:var(--surface);text-align:center">${flag} 인증</span>
+          <span onclick="openSeaModal('${nameSafe}','partner')"
+            style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center">🤝 파트너</span>
         </div>
       </div>
     </div>`;
   }).join('');
+}
+
+// ──────────────────────────────────────────
+// 🌏 동남아 상품 모달 (공장/인증/취득법/파트너)
+// ──────────────────────────────────────────
+function openSeaModal(productName, activeTab) {
+  const country   = _currentSeaCountry;
+  const certData  = SEA_COUNTRY_CERT_DATA[country];
+  const flag      = SEA_COUNTRY_FLAGS[country] || '🌏';
+  const cName     = certData?.countryName || SEA_COUNTRY_NAME[country] || country.toUpperCase();
+  const shortName = productName.substring(0, 22) + (productName.length > 22 ? '...' : '');
+
+  const titleMap = {
+    factory:   `🏭 한국 공장 소싱 — "${shortName}"`,
+    cert:      `${flag} ${cName} 판매 인증 — "${shortName}"`,
+    certguide: `📋 ${cName} 인증 취득 절차`,
+    partner:   `🤝 ${cName} 파트너 찾기`,
+  };
+  document.getElementById('modalTitle').innerHTML = titleMap[activeTab] || titleMap.factory;
+
+  // ── 탭 1: 공장 소싱 (일본과 동일한 소싱 검색 재활용)
+  const oemKeyword = productName.substring(0, 25) + ' OEM';
+  const factoryHTML = `
+    <div style="margin-bottom:14px">
+      <div style="font-weight:800;font-size:0.82rem;color:#166534;margin-bottom:8px">🏭 추천 OEM 소싱 플랫폼</div>
+      <div style="display:flex;gap:7px;margin-bottom:10px">
+        <a href="https://domeggook.com/main/search/srchList.php?wd=${encodeURIComponent(productName.substring(0,20))}" target="_blank"
+          style="flex:1;display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,#F0FDF4,#DCFCE7);border:2px solid #22C55E;border-radius:10px;padding:11px 13px;text-decoration:none">
+          <span style="font-size:1.4rem">🛒</span>
+          <div><div style="font-weight:900;font-size:0.84rem;color:#15803D">도매꾹 →</div>
+          <div style="font-size:0.65rem;color:#4B5563;margin-top:2px">국내 최대 도매 소싱 플랫폼</div></div>
+        </a>
+        <a href="https://ifactoryhub.com/" target="_blank"
+          style="flex:1;display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1.5px solid #CBD5E1;border-radius:10px;padding:11px 13px;text-decoration:none">
+          <span style="font-size:1.4rem">🗂️</span>
+          <div><div style="font-weight:800;font-size:0.84rem;color:#1E40AF">아이팩토리허브 →</div>
+          <div style="font-size:0.65rem;color:#64748B;margin-top:2px">카테고리별 공장 리스트</div></div>
+        </a>
+      </div>
+      <div style="background:#FFF7ED;border:1.5px solid #FB923C;border-radius:10px;padding:10px 13px;margin-bottom:10px;display:flex;align-items:flex-start;gap:8px">
+        <span style="font-size:1rem;margin-top:1px">⚠️</span>
+        <div>
+          <div style="font-weight:800;font-size:0.75rem;color:#C2410C;margin-bottom:2px">${flag} ${cName} 수출 시 꼭 확인하세요</div>
+          <div style="font-size:0.72rem;color:#7C2D12;line-height:1.5">${certData ? certData.tip : '해당 국가의 규정을 사전에 확인하세요.'}</div>
+        </div>
+      </div>
+      <div style="background:#F8FAFC;border:1.5px solid #E2E8F0;border-radius:10px;padding:11px 13px">
+        <div style="font-size:0.75rem;font-weight:700;color:#374151;margin-bottom:7px">🔍 네이버에서 공장 직접 검색</div>
+        <div style="display:flex;gap:7px">
+          <input id="seaSourcingInput" type="text" value="${oemKeyword}"
+            style="flex:1;padding:7px 11px;border:1.5px solid #CBD5E1;border-radius:7px;font-size:0.82rem;outline:none;background:#fff"
+            onkeydown="if(event.key==='Enter')window.open('https://search.naver.com/search.naver?query='+encodeURIComponent(document.getElementById('seaSourcingInput').value),'_blank')">
+          <button onclick="window.open('https://search.naver.com/search.naver?query='+encodeURIComponent(document.getElementById('seaSourcingInput').value),'_blank')"
+            style="padding:7px 13px;background:#1E40AF;color:#fff;border:none;border-radius:7px;font-weight:700;cursor:pointer;font-size:0.8rem;white-space:nowrap">검색</button>
+        </div>
+      </div>
+    </div>`;
+
+  // ── 탭 2: 인증
+  const diffColor = certData?.difficulty === 'high' ? '#DC2626' : certData?.difficulty === 'mid' ? '#D97706' : '#059669';
+  const diffText  = certData?.difficulty === 'high' ? '🔴 높음' : certData?.difficulty === 'mid' ? '🟡 중간' : '🟢 낮음';
+  const certHTML  = certData ? `
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <span style="font-size:0.8rem;font-weight:700;padding:4px 12px;border-radius:99px;background:${diffColor}15;color:${diffColor}">인증 난이도 ${diffText}</span>
+      <span style="font-size:0.75rem;color:#6B7280">⏱ ${certData.period} · 💰 ${certData.cost}</span>
+    </div>
+    <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:11px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
+      <span style="font-size:1rem">🏛️</span>
+      <div>
+        <div style="font-size:0.75rem;font-weight:800;color:#1D4ED8">${certData.agency}</div>
+        <div style="font-size:0.68rem;color:#3730A3;margin-top:2px">주관 기관</div>
+      </div>
+      <a href="${certData.agencyUrl}" target="_blank"
+        style="margin-left:auto;font-size:0.68rem;padding:4px 10px;border:1px solid #3B82F6;border-radius:6px;color:#1D4ED8;text-decoration:none;font-weight:700;white-space:nowrap">바로가기 →</a>
+    </div>
+    ${certData.certs.map(c => `
+      <div style="background:var(--bg);border:1px solid var(--border);border-left:3px solid ${c.required ? diffColor : '#CBD5E1'};border-radius:10px;padding:13px 15px;margin-bottom:10px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:5px">
+          <span style="font-weight:800;font-size:0.9rem">${c.name}</span>
+          <span style="font-size:0.68rem;padding:2px 8px;border-radius:99px;font-weight:700;background:${c.required ? '#FEE2E2' : '#F1F5F9'};color:${c.required ? '#DC2626' : '#64748B'}">${c.required ? '필수' : '권장'}</span>
+        </div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:4px">${c.full}</div>
+        <div style="font-size:0.81rem;color:var(--text);line-height:1.6">${c.desc}</div>
+      </div>`).join('')}
+    <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:12px 15px;font-size:0.81rem;color:#92400E;line-height:1.6">
+      💡 ${certData.tip}
+    </div>` : `<div style="text-align:center;padding:40px;color:var(--muted)">해당 국가의 인증 정보를 준비 중입니다.</div>`;
+
+  // ── 탭 3: 취득법 (스텝 페이지네이션)
+  const certGuideHTML = certData ? `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px">
+      <div style="background:${diffColor}12;border:1px solid ${diffColor}40;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:0.7rem;font-weight:700;color:${diffColor};margin-bottom:5px">취득 난이도</div>
+        <div style="font-size:1rem;font-weight:900;color:${diffColor}">${diffText}</div>
+      </div>
+      <div style="background:#E0F2FE;border:1px solid #BAE6FD;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:0.7rem;font-weight:700;color:#0369A1;margin-bottom:5px">⏱ 소요 기간</div>
+        <div style="font-size:0.88rem;font-weight:800;color:#0369A1">${certData.period}</div>
+      </div>
+      <div style="background:#FEF3C7;border:1px solid #FDE68A;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:0.7rem;font-weight:700;color:#B45309;margin-bottom:5px">💰 예상 비용</div>
+        <div style="font-size:0.88rem;font-weight:800;color:#B45309">${certData.cost}</div>
+      </div>
+      <div style="background:#F0FDF4;border:1px solid #BBF7D0;border-radius:12px;padding:14px;text-align:center">
+        <div style="font-size:0.7rem;font-weight:700;color:#166534;margin-bottom:5px">🏛️ 담당 기관</div>
+        <div style="font-size:0.8rem;font-weight:800;color:#166534;line-height:1.3">${certData.agencyShort}</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span style="font-weight:900;font-size:0.95rem;color:var(--text)">📋 취득 절차</span>
+      <span id="seaStepNum" style="font-size:0.78rem;font-weight:700;background:#0891b2;color:#fff;padding:3px 10px;border-radius:99px">STEP 1 / ${certData.steps.length}</span>
+    </div>
+    <div id="seaStepContainer" data-current="0" style="min-height:160px">
+      ${certData.steps.map((s, i) => `
+        <div class="cert-step" style="display:${i===0?'block':'none'}">
+          <div style="background:var(--bg);border:2px solid #0891b2;border-radius:14px;padding:20px 22px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+              <span style="min-width:36px;height:36px;border-radius:50%;background:#0891b2;color:#fff;font-size:0.88rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">${s.num}</span>
+              <div style="font-weight:900;font-size:1rem;color:var(--text)">${s.title}</div>
+            </div>
+            <div style="font-size:0.84rem;color:var(--text);line-height:1.75;padding-left:48px">${s.desc}</div>
+          </div>
+        </div>`).join('')}
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;gap:10px">
+      <button id="seaPrevBtn" onclick="seaStepNav(-1)"
+        style="padding:8px 18px;border-radius:8px;border:1px solid #0891b2;background:transparent;color:#0891b2;font-weight:700;font-size:0.82rem;cursor:pointer;opacity:0.4;pointer-events:none" disabled>← 이전</button>
+      <div style="display:flex;gap:6px;align-items:center">
+        ${certData.steps.map((_, i) => `<div class="sea-step-dot" data-idx="${i}" style="width:${i===0?'20px':'8px'};height:8px;border-radius:99px;background:${i===0?'#0891b2':'#CBD5E1'};transition:all .25s"></div>`).join('')}
+      </div>
+      <button id="seaNextBtn" onclick="seaStepNav(1)"
+        style="padding:8px 18px;border-radius:8px;border:none;background:#0891b2;color:#fff;font-weight:700;font-size:0.82rem;cursor:pointer">다음 →</button>
+    </div>` : `<div style="text-align:center;padding:40px;color:var(--muted)">해당 국가의 취득 절차 정보를 준비 중입니다.</div>`;
+
+  // ── 탭 4: 파트너
+  const partnerHTML = certData ? certData.partners.map(p => `
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:15px;margin-bottom:10px;display:flex;align-items:center;gap:12px">
+      <span style="font-size:1.6rem">🌐</span>
+      <div style="flex:1;min-width:0">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:4px">
+          <span style="font-weight:800;font-size:0.88rem;color:var(--text)">${p.name}</span>
+          <span style="font-size:0.65rem;padding:2px 7px;border-radius:99px;background:#EFF6FF;color:#1D4ED8;font-weight:700">${p.type}</span>
+        </div>
+        <div style="font-size:0.76rem;color:var(--muted);margin-bottom:8px">${p.desc}</div>
+        <a href="${p.url}" target="_blank"
+          style="font-size:0.72rem;padding:5px 12px;border:1px solid #3B82F6;border-radius:6px;color:#1D4ED8;text-decoration:none;font-weight:700"
+          onmouseover="this.style.background='#3B82F6';this.style.color='#fff'"
+          onmouseout="this.style.background='transparent';this.style.color='#1D4ED8'">바로가기 →</a>
+      </div>
+    </div>`).join('') : `<div style="text-align:center;padding:40px;color:var(--muted)">파트너 정보를 준비 중입니다.</div>`;
+
+  // ── 탭 네비게이션 렌더
+  const tabs = [
+    { key:'factory',   label:'🏭 공장',    html:factoryHTML },
+    { key:'cert',      label:`${flag} 인증`, html:certHTML },
+    { key:'certguide', label:'📋 취득법',   html:certGuideHTML },
+    { key:'partner',   label:'🤝 파트너',   html:partnerHTML },
+  ];
+  const tabNav = tabs.map(t => `
+    <button onclick="switchSeaModalTab('${t.key}',this)"
+      style="padding:7px 14px;border-radius:7px;border:none;cursor:pointer;font-size:0.78rem;font-weight:700;transition:all .2s;
+             ${t.key===activeTab ? 'background:var(--primary);color:#fff;' : 'background:transparent;color:var(--muted);'}"
+    >${t.label}</button>`).join('');
+  const tabBody = tabs.map(t => `
+    <div id="seaTab_${t.key}" style="display:${t.key===activeTab?'block':'none'}">${t.html}</div>`).join('');
+
+  document.getElementById('modalBody').innerHTML = `
+    <div style="display:flex;gap:4px;margin-bottom:16px;background:var(--surface);border-radius:10px;padding:4px;width:fit-content">${tabNav}</div>
+    ${tabBody}`;
+  document.getElementById('factoryModal').classList.add('open');
+}
+
+function switchSeaModalTab(key, btn) {
+  btn.parentElement.querySelectorAll('button').forEach(b => {
+    b.style.background = 'transparent'; b.style.color = 'var(--muted)';
+  });
+  btn.style.background = 'var(--primary)'; btn.style.color = '#fff';
+  document.querySelectorAll('[id^="seaTab_"]').forEach(el => el.style.display = 'none');
+  const tab = document.getElementById('seaTab_' + key);
+  if (tab) tab.style.display = 'block';
+}
+
+function seaStepNav(dir) {
+  const container = document.getElementById('seaStepContainer');
+  if (!container) return;
+  const steps = container.querySelectorAll('.cert-step');
+  const dots  = document.querySelectorAll('.sea-step-dot');
+  let cur = parseInt(container.dataset.current || '0');
+  steps[cur].style.display = 'none';
+  cur = Math.max(0, Math.min(steps.length - 1, cur + dir));
+  steps[cur].style.display = 'block';
+  container.dataset.current = cur;
+  document.getElementById('seaStepNum').textContent = `STEP ${cur+1} / ${steps.length}`;
+  dots.forEach((d, i) => { d.style.width = i===cur?'20px':'8px'; d.style.background = i===cur?'#0891b2':'#CBD5E1'; });
+  const prev = document.getElementById('seaPrevBtn');
+  const next = document.getElementById('seaNextBtn');
+  if (prev) { prev.disabled = cur===0; prev.style.opacity = cur===0?'0.4':'1'; prev.style.pointerEvents = cur===0?'none':'auto'; }
+  if (next) { next.disabled = cur===steps.length-1; next.style.opacity = cur===steps.length-1?'0.4':'1'; next.style.pointerEvents = cur===steps.length-1?'none':'auto'; }
 }
 
 function renderSeaCountryFallback(country) {
