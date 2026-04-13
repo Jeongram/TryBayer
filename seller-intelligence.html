@@ -2279,25 +2279,27 @@ function renderSeaCountryItems(items, country) {
   const el = document.getElementById('seaRankList');
   if (!el) return;
   const flag = SEA_COUNTRY_FLAGS[country] || '🌏';
+  const rankBadge = ['🥇','🥈','🥉'];
   el.innerHTML = items.slice(0, 20).map((raw, i) => {
-    const item  = raw.item_basic || raw;
-    const name  = (item.name || '').substring(0, 50);
+    const item     = raw.item_basic || raw;
+    const name     = (item.name || '').substring(0, 50);
     const priceRaw = item.price || item.price_min || 0;
-    const price = priceRaw ? (priceRaw / 100000).toFixed(2) : '—';
-    const sold  = item.historical_sold
-      ? item.historical_sold.toLocaleString()
-      : (item.sold ? String(item.sold) : '—');
-    const shopUrl = `https://shopee.${country}/search?keyword=${encodeURIComponent(item.name || 'best sellers')}`;
-    const rank = i + 1;
+    const price    = priceRaw ? (priceRaw / 100000).toFixed(2) : '—';
+    const soldNum  = (item.historical_sold || item.sold || 0);
+    const soldTag  = soldNum > 0
+      ? `<span style="font-size:0.65rem;color:#9CA3AF">판매 ${soldNum.toLocaleString()}+</span>`
+      : `<span style="font-size:0.62rem;padding:1px 5px;border-radius:99px;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;font-weight:700">판매순 TOP${i+1}</span>`;
+    const shopUrl  = `https://shopee.${country}/search?keyword=${encodeURIComponent(item.name || 'best sellers')}`;
+    const rank     = i + 1;
     return `
     <div class="rank-item" style="cursor:default;padding:7px 4px">
       <span class="rank-num ${rank<=3?'top':''}">${rank}</span>
-      <span class="rank-icon" style="font-size:1rem">🛍️</span>
+      <span class="rank-icon" style="font-size:1rem">${rank<=3 ? rankBadge[rank-1] : '🛍️'}</span>
       <div class="rank-info" style="flex:1;min-width:0">
         <div style="font-size:0.8rem;font-weight:700;color:#1A1917;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</div>
         <div style="display:flex;gap:6px;align-items:center;margin-top:3px;flex-wrap:wrap">
           <span style="font-size:0.7rem;color:#15803D;font-weight:700">${flag} ${price}</span>
-          <span style="font-size:0.65rem;color:#9CA3AF">판매 ${sold}+</span>
+          ${soldTag}
           <a href="${shopUrl}" target="_blank" rel="noopener"
             style="font-size:0.58rem;color:#15803D;font-weight:700;padding:1px 5px;border:1px solid #22C55E;border-radius:4px;background:#F0FDF4;text-decoration:none;white-space:nowrap">🛒 보기</a>
         </div>
