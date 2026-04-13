@@ -2278,30 +2278,63 @@ function fetchSeaCountryProducts(country) {
 function renderSeaCountryItems(items, country) {
   const el = document.getElementById('seaRankList');
   if (!el) return;
-  const flag = SEA_COUNTRY_FLAGS[country] || '🌏';
-  const rankBadge = ['🥇','🥈','🥉'];
+  const flag    = SEA_COUNTRY_FLAGS[country] || '🌏';
+  const cdnBase = 'https://cf.shopee.sg/file/';
+
   el.innerHTML = items.slice(0, 20).map((raw, i) => {
     const item     = raw.item_basic || raw;
-    const name     = (item.name || '').substring(0, 50);
+    const name     = (item.name || '').substring(0, 55);
     const priceRaw = item.price || item.price_min || 0;
     const price    = priceRaw ? (priceRaw / 100000).toFixed(2) : '—';
-    const soldNum  = (item.historical_sold || item.sold || 0);
-    const soldTag  = soldNum > 0
-      ? `<span style="font-size:0.65rem;color:#9CA3AF">판매 ${soldNum.toLocaleString()}+</span>`
-      : `<span style="font-size:0.62rem;padding:1px 5px;border-radius:99px;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;font-weight:700">판매순 TOP${i+1}</span>`;
-    const shopUrl  = `https://shopee.${country}/search?keyword=${encodeURIComponent(item.name || 'best sellers')}`;
     const rank     = i + 1;
+    const isTop    = rank <= 3;
+
+    // 이미지
+    const imgId  = item.image || (item.images && item.images[0]);
+    const imgUrl = imgId ? `${cdnBase}${imgId}` : '';
+    const imgHtml = imgUrl
+      ? `<img src="${imgUrl}" style="width:62px;height:62px;object-fit:cover;border-radius:7px;flex-shrink:0;border:1px solid #E5E7EB" onerror="this.style.display='none'">`
+      : `<div style="width:62px;height:62px;border-radius:7px;background:#F0FDF4;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;border:1px solid #E5E7EB">🛍️</div>`;
+
+    // 평점
+    const rating  = item.item_rating?.rating_star || 0;
+    const ratingHtml = rating > 0
+      ? `<span style="font-size:0.62rem;color:#F59E0B;font-weight:700">★ ${rating.toFixed(1)}</span>`
+      : '';
+
+    // 판매량
+    const soldNum = item.historical_sold || item.sold || 0;
+    const soldHtml = soldNum > 0
+      ? `<span style="font-size:0.62rem;color:#9CA3AF">판매 ${soldNum.toLocaleString()}+</span>`
+      : `<span style="font-size:0.6rem;padding:1px 5px;border-radius:99px;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;font-weight:700">판매순 TOP${rank}</span>`;
+
+    // 순위 뱃지
+    const rankColor = isTop ? '#EF4444' : rank <= 10 ? '#D97706' : '#6B7280';
+    const shopUrl   = `https://shopee.${country}/search?keyword=${encodeURIComponent(item.name || 'best sellers')}`;
+
     return `
-    <div class="rank-item" style="cursor:default;padding:7px 4px">
-      <span class="rank-num ${rank<=3?'top':''}">${rank}</span>
-      <span class="rank-icon" style="font-size:1rem">${rank<=3 ? rankBadge[rank-1] : '🛍️'}</span>
-      <div class="rank-info" style="flex:1;min-width:0">
-        <div style="font-size:0.8rem;font-weight:700;color:#1A1917;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</div>
-        <div style="display:flex;gap:6px;align-items:center;margin-top:3px;flex-wrap:wrap">
-          <span style="font-size:0.7rem;color:#15803D;font-weight:700">${flag} ${price}</span>
-          ${soldTag}
+    <div class="rank-item" style="cursor:default;padding:8px 4px;align-items:flex-start;gap:8px">
+      ${imgHtml}
+      <div style="flex:1;min-width:0">
+        <!-- 순위 + 이름 -->
+        <div style="display:flex;align-items:center;gap:5px;margin-bottom:3px">
+          <span style="font-size:0.65rem;font-weight:800;color:#fff;background:${rankColor};padding:1px 6px;border-radius:99px;flex-shrink:0">${rank}위</span>
+          <span style="font-size:0.78rem;font-weight:700;color:#1A1917;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</span>
+        </div>
+        <!-- 가격 + 평점 + 판매 -->
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:5px">
+          <span style="font-size:0.75rem;color:#15803D;font-weight:800">${flag} ${price}</span>
+          ${ratingHtml}
+          ${soldHtml}
+        </div>
+        <!-- 버튼 -->
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:3px">
           <a href="${shopUrl}" target="_blank" rel="noopener"
-            style="font-size:0.58rem;color:#15803D;font-weight:700;padding:1px 5px;border:1px solid #22C55E;border-radius:4px;background:#F0FDF4;text-decoration:none;white-space:nowrap">🛒 보기</a>
+            style="font-size:0.6rem;color:#15803D;font-weight:700;padding:3px 0;border:1px solid #22C55E;border-radius:5px;background:#F0FDF4;text-decoration:none;text-align:center;white-space:nowrap">🛒 보기</a>
+          <span onclick="openFactoryModal('${name}','🛍️','factory')"
+            style="font-size:0.6rem;color:var(--primary);font-weight:700;cursor:pointer;padding:3px 0;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center;white-space:nowrap">🏭 공장</span>
+          <span onclick="openFactoryModal('${name}','🛍️','partner')"
+            style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:3px 0;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center;white-space:nowrap">🤝 파트너</span>
         </div>
       </div>
     </div>`;
