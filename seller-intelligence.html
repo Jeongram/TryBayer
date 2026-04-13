@@ -622,13 +622,18 @@
       </div>
       <!-- 국가별 탭 -->
       <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">
-        <button onclick="switchSeaCountry('all',this)" class="sea-ctab active">🌏 전체</button>
-        <button onclick="switchSeaCountry('vn',this)" class="sea-ctab">🇻🇳 VN</button>
-        <button onclick="switchSeaCountry('co.th',this)" class="sea-ctab">🇹🇭 TH</button>
-        <button onclick="switchSeaCountry('co.id',this)" class="sea-ctab">🇮🇩 ID</button>
-        <button onclick="switchSeaCountry('com.my',this)" class="sea-ctab">🇲🇾 MY</button>
-        <button onclick="switchSeaCountry('sg',this)" class="sea-ctab">🇸🇬 SG</button>
-        <button onclick="switchSeaCountry('ph',this)" class="sea-ctab">🇵🇭 PH</button>
+        <button onclick="switchSeaCountry('co.id',this)" class="sea-ctab active">🇮🇩 인도네시아</button>
+        <button onclick="switchSeaCountry('co.th',this)" class="sea-ctab">🇹🇭 태국</button>
+        <button onclick="switchSeaCountry('com.my',this)" class="sea-ctab">🇲🇾 말레이시아</button>
+        <button onclick="switchSeaCountry('tw',this)" class="sea-ctab">🇹🇼 대만</button>
+        <button onclick="switchSeaCountry('ph',this)" class="sea-ctab">🇵🇭 필리핀</button>
+        <button onclick="switchSeaCountry('vn',this)" class="sea-ctab">🇻🇳 베트남</button>
+        <button onclick="switchSeaCountry('sg',this)" class="sea-ctab">🇸🇬 싱가포르</button>
+        <button onclick="switchSeaCountry('com.br',this)" class="sea-ctab">🇧🇷 브라질</button>
+        <button onclick="switchSeaCountry('com.mx',this)" class="sea-ctab">🇲🇽 멕시코</button>
+        <button onclick="switchSeaCountry('com.ar',this)" class="sea-ctab">🇦🇷 아르헨티나</button>
+        <button onclick="switchSeaCountry('com.kh',this)" class="sea-ctab">🇰🇭 캄보디아</button>
+        <button onclick="switchSeaCountry('la',this)" class="sea-ctab">🇱🇦 라오스</button>
       </div>
       <div id="seaRankList" style="max-height:680px;overflow-y:auto;scrollbar-width:thin"></div>
     </div>
@@ -2221,31 +2226,39 @@ function renderSeaList(categories) {
 // ──────────────────────────────────────────
 // 🌏 동남아 국가별 탭 전환
 // ──────────────────────────────────────────
-const SEA_COUNTRY_FLAGS = { sg:'🇸🇬', vn:'🇻🇳', 'co.th':'🇹🇭', 'co.id':'🇮🇩', 'com.my':'🇲🇾', ph:'🇵🇭' };
-const SEA_COUNTRY_ABBR  = { sg:'SG',   vn:'VN',   'co.th':'TH',   'co.id':'ID',   'com.my':'MY',   ph:'PH'  };
+const SEA_COUNTRY_FLAGS = {
+  'co.id':'🇮🇩', 'co.th':'🇹🇭', 'com.my':'🇲🇾', tw:'🇹🇼', ph:'🇵🇭',
+  vn:'🇻🇳', sg:'🇸🇬', 'com.br':'🇧🇷', 'com.mx':'🇲🇽', 'com.ar':'🇦🇷',
+  'com.kh':'🇰🇭', la:'🇱🇦'
+};
+const SEA_COUNTRY_ABBR = {
+  'co.id':'ID', 'co.th':'TH', 'com.my':'MY', tw:'TW', ph:'PH',
+  vn:'VN', sg:'SG', 'com.br':'BR', 'com.mx':'MX', 'com.ar':'AR',
+  'com.kh':'KH', la:'LA'
+};
+const SEA_COUNTRY_NAME = {
+  'co.id':'인도네시아', 'co.th':'태국', 'com.my':'말레이시아', tw:'대만', ph:'필리핀',
+  vn:'베트남', sg:'싱가포르', 'com.br':'브라질', 'com.mx':'멕시코', 'com.ar':'아르헨티나',
+  'com.kh':'캄보디아', la:'라오스'
+};
 
 function switchSeaCountry(country, btn) {
   document.querySelectorAll('.sea-ctab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const tag = document.getElementById('seaStatusTag');
-  if (country === 'all') {
-    renderSeaList(SEA_CATEGORIES);
-    if (tag) { tag.textContent = '📊 시장 인사이트'; tag.style.background = '#15803D'; }
-    return;
-  }
   fetchSeaCountryProducts(country);
 }
 
 function fetchSeaCountryProducts(country) {
-  const el  = document.getElementById('seaRankList');
-  const tag = document.getElementById('seaStatusTag');
+  const el   = document.getElementById('seaRankList');
+  const tag  = document.getElementById('seaStatusTag');
   if (!el) return;
   const flag = SEA_COUNTRY_FLAGS[country] || '🌏';
   const abbr = SEA_COUNTRY_ABBR[country]  || country.toUpperCase();
+  const name = SEA_COUNTRY_NAME[country]  || country;
   if (tag) { tag.textContent = '연결 중...'; tag.style.background = '#F59E0B'; }
   el.innerHTML = `<div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.84rem;padding:12px 0">
     <span style="animation:spin 1s linear infinite;display:inline-block">⏳</span>
-    ${flag} Shopee ${abbr} TOP 20 불러오는 중...
+    ${flag} ${name} Shopee TOP 20 불러오는 중...
   </div>`;
   const apiBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
     ? 'http://localhost:8000' : location.origin;
@@ -2256,7 +2269,7 @@ function fetchSeaCountryProducts(country) {
         renderSeaCountryFallback(country);
         return;
       }
-      if (tag) { tag.textContent = `🟢 LIVE · ${flag} ${abbr}`; tag.style.background = '#22C55E'; }
+      if (tag) { tag.textContent = `🟢 LIVE · ${flag} ${name}`; tag.style.background = '#22C55E'; }
       renderSeaCountryItems(data.items, country);
     })
     .catch(() => renderSeaCountryFallback(country));
@@ -2294,16 +2307,31 @@ function renderSeaCountryItems(items, country) {
 }
 
 function renderSeaCountryFallback(country) {
-  const el  = document.getElementById('seaRankList');
-  const tag = document.getElementById('seaStatusTag');
+  const el   = document.getElementById('seaRankList');
+  const tag  = document.getElementById('seaStatusTag');
   if (!el) return;
-  if (tag) { tag.textContent = '📊 인사이트 데이터'; tag.style.background = '#6B7280'; }
-  const abbr     = SEA_COUNTRY_ABBR[country] || country.toUpperCase();
-  const filtered = SEA_CATEGORIES.filter(c => c.markets.includes(abbr));
-  const list     = filtered.length > 0
-    ? filtered.map((c, i) => ({ ...c, rank: i + 1 }))
-    : SEA_CATEGORIES;
-  renderSeaList(list);
+  const flag = SEA_COUNTRY_FLAGS[country] || '🌏';
+  const name = SEA_COUNTRY_NAME[country]  || country;
+  const abbr = SEA_COUNTRY_ABBR[country]  || country.toUpperCase();
+
+  // 동남아 국가는 카테고리 인사이트 폴백
+  const SEA_ABBRS = ['ID','TH','MY','TW','PH','VN','SG','KH','LA'];
+  if (SEA_ABBRS.includes(abbr)) {
+    if (tag) { tag.textContent = '📊 인사이트 데이터'; tag.style.background = '#6B7280'; }
+    const filtered = SEA_CATEGORIES.filter(c => c.markets.includes(abbr));
+    const list = filtered.length > 0
+      ? filtered.map((c, i) => ({ ...c, rank: i + 1 }))
+      : SEA_CATEGORIES;
+    renderSeaList(list);
+  } else {
+    // 비동남아 국가(브라질·멕시코·아르헨티나)는 안내 메시지
+    if (tag) { tag.textContent = '데이터 없음'; tag.style.background = '#9CA3AF'; }
+    el.innerHTML = `<div style="text-align:center;padding:32px 16px;color:var(--muted)">
+      <div style="font-size:2rem;margin-bottom:8px">${flag}</div>
+      <div style="font-size:0.85rem;font-weight:700;color:#374151;margin-bottom:6px">${name} 데이터를 불러올 수 없습니다</div>
+      <div style="font-size:0.75rem">Shopee ${abbr} API가 응답하지 않거나<br>해당 국가에서 서비스가 제한될 수 있습니다</div>
+    </div>`;
+  }
 }
 
 function renderAmazonList(categories) {
@@ -2904,7 +2932,7 @@ function connectAPI(silent = false) {
 
 function loadDemo() {
   renderRankList(DEMO_CATEGORIES);
-  renderSeaList(SEA_CATEGORIES);
+  fetchSeaCountryProducts('co.id');
   renderAmazonList(AMAZON_CATEGORIES);
   renderProductTable(DEMO_PRODUCTS);
   renderTrendChart(DEMO_CATEGORIES);
@@ -3463,8 +3491,8 @@ function renderDmgCard(item) {
   // 임시로 데모 렌더 (연결 완료 전 화면 채우기)
   renderRankList(DEMO_CATEGORIES);
   renderTrendChart(DEMO_CATEGORIES);
-  // 동남아·아마존은 항상 고정 인사이트 데이터로 렌더
-  renderSeaList(SEA_CATEGORIES);
+  // 동남아: 인도네시아 탭 기본 로드
+  fetchSeaCountryProducts('co.id');
   renderAmazonList(AMAZON_CATEGORIES);
 
   // 서버에 환경변수 키가 있는지 먼저 확인
