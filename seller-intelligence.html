@@ -185,6 +185,15 @@
     }
     .tab-btn.active { background: var(--primary); color: #fff; }
 
+    /* ── SEA COUNTRY TABS ── */
+    .sea-ctab {
+      padding: 4px 9px; border-radius: 6px; border: 1px solid #D1D5DB; cursor: pointer;
+      font-size: 0.72rem; font-weight: 700; background: #F9FAFB; color: #6B7280; transition: all .2s;
+      white-space: nowrap;
+    }
+    .sea-ctab.active { background: #15803D; color: #fff; border-color: #15803D; }
+    .sea-ctab:hover:not(.active) { background: #F0FDF4; border-color: #22C55E; color: #15803D; }
+
     /* ── FOOTER ── */
     footer { text-align: center; padding: 24px; color: var(--muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
     footer a { color: var(--primary-light); text-decoration: none; }
@@ -606,10 +615,20 @@
 
     <!-- 🌏 동남아 TOP 20 -->
     <div class="card" style="padding:16px 14px;min-width:0;overflow:hidden">
-      <div style="display:flex;align-items:center;gap:7px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:7px;margin-bottom:10px">
         <span style="font-size:1.1rem">🌏</span>
         <span style="font-weight:800;font-size:0.88rem;color:#15803D">동남아 TOP 20</span>
-        <span style="margin-left:auto;font-size:0.5rem;background:#15803D;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700">📊 시장 인사이트</span>
+        <span id="seaStatusTag" style="margin-left:auto;font-size:0.5rem;background:#15803D;color:#fff;padding:2px 7px;border-radius:99px;font-weight:700">📊 시장 인사이트</span>
+      </div>
+      <!-- 국가별 탭 -->
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px">
+        <button onclick="switchSeaCountry('all',this)" class="sea-ctab active">🌏 전체</button>
+        <button onclick="switchSeaCountry('vn',this)" class="sea-ctab">🇻🇳 VN</button>
+        <button onclick="switchSeaCountry('co.th',this)" class="sea-ctab">🇹🇭 TH</button>
+        <button onclick="switchSeaCountry('co.id',this)" class="sea-ctab">🇮🇩 ID</button>
+        <button onclick="switchSeaCountry('com.my',this)" class="sea-ctab">🇲🇾 MY</button>
+        <button onclick="switchSeaCountry('sg',this)" class="sea-ctab">🇸🇬 SG</button>
+        <button onclick="switchSeaCountry('ph',this)" class="sea-ctab">🇵🇭 PH</button>
       </div>
       <div id="seaRankList" style="max-height:680px;overflow-y:auto;scrollbar-width:thin"></div>
     </div>
@@ -2197,6 +2216,94 @@ function renderSeaList(categories) {
       </div>
     </div>`;
   }).join('');
+}
+
+// ──────────────────────────────────────────
+// 🌏 동남아 국가별 탭 전환
+// ──────────────────────────────────────────
+const SEA_COUNTRY_FLAGS = { sg:'🇸🇬', vn:'🇻🇳', 'co.th':'🇹🇭', 'co.id':'🇮🇩', 'com.my':'🇲🇾', ph:'🇵🇭' };
+const SEA_COUNTRY_ABBR  = { sg:'SG',   vn:'VN',   'co.th':'TH',   'co.id':'ID',   'com.my':'MY',   ph:'PH'  };
+
+function switchSeaCountry(country, btn) {
+  document.querySelectorAll('.sea-ctab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const tag = document.getElementById('seaStatusTag');
+  if (country === 'all') {
+    renderSeaList(SEA_CATEGORIES);
+    if (tag) { tag.textContent = '📊 시장 인사이트'; tag.style.background = '#15803D'; }
+    return;
+  }
+  fetchSeaCountryProducts(country);
+}
+
+function fetchSeaCountryProducts(country) {
+  const el  = document.getElementById('seaRankList');
+  const tag = document.getElementById('seaStatusTag');
+  if (!el) return;
+  const flag = SEA_COUNTRY_FLAGS[country] || '🌏';
+  const abbr = SEA_COUNTRY_ABBR[country]  || country.toUpperCase();
+  if (tag) { tag.textContent = '연결 중...'; tag.style.background = '#F59E0B'; }
+  el.innerHTML = `<div style="display:flex;align-items:center;gap:10px;color:var(--muted);font-size:0.84rem;padding:12px 0">
+    <span style="animation:spin 1s linear infinite;display:inline-block">⏳</span>
+    ${flag} Shopee ${abbr} TOP 20 불러오는 중...
+  </div>`;
+  const apiBase = (location.hostname === 'localhost' || location.hostname === '127.0.0.1')
+    ? 'http://localhost:8000' : location.origin;
+  fetch(`${apiBase}/api/shopee?keyword=${encodeURIComponent('best sellers')}&country=${country}&limit=20`)
+    .then(r => r.json())
+    .then(data => {
+      if (data.fallback || !data.items || data.items.length === 0) {
+        renderSeaCountryFallback(country);
+        return;
+      }
+      if (tag) { tag.textContent = `🟢 LIVE · ${flag} ${abbr}`; tag.style.background = '#22C55E'; }
+      renderSeaCountryItems(data.items, country);
+    })
+    .catch(() => renderSeaCountryFallback(country));
+}
+
+function renderSeaCountryItems(items, country) {
+  const el = document.getElementById('seaRankList');
+  if (!el) return;
+  const flag = SEA_COUNTRY_FLAGS[country] || '🌏';
+  el.innerHTML = items.slice(0, 20).map((raw, i) => {
+    const item  = raw.item_basic || raw;
+    const name  = (item.name || '').substring(0, 50);
+    const priceRaw = item.price || item.price_min || 0;
+    const price = priceRaw ? (priceRaw / 100000).toFixed(2) : '—';
+    const sold  = item.historical_sold
+      ? item.historical_sold.toLocaleString()
+      : (item.sold ? String(item.sold) : '—');
+    const shopUrl = `https://shopee.${country}/search?keyword=${encodeURIComponent(item.name || 'best sellers')}`;
+    const rank = i + 1;
+    return `
+    <div class="rank-item" style="cursor:default;padding:7px 4px">
+      <span class="rank-num ${rank<=3?'top':''}">${rank}</span>
+      <span class="rank-icon" style="font-size:1rem">🛍️</span>
+      <div class="rank-info" style="flex:1;min-width:0">
+        <div style="font-size:0.8rem;font-weight:700;color:#1A1917;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${name}</div>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:3px;flex-wrap:wrap">
+          <span style="font-size:0.7rem;color:#15803D;font-weight:700">${flag} ${price}</span>
+          <span style="font-size:0.65rem;color:#9CA3AF">판매 ${sold}+</span>
+          <a href="${shopUrl}" target="_blank" rel="noopener"
+            style="font-size:0.58rem;color:#15803D;font-weight:700;padding:1px 5px;border:1px solid #22C55E;border-radius:4px;background:#F0FDF4;text-decoration:none;white-space:nowrap">🛒 보기</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderSeaCountryFallback(country) {
+  const el  = document.getElementById('seaRankList');
+  const tag = document.getElementById('seaStatusTag');
+  if (!el) return;
+  if (tag) { tag.textContent = '📊 인사이트 데이터'; tag.style.background = '#6B7280'; }
+  const abbr     = SEA_COUNTRY_ABBR[country] || country.toUpperCase();
+  const filtered = SEA_CATEGORIES.filter(c => c.markets.includes(abbr));
+  const list     = filtered.length > 0
+    ? filtered.map((c, i) => ({ ...c, rank: i + 1 }))
+    : SEA_CATEGORIES;
+  renderSeaList(list);
 }
 
 function renderAmazonList(categories) {
