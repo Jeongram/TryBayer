@@ -650,33 +650,6 @@
 
   </div>
 
-  <!-- CHART (full width) -->
-  <div class="card" style="margin-bottom:20px">
-    <div style="font-weight:700;margin-bottom:14px;font-size:0.88rem;color:var(--muted)">📈 카테고리 성장 추이 (최근 8주, 일본 기준)</div>
-    <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
-  </div>
-
-  <!-- PRODUCT TABLE -->
-  <div class="section-title" style="margin-top:8px">🛍️ 추천 판매 상품 <span class="tag">경쟁력 점수 순</span></div>
-  <div class="card" style="padding:0;overflow:hidden">
-    <table class="product-table">
-      <thead>
-        <tr>
-          <th>순위</th>
-          <th>상품명 / 카테고리</th>
-          <th>현지 판매가 (¥)</th>
-          <th>경쟁력 점수</th>
-          <th>추정 마진</th>
-          <th>판매 국가</th>
-          <th>소싱 바로가기</th>
-        </tr>
-      </thead>
-      <tbody id="productTableBody">
-        <!-- JS로 렌더링 -->
-      </tbody>
-    </table>
-  </div>
-
   <!-- MARGIN CALCULATOR -->
   <div class="section-title" style="margin-top:32px">🧮 마진 계산기</div>
   <div class="card">
@@ -726,187 +699,572 @@
     </div>
   </div>
 
-  <!-- PARTNER SECTION -->
-  <div class="section-title" style="margin-top:36px">
-    🤝 일본 현지 파트너 찾기 <span class="tag">직접 연결</span>
-  </div>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-bottom:32px" id="partnerSection">
-
-    <!-- 카드 1: JETRO -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden">
-      <div style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);padding:16px 20px">
-        <div style="font-size:1.4rem;margin-bottom:4px">🏛️</div>
-        <div style="font-weight:800;color:#fff;font-size:0.95rem">JETRO 매칭 서비스</div>
-        <div style="color:#BFDBFE;font-size:0.76rem;margin-top:2px">일본무역진흥기구 — 무료</div>
-      </div>
-      <div style="padding:16px 20px">
-        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:14px">일본 정부 산하 기관. 한국 기업과 일본 현지 유통·바이어를 공식적으로 무료 매칭해주는 가장 신뢰도 높은 채널.</p>
-        <div style="margin-bottom:12px">
-          <div style="font-size:0.75rem;font-weight:800;color:var(--success);margin-bottom:5px">✅ 장점</div>
-          <ul style="font-size:0.8rem;color:var(--text);line-height:1.8;padding-left:16px">
-            <li>완전 무료, 정부 보증</li>
-            <li>검증된 일본 바이어 DB 보유</li>
-            <li>1:1 상담·통역 지원</li>
-            <li>서울 사무소 방문 상담 가능</li>
-          </ul>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:0.75rem;font-weight:800;color:var(--danger);margin-bottom:5px">❌ 단점</div>
-          <ul style="font-size:0.8rem;color:var(--text);line-height:1.8;padding-left:16px">
-            <li>매칭까지 2~4주 소요</li>
-            <li>계약은 본인이 직접 협상</li>
-          </ul>
-        </div>
-        <a href="https://www.jetro.go.jp/en/" target="_blank"
-          style="display:block;text-align:center;background:#1d4ed8;color:#fff;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;text-decoration:none">
-          JETRO 바로가기 →
-        </a>
-      </div>
-    </div>
-
-    <!-- 카드 2: KOTRA -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden">
-      <div style="background:linear-gradient(135deg,#065f46,#10b981);padding:16px 20px">
-        <div style="font-size:1.4rem;margin-bottom:4px">🇰🇷</div>
-        <div style="font-weight:800;color:#fff;font-size:0.95rem">KOTRA 무역관</div>
-        <div style="color:#A7F3D0;font-size:0.76rem;margin-top:2px">대한무역투자진흥공사 — 저비용</div>
-      </div>
-      <div style="padding:16px 20px">
-        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:14px">도쿄·오사카 무역관을 통해 일본 현지 바이어와 직접 미팅을 주선. 수출 바우처 등 지원 사업과 연계 가능.</p>
-        <div style="margin-bottom:12px">
-          <div style="font-size:0.75rem;font-weight:800;color:var(--success);margin-bottom:5px">✅ 장점</div>
-          <ul style="font-size:0.8rem;color:var(--text);line-height:1.8;padding-left:16px">
-            <li>한국어 지원, 친숙한 절차</li>
-            <li>수출 바우처 연계 시 비용 보조</li>
-            <li>일본 현지 법률 자문 연결</li>
-            <li>온라인 화상 매칭도 가능</li>
-          </ul>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:0.75rem;font-weight:800;color:var(--danger);margin-bottom:5px">❌ 단점</div>
-          <ul style="font-size:0.8rem;color:var(--text);line-height:1.8;padding-left:16px">
-            <li>일부 서비스 유료 (소정 수수료)</li>
-            <li>성사 보장 없음</li>
-          </ul>
-        </div>
-        <a href="https://www.kotra.or.kr" target="_blank"
-          style="display:block;text-align:center;background:#065f46;color:#fff;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;text-decoration:none">
-          KOTRA 바로가기 →
-        </a>
-      </div>
-    </div>
-
-    <!-- 카드 3: 허가 명의 대여 (절충안) -->
-    <div style="background:var(--surface);border:2px solid var(--primary);border-radius:var(--card-radius);overflow:hidden;position:relative">
-      <div style="position:absolute;top:12px;right:12px;background:var(--primary);color:#fff;font-size:0.68rem;font-weight:800;padding:3px 9px;border-radius:99px">💡 추천 절충안</div>
-      <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:16px 20px">
-        <div style="font-size:1.4rem;margin-bottom:4px">📋</div>
-        <div style="font-weight:800;color:#fff;font-size:0.95rem">허가 명의 대여</div>
-        <div style="color:#C4B5FD;font-size:0.76rem;margin-top:2px">약기법 허가 보유 업체와 계약 — 월 정액</div>
-      </div>
-      <div style="padding:16px 20px">
-        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:14px">일본 내 화장품 제조판매업 허가를 보유한 소규모 업체에 허가 명의만 빌리고, 영업·판매·CS는 본인이 직접 운영.</p>
-        <div style="margin-bottom:12px">
-          <div style="font-size:0.75rem;font-weight:800;color:var(--success);margin-bottom:5px">✅ 장점</div>
-          <ul style="font-size:0.8rem;color:var(--text);line-height:1.8;padding-left:16px">
-            <li>대행사 대비 비용 70~80% 절감</li>
-            <li>판매·마케팅 직접 통제 가능</li>
-            <li>월 정액으로 비용 예측 가능</li>
-          </ul>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:0.75rem;font-weight:800;color:var(--danger);margin-bottom:5px">❌ 단점</div>
-          <ul style="font-size:0.8rem;color:var(--text);line-height:1.8;padding-left:16px">
-            <li>허가 업체 직접 발굴 필요</li>
-            <li>라벨·통관은 본인 처리</li>
-            <li>계약서 법률 검토 필요</li>
-          </ul>
-        </div>
-        <a href="https://www.jetro.go.jp/en/" target="_blank"
-          style="display:block;text-align:center;background:var(--primary);color:#fff;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;text-decoration:none">
-          약기법 허가 안내 →
-        </a>
-      </div>
-    </div>
-
-    <!-- 카드 4: B2B 전시회 -->
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--card-radius);overflow:hidden">
-      <div style="background:linear-gradient(135deg,#92400e,#d97706);padding:16px 20px">
-        <div style="font-size:1.4rem;margin-bottom:4px">🎪</div>
-        <div style="font-weight:800;color:#fff;font-size:0.95rem">B2B 전시회 참가</div>
-        <div style="color:#FDE68A;font-size:0.76rem;margin-top:2px">COSME Tokyo · Inter Charm — 직접 네트워킹</div>
-      </div>
-      <div style="padding:16px 20px">
-        <p style="font-size:0.82rem;color:var(--muted);line-height:1.6;margin-bottom:14px">일본 현지 전시회에 직접 참가해 도매 바이어, 유통사, 허가 보유 업체를 한 자리에서 만나는 가장 직접적인 방법.</p>
-        <div style="margin-bottom:12px">
-          <div style="font-size:0.75rem;font-weight:800;color:var(--success);margin-bottom:5px">✅ 장점</div>
-          <ul style="font-size:0.8rem;color:var(--text);line-height:1.8;padding-left:16px">
-            <li>신뢰 형성이 가장 빠름</li>
-            <li>다수 바이어 동시 접촉</li>
-            <li>시장 반응 직접 테스트 가능</li>
-          </ul>
-        </div>
-        <div style="margin-bottom:16px">
-          <div style="font-size:0.75rem;font-weight:800;color:var(--danger);margin-bottom:5px">❌ 단점</div>
-          <ul style="font-size:0.8rem;color:var(--text);line-height:1.8;padding-left:16px">
-            <li>부스 비용 + 출장비 발생</li>
-            <li>연 1~2회로 기회 제한적</li>
-            <li>일본어 소통 능력 필요</li>
-          </ul>
-        </div>
-        <a href="https://www.cosmetokyo.jp/" target="_blank"
-          style="display:block;text-align:center;background:#92400e;color:#fff;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;text-decoration:none">
-          COSME Tokyo 바로가기 →
-        </a>
-      </div>
-    </div>
-
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 4. 각 플랫폼 입점 가이드                           -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-title" style="margin-top:40px" id="platformGuide">
+    🏪 각 플랫폼 입점 가이드 <span class="tag">단계별 안내</span>
   </div>
 
-  <!-- API GUIDE -->
-  <div class="section-title" style="margin-top:36px" id="guide">
-    📋 Rakuten API 발급 가이드 <span class="tag">무료</span>
+  <!-- 플랫폼 탭 -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <button onclick="switchPlatformTab('rakuten',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #FB923C;background:#FB923C;color:#fff;font-weight:700;font-size:0.82rem;cursor:pointer" class="ptab active">🇯🇵 라쿠텐</button>
+    <button onclick="switchPlatformTab('shopee',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #E2E8F0;background:var(--surface);color:var(--muted);font-weight:700;font-size:0.82rem;cursor:pointer" class="ptab">🌏 쇼피(Shopee)</button>
+    <button onclick="switchPlatformTab('amazon',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #E2E8F0;background:var(--surface);color:var(--muted);font-weight:700;font-size:0.82rem;cursor:pointer" class="ptab">🇺🇸 아마존</button>
+    <button onclick="switchPlatformTab('qoo10',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #E2E8F0;background:var(--surface);color:var(--muted);font-weight:700;font-size:0.82rem;cursor:pointer" class="ptab">🇯🇵 큐텐</button>
+    <button onclick="switchPlatformTab('lazada',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #E2E8F0;background:var(--surface);color:var(--muted);font-weight:700;font-size:0.82rem;cursor:pointer" class="ptab">🌏 라자다</button>
   </div>
-  <div class="guide-steps">
-    <div class="guide-step">
-      <div class="step-num">01</div>
-      <div class="step-title">라쿠텐 개발자 센터 접속</div>
-      <div class="step-desc">라쿠텐 웹서비스 개발자 페이지에 접속합니다. 일본어지만 Google 번역으로 쉽게 진행 가능합니다.</div>
-      <a href="https://webservice.rakuten.co.jp/" target="_blank" class="step-link">→ webservice.rakuten.co.jp</a>
-    </div>
-    <div class="guide-step">
-      <div class="step-num">02</div>
-      <div class="step-title">라쿠텐 계정 생성 / 로그인</div>
-      <div class="step-desc">라쿠텐 글로벌 계정으로 로그인합니다. 기존 라쿠텐 쇼핑 계정이 있으면 동일하게 사용 가능합니다.</div>
-      <a href="https://grp02.id.rakuten.co.jp/rms/nid/registform" target="_blank" class="step-link">→ 계정 만들기</a>
-    </div>
-    <div class="guide-step">
-      <div class="step-num">03</div>
-      <div class="step-title">앱 등록 → Application ID 발급</div>
-      <div class="step-desc">"アプリ登録" (앱 등록) 버튼 클릭 → 앱 이름, URL 등 입력 → 즉시 Application ID 발급됩니다.</div>
-      <a href="https://webservice.rakuten.co.jp/app/create" target="_blank" class="step-link">→ 앱 등록 페이지</a>
-    </div>
-    <div class="guide-step">
-      <div class="step-num">04</div>
-      <div class="step-title">위 입력창에 키 붙여넣기</div>
-      <div class="step-desc">발급된 Application ID를 복사해서 상단 API Key 입력창에 붙여넣으면 실시간 데이터로 자동 전환됩니다.</div>
-      <a href="#" onclick="document.getElementById('apiKeyInput').focus();return false;" class="step-link">→ 키 입력창으로 이동</a>
+
+  <!-- 라쿠텐 -->
+  <div id="ptab_rakuten" class="ptab-content">
+    <div class="card" style="padding:20px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <span style="font-size:2rem">🇯🇵</span>
+        <div>
+          <div style="font-weight:900;font-size:1rem;color:#C2410C">Rakuten Ichiba (라쿠텐 이치바)</div>
+          <div style="font-size:0.76rem;color:var(--muted)">일본 최대 이커머스 플랫폼 · 월간 이용자 5,000만+</div>
+        </div>
+        <a href="https://www.rakuten.co.jp/ec/" target="_blank"
+          style="margin-left:auto;padding:7px 14px;background:#C2410C;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;text-decoration:none;white-space:nowrap">입점 신청 →</a>
+      </div>
+      <!-- 핵심 정보 3칸 -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+        <div style="background:#FFF7ED;border:1px solid #FDBA74;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#C2410C;font-weight:700;margin-bottom:4px">💰 월정액</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#C2410C">¥50,000~</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">점포 유형별 상이</div>
+        </div>
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#166534;font-weight:700;margin-bottom:4px">📦 수수료</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#166534">8~15%</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">카테고리별 차등</div>
+        </div>
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#1D4ED8;font-weight:700;margin-bottom:4px">⏱ 심사 기간</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#1D4ED8">2~4주</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">서류 심사 포함</div>
+        </div>
+      </div>
+      <!-- 단계 -->
+      <div style="font-weight:800;font-size:0.84rem;margin-bottom:10px;color:var(--text)">📋 입점 절차</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#C2410C;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">1</span>
+          <div><div style="font-weight:700;font-size:0.82rem">사업자 등록증 + 법인/개인 서류 준비</div><div style="font-size:0.74rem;color:var(--muted)">한국 사업자도 가능 · 일본어 번역 공증 불필요</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#C2410C;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">2</span>
+          <div><div style="font-weight:700;font-size:0.82rem">라쿠텐 이치바 출점 신청서 작성</div><div style="font-size:0.74rem;color:var(--muted)">점포 유형 선택 (스タン다드/메가숍/테나트)</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#C2410C;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">3</span>
+          <div><div style="font-weight:700;font-size:0.82rem">심사 통과 → 점포 오픈 준비</div><div style="font-size:0.74rem;color:var(--muted)">상품 등록 (일본어 필수) · 점포 디자인 설정</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#22C55E;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">4</span>
+          <div><div style="font-weight:700;font-size:0.82rem">오픈 → 광고·쿠폰·포인트 마케팅 시작</div><div style="font-size:0.74rem;color:var(--muted)">RPP 광고, 라쿠텐 슈퍼포인트 등 활용 권장</div></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;background:#FFF7ED;border-left:3px solid #FB923C;padding:10px 14px;border-radius:0 8px 8px 0;font-size:0.78rem;color:#92400E">
+        💡 <b>팁:</b> 한국어 상품페이지 그대로는 심사 탈락 가능성 높음. 일본어 전문 번역 서비스(미라이 번역 등) 활용 추천.
+      </div>
     </div>
   </div>
 
-  <!-- NEXT STEP TEASER -->
-  <div class="card" style="margin-top:32px;background:linear-gradient(135deg,#EDE9FE,#F5F3FF);border-color:#C4B9FC">
-    <div style="font-weight:800;font-size:1rem;margin-bottom:8px;color:#3D35A0">🚀 Phase 2 — Shopee (동남아) 연동 예정</div>
-    <div style="color:#5B56A0;font-size:0.85rem;line-height:1.7">
-      Shopee Open Platform API 파트너 승인 후 말레이시아·태국·인도네시아 등 동남아 6개국 판매 데이터를 추가합니다.
-      Amazon SP-API 연동으로 미국 시장 데이터도 함께 제공 예정입니다.
-    </div>
-    <div style="margin-top:12px;display:flex;gap:10px;flex-wrap:wrap">
-      <span style="background:rgba(79,70,229,.2);color:var(--primary-light);padding:4px 12px;border-radius:6px;font-size:0.78rem;font-weight:700">🇸🇬 Shopee</span>
-      <span style="background:rgba(79,70,229,.2);color:var(--primary-light);padding:4px 12px;border-radius:6px;font-size:0.78rem;font-weight:700">🇺🇸 Amazon</span>
-      <span style="background:rgba(79,70,229,.2);color:var(--primary-light);padding:4px 12px;border-radius:6px;font-size:0.78rem;font-weight:700">🇨🇳 Taobao/JD</span>
+  <!-- 쇼피 -->
+  <div id="ptab_shopee" class="ptab-content" style="display:none">
+    <div class="card" style="padding:20px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <span style="font-size:2rem">🌏</span>
+        <div>
+          <div style="font-weight:900;font-size:1rem;color:#EE4D2D">Shopee (쇼피)</div>
+          <div style="font-size:0.76rem;color:var(--muted)">동남아 + 대만 최대 플랫폼 · 월간 이용자 6억+</div>
+        </div>
+        <a href="https://seller.shopee.com.my/edu/article/8309" target="_blank"
+          style="margin-left:auto;padding:7px 14px;background:#EE4D2D;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;text-decoration:none;white-space:nowrap">입점 안내 →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+        <div style="background:#FFF5F5;border:1px solid #FCA5A5;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#DC2626;font-weight:700;margin-bottom:4px">💰 입점비</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#DC2626">무료</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">기본 입점 무료</div>
+        </div>
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#166534;font-weight:700;margin-bottom:4px">📦 수수료</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#166534">2~5%</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">국가·카테고리별</div>
+        </div>
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#1D4ED8;font-weight:700;margin-bottom:4px">⏱ 승인</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#1D4ED8">1~3일</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">빠른 심사</div>
+        </div>
+      </div>
+      <div style="font-weight:800;font-size:0.84rem;margin-bottom:10px">📋 입점 절차</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#EE4D2D;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">1</span>
+          <div><div style="font-weight:700;font-size:0.82rem">진출 희망 국가 결정 (태국/말레이시아/인니 등)</div><div style="font-size:0.74rem;color:var(--muted)">국가별 별도 계정 생성 필요 · 한국 셀러 Cross-Border 가능</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#EE4D2D;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">2</span>
+          <div><div style="font-weight:700;font-size:0.82rem">Shopee 판매자 센터 가입 (해당국 사이트)</div><div style="font-size:0.74rem;color:var(--muted)">이메일 + 전화번호 인증 · 사업자 서류 업로드</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#EE4D2D;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">3</span>
+          <div><div style="font-weight:700;font-size:0.82rem">상품 등록 (현지어 or 영어)</div><div style="font-size:0.74rem;color:var(--muted)">Cross-Border는 한국어 가능 · 현지어 등록 시 노출 유리</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#22C55E;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">4</span>
+          <div><div style="font-weight:700;font-size:0.82rem">쇼피 물류(SLS) 또는 자체 배송 설정</div><div style="font-size:0.74rem;color:var(--muted)">한국발 SLS 이용 시 쇼피 물류센터 경유 가능</div></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;background:#FFF5F5;border-left:3px solid #EE4D2D;padding:10px 14px;border-radius:0 8px 8px 0;font-size:0.78rem;color:#7F1D1D">
+        💡 <b>팁:</b> Shopee Cross-Border (한국→동남아 직배송) 프로그램 활용 시 현지 법인 없이도 판매 가능. 단, 플래시세일·프로모션 참여는 현지 셀러 우선.
+      </div>
     </div>
   </div>
+
+  <!-- 아마존 -->
+  <div id="ptab_amazon" class="ptab-content" style="display:none">
+    <div class="card" style="padding:20px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <span style="font-size:2rem">🇺🇸</span>
+        <div>
+          <div style="font-weight:900;font-size:1rem;color:#FF9900">Amazon Global Selling</div>
+          <div style="font-size:0.76rem;color:var(--muted)">미국·일본·유럽 동시 입점 가능 · 월간 이용자 2억+</div>
+        </div>
+        <a href="https://sell.amazon.com/global-selling/korea" target="_blank"
+          style="margin-left:auto;padding:7px 14px;background:#FF9900;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;text-decoration:none;white-space:nowrap">입점 신청 →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+        <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#D97706;font-weight:700;margin-bottom:4px">💰 월정액</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#D97706">$39.99</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">프로페셔널 플랜</div>
+        </div>
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#166534;font-weight:700;margin-bottom:4px">📦 수수료</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#166534">8~15%</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">카테고리별 상이</div>
+        </div>
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#1D4ED8;font-weight:700;margin-bottom:4px">⏱ 계정 심사</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#1D4ED8">1~2주</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">신원 인증 포함</div>
+        </div>
+      </div>
+      <div style="font-weight:800;font-size:0.84rem;margin-bottom:10px">📋 입점 절차</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#FF9900;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">1</span>
+          <div><div style="font-weight:700;font-size:0.82rem">Seller Central 계정 생성 + 신원 인증</div><div style="font-size:0.74rem;color:var(--muted)">여권/사업자 + 신용카드 + 은행계좌 필요</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#FF9900;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">2</span>
+          <div><div style="font-weight:700;font-size:0.82rem">브랜드 등록 (Brand Registry 권장)</div><div style="font-size:0.74rem;color:var(--muted)">상표권 보호 + A+ 콘텐츠 + 광고 혜택</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#FF9900;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">3</span>
+          <div><div style="font-weight:700;font-size:0.82rem">FBA 또는 FBM 배송 방식 선택</div><div style="font-size:0.74iter;color:var(--muted)">FBA: 아마존 창고 위탁 / FBM: 직접 배송</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#22C55E;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">4</span>
+          <div><div style="font-weight:700;font-size:0.82rem">리스팅 최적화 → PPC 광고 시작</div><div style="font-size:0.74rem;color:var(--muted)">키워드 리서치 필수 · Sponsored Products 권장</div></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;background:#FFFBEB;border-left:3px solid #FF9900;padding:10px 14px;border-radius:0 8px 8px 0;font-size:0.78rem;color:#92400E">
+        💡 <b>팁:</b> 아마존 미국은 계정 정지 위험이 높음. 리뷰 조작 절대 금지. 한국어 지원 가능한 Amazon Global Selling 상담창구 활용 추천.
+      </div>
+    </div>
+  </div>
+
+  <!-- 큐텐 -->
+  <div id="ptab_qoo10" class="ptab-content" style="display:none">
+    <div class="card" style="padding:20px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <span style="font-size:2rem">🛒</span>
+        <div>
+          <div style="font-weight:900;font-size:1rem;color:#E91E8C">Qoo10 Japan (큐텐 재팬)</div>
+          <div style="font-size:0.76rem;color:var(--muted)">일본 내 K-뷰티·식품 강세 · 한국 셀러 최다</div>
+        </div>
+        <a href="https://www.qoo10.jp/gmkt.inc/Seller/Intro.aspx" target="_blank"
+          style="margin-left:auto;padding:7px 14px;background:#E91E8C;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;text-decoration:none;white-space:nowrap">입점 신청 →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+        <div style="background:#FDF2F8;border:1px solid #F9A8D4;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#BE185D;font-weight:700;margin-bottom:4px">💰 입점비</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#BE185D">무료</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">기본 입점 무료</div>
+        </div>
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#166534;font-weight:700;margin-bottom:4px">📦 수수료</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#166534">5~15%</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">카테고리별</div>
+        </div>
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#1D4ED8;font-weight:700;margin-bottom:4px">⏱ 심사</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#1D4ED8">1~3일</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">한국어 지원</div>
+        </div>
+      </div>
+      <div style="font-weight:800;font-size:0.84rem;margin-bottom:10px">📋 입점 절차</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#E91E8C;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">1</span>
+          <div><div style="font-weight:700;font-size:0.82rem">큐텐 판매자 센터 한국어로 가입</div><div style="font-size:0.74rem;color:var(--muted)">사업자등록증 + 통장 사본만으로 가입 가능</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#E91E8C;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">2</span>
+          <div><div style="font-weight:700;font-size:0.82rem">상품 등록 (한국어 원본 → 자동 번역 지원)</div><div style="font-size:0.74rem;color:var(--muted)">기계 번역 검토 후 등록 권장</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#E91E8C;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">3</span>
+          <div><div style="font-weight:700;font-size:0.82rem">큐텐 배송 대행(QXpress) 설정</div><div style="font-size:0.74rem;color:var(--muted)">한국 → 일본 3~5일 배송 가능</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#22C55E;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">4</span>
+          <div><div style="font-weight:700;font-size:0.82rem">메가와리(특가 이벤트) 참여로 노출 확대</div><div style="font-size:0.74rem;color:var(--muted)">큐텐 최대 트래픽 이벤트 · 매달 개최</div></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;background:#FDF2F8;border-left:3px solid #E91E8C;padding:10px 14px;border-radius:0 8px 8px 0;font-size:0.78rem;color:#9D174D">
+        💡 <b>팁:</b> 큐텐은 한국 셀러 친화적이라 진입 장벽이 가장 낮습니다. 메가와리 이벤트 참여 시 매출이 평소 5~10배 급증하는 경우도 있음.
+      </div>
+    </div>
+  </div>
+
+  <!-- 라자다 -->
+  <div id="ptab_lazada" class="ptab-content" style="display:none">
+    <div class="card" style="padding:20px">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:18px">
+        <span style="font-size:2rem">🌏</span>
+        <div>
+          <div style="font-weight:900;font-size:1rem;color:#0F146D">Lazada (라자다)</div>
+          <div style="font-size:0.76rem;color:var(--muted)">알리바바 그룹 · 동남아 6개국 · 월간 이용자 1.5억+</div>
+        </div>
+        <a href="https://sellercenter.lazada.co.th/apps/seller/register" target="_blank"
+          style="margin-left:auto;padding:7px 14px;background:#0F146D;color:#fff;border-radius:8px;font-size:0.78rem;font-weight:700;text-decoration:none;white-space:nowrap">입점 신청 →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px">
+        <div style="background:#EEF2FF;border:1px solid #A5B4FC;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#3730A3;font-weight:700;margin-bottom:4px">💰 입점비</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#3730A3">무료</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">기본 입점 무료</div>
+        </div>
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#166534;font-weight:700;margin-bottom:4px">📦 수수료</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#166534">1~4%</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">국가별 상이</div>
+        </div>
+        <div style="background:#EFF6FF;border:1px solid #BFDBFE;border-radius:10px;padding:12px;text-align:center">
+          <div style="font-size:0.68rem;color:#1D4ED8;font-weight:700;margin-bottom:4px">⏱ 승인</div>
+          <div style="font-weight:900;font-size:0.95rem;color:#1D4ED8">3~7일</div>
+          <div style="font-size:0.65rem;color:#6B7280;margin-top:2px">서류 심사</div>
+        </div>
+      </div>
+      <div style="font-weight:800;font-size:0.84rem;margin-bottom:10px">📋 입점 절차</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#0F146D;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">1</span>
+          <div><div style="font-weight:700;font-size:0.82rem">진출 국가 선택 (태국/말레이/인니/필리핀 등)</div><div style="font-size:0.74rem;color:var(--muted)">국가별 Seller Center 별도 계정</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#0F146D;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">2</span>
+          <div><div style="font-weight:700;font-size:0.82rem">사업자 서류 + 연락처 인증</div><div style="font-size:0.74rem;color:var(--muted)">현지 은행계좌 없어도 한국 계좌 연결 가능</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#0F146D;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">3</span>
+          <div><div style="font-weight:700;font-size:0.82rem">LazMall 또는 일반 셀러 선택</div><div style="font-size:0.74rem;color:var(--muted)">LazMall: 공식 브랜드 스토어, 노출 우선</div></div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:flex-start">
+          <span style="min-width:24px;height:24px;background:#22C55E;color:#fff;border-radius:50%;font-size:0.72rem;font-weight:900;display:flex;align-items:center;justify-content:center">4</span>
+          <div><div style="font-weight:700;font-size:0.82rem">Lazada 물류(LEX) 또는 자체 배송 설정</div><div style="font-size:0.74rem;color:var(--muted)">11.11, 12.12 등 메가 세일 참여 권장</div></div>
+        </div>
+      </div>
+      <div style="margin-top:14px;background:#EEF2FF;border-left:3px solid #0F146D;padding:10px 14px;border-radius:0 8px 8px 0;font-size:0.78rem;color:#1E1B4B">
+        💡 <b>팁:</b> 라자다는 알리바바 그룹 지원으로 11.11 광군제에 연계 프로모션 참여 시 폭발적 매출 가능. 단, 재고 관리 철저히.
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 5. 유사상품 / 경쟁상품 분석                         -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-title" style="margin-top:40px" id="compAnalysis">
+    🔍 유사상품 / 경쟁상품 분석 <span class="tag">시장 포화도</span>
+  </div>
+  <div class="card" style="padding:20px">
+    <!-- 검색 입력 -->
+    <div style="display:flex;gap:10px;margin-bottom:20px">
+      <input type="text" id="compSearchInput" placeholder="분석할 상품명 입력 (예: 달팽이크림, 신라면, MLB볼캡...)"
+        style="flex:1;padding:10px 14px;border:2px solid #E2E8F0;border-radius:10px;font-size:0.88rem;outline:none;background:var(--surface);color:var(--text)"
+        onfocus="this.style.borderColor='#6366F1'" onblur="this.style.borderColor='#E2E8F0'"
+        onkeydown="if(event.key==='Enter')analyzeCompetitor()">
+      <button onclick="analyzeCompetitor()"
+        style="padding:10px 22px;background:var(--primary);color:#fff;border:none;border-radius:10px;font-weight:800;font-size:0.88rem;cursor:pointer;white-space:nowrap">분석하기 🔍</button>
+    </div>
+    <!-- 결과 영역 -->
+    <div id="compResult">
+      <!-- 기본 안내 -->
+      <div style="text-align:center;padding:32px 0;color:var(--muted)">
+        <div style="font-size:2.5rem;margin-bottom:12px">🔍</div>
+        <div style="font-weight:700;font-size:0.9rem;margin-bottom:6px">상품명을 입력하고 분석하기를 클릭하세요</div>
+        <div style="font-size:0.78rem">각 마켓별 경쟁 현황, 가격대, 진입 난이도를 분석해드립니다</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- 6. 국가별 물류 / 배송 가이드                        -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="section-title" style="margin-top:40px" id="logisticsGuide">
+    🚚 국가별 물류 / 배송 가이드 <span class="tag">비용·기간 비교</span>
+  </div>
+
+  <!-- 국가 탭 -->
+  <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+    <button onclick="switchLogTab('japan',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #FB923C;background:#FB923C;color:#fff;font-weight:700;font-size:0.82rem;cursor:pointer" class="ltab active">🇯🇵 일본</button>
+    <button onclick="switchLogTab('sea',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #E2E8F0;background:var(--surface);color:var(--muted);font-weight:700;font-size:0.82rem;cursor:pointer" class="ltab">🌏 동남아</button>
+    <button onclick="switchLogTab('usa',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #E2E8F0;background:var(--surface);color:var(--muted);font-weight:700;font-size:0.82rem;cursor:pointer" class="ltab">🇺🇸 미국</button>
+    <button onclick="switchLogTab('eu',this)"
+      style="padding:7px 16px;border-radius:99px;border:2px solid #E2E8F0;background:var(--surface);color:var(--muted);font-weight:700;font-size:0.82rem;cursor:pointer" class="ltab">🇪🇺 유럽</button>
+  </div>
+
+  <!-- 일본 물류 -->
+  <div id="ltab_japan" class="ltab-content">
+    <div class="card" style="padding:20px">
+      <div style="font-weight:800;font-size:0.9rem;margin-bottom:14px;color:var(--text)">🇯🇵 한국 → 일본 배송 옵션 비교</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem">
+          <thead>
+            <tr style="background:linear-gradient(90deg,#FFF7ED,#FFF3E0)">
+              <th style="padding:10px 12px;text-align:left;border-bottom:2px solid #FB923C;font-weight:800;color:#C2410C">배송 방법</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #FB923C;font-weight:800;color:#C2410C">소요 기간</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #FB923C;font-weight:800;color:#C2410C">비용 (1kg 기준)</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #FB923C;font-weight:800;color:#C2410C">추천 상황</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;font-weight:700">📮 EMS</td>
+              <td style="padding:10px 12px;text-align:center;color:#059669;font-weight:700">3~5일</td>
+              <td style="padding:10px 12px;text-align:center">₩18,000~25,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">소량 · 고가품 · 빠른배송</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--bg)">
+              <td style="padding:10px 12px;font-weight:700">✈️ DHL/FedEx/UPS</td>
+              <td style="padding:10px 12px;text-align:center;color:#059669;font-weight:700">2~4일</td>
+              <td style="padding:10px 12px;text-align:center">₩25,000~40,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">고가 · 긴급 · B2B</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;font-weight:700">📦 항공화물</td>
+              <td style="padding:10px 12px;text-align:center;color:#D97706;font-weight:700">5~8일</td>
+              <td style="padding:10px 12px;text-align:center">₩8,000~15,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">중량 10kg+ · 중가품</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--bg)">
+              <td style="padding:10px 12px;font-weight:700">🚢 해상운송(LCL)</td>
+              <td style="padding:10px 12px;text-align:center;color:#6B7280;font-weight:700">7~14일</td>
+              <td style="padding:10px 12px;text-align:center">₩3,000~8,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">대량 · 저가품 · 정기발송</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;font-weight:700">🏪 큐텐 QXpress</td>
+              <td style="padding:10px 12px;text-align:center;color:#059669;font-weight:700">3~5일</td>
+              <td style="padding:10px 12px;text-align:center">₩6,000~12,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">큐텐 셀러 전용 · 가성비↑</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:10px;padding:12px">
+          <div style="font-weight:800;font-size:0.78rem;color:#166534;margin-bottom:6px">✅ 추천 물류사</div>
+          <div style="font-size:0.75rem;color:var(--text);line-height:1.8">
+            • <b>CJ대한통운 직배송</b> (일본향 저렴)<br>
+            • <b>판토스</b> (LG계열, 신뢰도↑)<br>
+            • <b>세방물류</b> (소규모 셀러 친화적)
+          </div>
+        </div>
+        <div style="background:#FFF7ED;border:1px solid #FDBA74;border-radius:10px;padding:12px">
+          <div style="font-weight:800;font-size:0.78rem;color:#C2410C;margin-bottom:6px">⚠️ 주의사항</div>
+          <div style="font-size:0.75rem;color:var(--text);line-height:1.8">
+            • 16,666엔 초과 시 일본 관세 발생<br>
+            • 식품·화장품은 검역 필요<br>
+            • 리튬배터리 포함 시 항공 제한
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 동남아 물류 -->
+  <div id="ltab_sea" class="ltab-content" style="display:none">
+    <div class="card" style="padding:20px">
+      <div style="font-weight:800;font-size:0.9rem;margin-bottom:14px">🌏 한국 → 동남아 배송 옵션 비교</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem">
+          <thead>
+            <tr style="background:linear-gradient(90deg,#F0FFF4,#DCFCE7)">
+              <th style="padding:10px 12px;text-align:left;border-bottom:2px solid #22C55E;font-weight:800;color:#166534">배송 방법</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #22C55E;font-weight:800;color:#166534">소요 기간</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #22C55E;font-weight:800;color:#166534">비용 (1kg)</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #22C55E;font-weight:800;color:#166534">추천 국가/상황</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;font-weight:700">📮 K-패킷</td>
+              <td style="padding:10px 12px;text-align:center;color:#D97706;font-weight:700">7~14일</td>
+              <td style="padding:10px 12px;text-align:center">₩5,000~12,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">소량·소형 · 전 국가</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--bg)">
+              <td style="padding:10px 12px;font-weight:700">🛍️ Shopee SLS</td>
+              <td style="padding:10px 12px;text-align:center;color:#059669;font-weight:700">5~10일</td>
+              <td style="padding:10px 12px;text-align:center">₩4,000~10,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">쇼피 셀러 전용 · 가성비</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;font-weight:700">✈️ DHL/FedEx</td>
+              <td style="padding:10px 12px;text-align:center;color:#059669;font-weight:700">3~6일</td>
+              <td style="padding:10px 12px;text-align:center">₩25,000~45,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">고가·긴급 · B2B</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--bg)">
+              <td style="padding:10px 12px;font-weight:700">📦 항공화물</td>
+              <td style="padding:10px 12px;text-align:center;color:#D97706;font-weight:700">5~10일</td>
+              <td style="padding:10px 12px;text-align:center">₩7,000~18,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">10kg+ · 의류·잡화</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;font-weight:700">🚢 해상운송</td>
+              <td style="padding:10px 12px;text-align:center;color:#6B7280;font-weight:700">15~25일</td>
+              <td style="padding:10px 12px;text-align:center">₩2,000~6,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">대량 · 저가품 · 정기선</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;background:#F0FDF4;border-left:3px solid #22C55E;padding:10px 14px;border-radius:0 8px 8px 0;font-size:0.78rem;color:#14532D">
+        💡 <b>팁:</b> 동남아는 국가마다 통관 규정이 달라 동일 배송방법도 소요시간이 크게 다릅니다. 싱가포르·말레이시아가 가장 빠르고, 인도네시아·필리핀이 가장 느린 편입니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 미국 물류 -->
+  <div id="ltab_usa" class="ltab-content" style="display:none">
+    <div class="card" style="padding:20px">
+      <div style="font-weight:800;font-size:0.9rem;margin-bottom:14px">🇺🇸 한국 → 미국 배송 옵션 비교</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem">
+          <thead>
+            <tr style="background:linear-gradient(90deg,#EFF6FF,#DBEAFE)">
+              <th style="padding:10px 12px;text-align:left;border-bottom:2px solid #3B82F6;font-weight:800;color:#1D4ED8">배송 방법</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #3B82F6;font-weight:800;color:#1D4ED8">소요 기간</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #3B82F6;font-weight:800;color:#1D4ED8">비용 (1kg)</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #3B82F6;font-weight:800;color:#1D4ED8">추천 상황</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;font-weight:700">📦 Amazon FBA 납품</td>
+              <td style="padding:10px 12px;text-align:center;color:#059669;font-weight:700">7~14일</td>
+              <td style="padding:10px 12px;text-align:center">₩15,000~30,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">아마존 셀러 · 대량</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--bg)">
+              <td style="padding:10px 12px;font-weight:700">✈️ DHL Express</td>
+              <td style="padding:10px 12px;text-align:center;color:#059669;font-weight:700">3~5일</td>
+              <td style="padding:10px 12px;text-align:center">₩35,000~60,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">긴급·고가 B2B</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;font-weight:700">📮 EMS</td>
+              <td style="padding:10px 12px;text-align:center;color:#D97706;font-weight:700">5~10일</td>
+              <td style="padding:10px 12px;text-align:center">₩22,000~38,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">소량·개인 직구</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--bg)">
+              <td style="padding:10px 12px;font-weight:700">✈️ 항공화물(AWB)</td>
+              <td style="padding:10px 12px;text-align:center;color:#D97706;font-weight:700">7~12일</td>
+              <td style="padding:10px 12px;text-align:center">₩10,000~22,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">50kg+ 중량</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;font-weight:700">🚢 해상운송(FCL/LCL)</td>
+              <td style="padding:10px 12px;text-align:center;color:#6B7280;font-weight:700">20~30일</td>
+              <td style="padding:10px 12px;text-align:center">₩2,500~7,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">컨테이너급 대량</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;background:#EFF6FF;border-left:3px solid #3B82F6;padding:10px 14px;border-radius:0 8px 8px 0;font-size:0.78rem;color:#1E3A8A">
+        💡 <b>팁:</b> 미국향 $800 이하는 de minimis 면세 적용 가능 (단, 2024년 이후 강화 추세). FBA 이용 시 미국 창고에서 당일/익일 배송 가능해 구매 전환율이 크게 높아집니다.
+      </div>
+    </div>
+  </div>
+
+  <!-- 유럽 물류 -->
+  <div id="ltab_eu" class="ltab-content" style="display:none">
+    <div class="card" style="padding:20px">
+      <div style="font-weight:800;font-size:0.9rem;margin-bottom:14px">🇪🇺 한국 → 유럽 배송 옵션 비교</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:0.8rem">
+          <thead>
+            <tr style="background:linear-gradient(90deg,#F5F3FF,#EDE9FE)">
+              <th style="padding:10px 12px;text-align:left;border-bottom:2px solid #7C3AED;font-weight:800;color:#5B21B6">배송 방법</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #7C3AED;font-weight:800;color:#5B21B6">소요 기간</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #7C3AED;font-weight:800;color:#5B21B6">비용 (1kg)</th>
+              <th style="padding:10px 12px;text-align:center;border-bottom:2px solid #7C3AED;font-weight:800;color:#5B21B6">추천 상황</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;font-weight:700">✈️ DHL/UPS</td>
+              <td style="padding:10px 12px;text-align:center;color:#059669;font-weight:700">3~6일</td>
+              <td style="padding:10px 12px;text-align:center">₩40,000~70,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">고가·긴급</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border);background:var(--bg)">
+              <td style="padding:10px 12px;font-weight:700">📮 EMS</td>
+              <td style="padding:10px 12px;text-align:center;color:#D97706;font-weight:700">7~14일</td>
+              <td style="padding:10px 12px;text-align:center">₩25,000~45,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">소량·일반</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:10px 12px;font-weight:700">✈️ 항공화물</td>
+              <td style="padding:10px 12px;text-align:center;color:#D97706;font-weight:700">10~15일</td>
+              <td style="padding:10px 12px;text-align:center">₩12,000~25,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">중량 50kg+</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 12px;font-weight:700">🚢 해상운송</td>
+              <td style="padding:10px 12px;text-align:center;color:#6B7280;font-weight:700">30~45일</td>
+              <td style="padding:10px 12px;text-align:center">₩2,000~5,000</td>
+              <td style="padding:10px 12px;font-size:0.75rem;color:var(--muted)">컨테이너 대량</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div style="margin-top:14px;background:#F5F3FF;border-left:3px solid #7C3AED;padding:10px 14px;border-radius:0 8px 8px 0;font-size:0.78rem;color:#3B0764">
+        💡 <b>팁:</b> 유럽은 VAT 등록 의무(€10,000 초과 시)와 GDPR 규정 준수 필요. 독일·프랑스·영국 순으로 K-뷰티 수요가 높습니다.
+      </div>
+    </div>
+  </div>
+
+  <div style="height:48px"></div><!-- bottom padding -->
+
 </div>
 
 <!-- ── 공장 정보 모달 ── -->
@@ -919,6 +1277,66 @@
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-notice">※ 본 정보는 참고용 샘플 데이터입니다. 실제 거래 전 반드시 직접 확인하세요.</div>
   </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- 🔖 플로팅 북마크 / 관심상품 패널 (우측 슬라이딩)       -->
+<!-- ══════════════════════════════════════════════════════ -->
+<div id="bookmarkPanel" style="
+  position:fixed;
+  right:0; top:50%;
+  transform:translateY(-50%) translateX(0);
+  width:220px;
+  max-height:70vh;
+  background:var(--surface,#fff);
+  border:1.5px solid var(--border,#E2E8F0);
+  border-right:none;
+  border-radius:14px 0 0 14px;
+  box-shadow:-4px 0 24px rgba(0,0,0,0.10);
+  z-index:999;
+  display:flex;
+  flex-direction:column;
+  transition:transform .35s cubic-bezier(.4,0,.2,1);
+  overflow:hidden;
+">
+  <!-- 헤더 -->
+  <div style="background:linear-gradient(135deg,#6366F1,#4F46E5);padding:12px 14px;display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0" onclick="toggleBookmarkPanel()">
+    <span style="font-size:1.1rem">🔖</span>
+    <div style="flex:1">
+      <div style="font-weight:800;color:#fff;font-size:0.8rem">관심 상품</div>
+      <div style="font-size:0.64rem;color:#C7D2FE" id="bmCount">저장된 상품 0개</div>
+    </div>
+    <span id="bmToggleArrow" style="color:#C7D2FE;font-size:0.9rem;transition:transform .3s">◀</span>
+  </div>
+  <!-- 리스트 -->
+  <div id="bmList" style="flex:1;overflow-y:auto;padding:8px 0">
+    <div id="bmEmpty" style="padding:20px 12px;text-align:center;color:var(--muted,#9CA3AF)">
+      <div style="font-size:1.6rem;margin-bottom:8px">📌</div>
+      <div style="font-size:0.74rem;font-weight:600">아직 저장된 상품이 없어요</div>
+      <div style="font-size:0.68rem;margin-top:4px">상품 카드의 🔖 버튼을 눌러<br>관심 상품을 저장하세요</div>
+    </div>
+  </div>
+  <!-- 하단 전체 삭제 -->
+  <div style="flex-shrink:0;border-top:1px solid var(--border,#E2E8F0);padding:8px 12px;display:flex;gap:6px">
+    <button onclick="clearAllBookmarks()" style="flex:1;padding:6px;background:#FEE2E2;color:#DC2626;border:none;border-radius:7px;font-size:0.72rem;font-weight:700;cursor:pointer">전체 삭제</button>
+    <button onclick="exportBookmarks()" style="flex:1;padding:6px;background:#EEF2FF;color:#4F46E5;border:none;border-radius:7px;font-size:0.72rem;font-weight:700;cursor:pointer">목록 복사</button>
+  </div>
+</div>
+
+<!-- 접힘 상태일때 탭 핸들 -->
+<div id="bmHandle" style="
+  position:fixed; right:0; top:50%;
+  transform:translateY(-50%);
+  background:linear-gradient(135deg,#6366F1,#4F46E5);
+  color:#fff; padding:10px 6px;
+  border-radius:10px 0 0 10px;
+  cursor:pointer; z-index:998;
+  display:none; flex-direction:column; align-items:center; gap:4px;
+  box-shadow:-2px 0 12px rgba(99,102,241,0.4);
+  font-size:0.65rem; font-weight:700;
+" onclick="toggleBookmarkPanel()" title="관심상품 열기">
+  <span style="font-size:1rem">🔖</span>
+  <span id="bmHandleCount" style="background:rgba(255,255,255,0.3);border-radius:99px;padding:2px 6px;font-size:0.6rem">0</span>
 </div>
 
 <footer>
@@ -3323,6 +3741,7 @@ function renderSeaCountryItems(items, country) {
             style="font-size:0.6rem;color:#0891b2;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #0891b2;border-radius:5px;background:var(--surface);text-align:center">📋 취득법</span>
           <span onclick="openSeaModal('${nameSafe}','partner')"
             style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center">🤝 파트너</span>
+          <span onclick="addBookmark('${nameSafe}','${(item.mock_emoji||'📦').replace(/'/g,'')}','${(SEA_COUNTRY_FLAGS[country]||'')+' '+(SEA_COUNTRY_NAME[country]||country)}','${price}')" style="grid-column:1/-1;font-size:0.6rem;color:#6366F1;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #6366F1;border-radius:5px;background:var(--surface);text-align:center">🔖 관심상품 저장</span>
         </div>
       </div>
     </div>`;
@@ -3597,6 +4016,7 @@ function renderSeaCountryFallback(country) {
             style="font-size:0.6rem;color:#0891b2;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #0891b2;border-radius:5px;background:var(--surface);text-align:center">📋 취득법</span>
           <span onclick="openSeaModal('${nameSafe}','partner')"
             style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center">🤝 파트너</span>
+          <span onclick="addBookmark('${nameSafe}','${(item.mock_emoji||'📦').replace(/'/g,'')}','${(SEA_COUNTRY_FLAGS[country]||'')+' '+(SEA_COUNTRY_NAME[country]||country)}','${price}')" style="grid-column:1/-1;font-size:0.6rem;color:#6366F1;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #6366F1;border-radius:5px;background:var(--surface);text-align:center">🔖 관심상품 저장</span>
         </div>
       </div>
     </div>`;
@@ -4816,8 +5236,228 @@ function renderDmgCard(item) {
 function carouselScroll(id, dir) {
   const el = document.getElementById(id);
   if (!el) return;
-  const cardWidth = el.scrollWidth / 10; // 10개 카드 기준 1개 너비
+  const cardWidth = el.scrollWidth / 10;
   el.scrollLeft += dir * cardWidth;
+}
+
+// ──────────────────────────────────────────
+// 플랫폼 입점 가이드 탭 전환
+// ──────────────────────────────────────────
+function switchPlatformTab(key, btn) {
+  document.querySelectorAll('.ptab').forEach(b => {
+    b.style.background = 'var(--surface)';
+    b.style.color = 'var(--muted)';
+    b.style.borderColor = '#E2E8F0';
+  });
+  btn.style.background = '#6366F1';
+  btn.style.color = '#fff';
+  btn.style.borderColor = '#6366F1';
+  document.querySelectorAll('.ptab-content').forEach(el => el.style.display = 'none');
+  const target = document.getElementById('ptab_' + key);
+  if (target) target.style.display = 'block';
+}
+
+// ──────────────────────────────────────────
+// 물류/배송 가이드 탭 전환
+// ──────────────────────────────────────────
+function switchLogTab(key, btn) {
+  document.querySelectorAll('.ltab').forEach(b => {
+    b.style.background = 'var(--surface)';
+    b.style.color = 'var(--muted)';
+    b.style.borderColor = '#E2E8F0';
+  });
+  btn.style.background = '#0891B2';
+  btn.style.color = '#fff';
+  btn.style.borderColor = '#0891B2';
+  document.querySelectorAll('.ltab-content').forEach(el => el.style.display = 'none');
+  const target = document.getElementById('ltab_' + key);
+  if (target) target.style.display = 'block';
+}
+
+// ──────────────────────────────────────────
+// 유사상품 / 경쟁상품 분석
+// ──────────────────────────────────────────
+const _COMP_DATA = {
+  '달팽이크림': { markets: [{name:'라쿠텐',flag:'🇯🇵',count:1240,priceRange:'¥800~¥4,500',topPrice:'¥2,380',sat:'높음',satColor:'#DC2626'},{name:'쇼피 TH',flag:'🇹🇭',count:420,priceRange:'฿250~฿1,200',topPrice:'฿590',sat:'중간',satColor:'#D97706'},{name:'아마존US',flag:'🇺🇸',count:680,priceRange:'$8~$35',topPrice:'$18.99',sat:'높음',satColor:'#DC2626'}], category:'화장품', tip:'달팽이크림은 라쿠텐에서 이미 포화 상태. 쇼피 동남아 소도시 타겟 or 차별화 포뮬러 추천.' },
+  '신라면': { markets: [{name:'라쿠텐',flag:'🇯🇵',count:340,priceRange:'¥300~¥900',topPrice:'¥598',sat:'중간',satColor:'#D97706'},{name:'쇼피 MY',flag:'🇲🇾',count:180,priceRange:'RM8~RM25',topPrice:'RM14.90',sat:'낮음',satColor:'#059669'},{name:'아마존US',flag:'🇺🇸',count:520,priceRange:'$12~$28',topPrice:'$18.49',sat:'중간',satColor:'#D97706'}], category:'식품', tip:'신라면은 미국 아마존에서 경쟁 심화 추세. 말레이시아 쇼피는 아직 경쟁 낮아 진입 여지 있음.' },
+  'MLB볼캡': { markets: [{name:'라쿠텐',flag:'🇯🇵',count:2100,priceRange:'¥3,000~¥12,000',topPrice:'¥6,800',sat:'높음',satColor:'#DC2626'},{name:'쇼피 TW',flag:'🇹🇼',count:890,priceRange:'NT$600~NT$2,500',topPrice:'NT$1,380',sat:'높음',satColor:'#DC2626'},{name:'쇼피 TH',flag:'🇹🇭',count:320,priceRange:'฿800~฿3,500',topPrice:'฿1,890',sat:'중간',satColor:'#D97706'}], category:'패션', tip:'MLB 라이선스 정품 여부가 핵심. 정품 인증 강조 시 프리미엄 가격 형성 가능. 라쿠텐은 이미 포화.' },
+  '콜라겐': { markets: [{name:'라쿠텐',flag:'🇯🇵',count:3200,priceRange:'¥1,500~¥8,000',topPrice:'¥3,980',sat:'매우높음',satColor:'#7F1D1D'},{name:'쇼피 VN',flag:'🇻🇳',count:560,priceRange:'₫180K~₫650K',topPrice:'₫320K',sat:'중간',satColor:'#D97706'},{name:'쇼피 PH',flag:'🇵🇭',count:280,priceRange:'₱350~₱1,200',topPrice:'₱780',sat:'낮음',satColor:'#059669'}], category:'건강기능식품', tip:'콜라겐은 일본이 최대 시장이지만 포화 극심. 필리핀·베트남은 이너뷰티 시장 초기 단계라 진입 유리.' },
+};
+
+function analyzeCompetitor() {
+  const input = (document.getElementById('compSearchInput').value || '').trim();
+  const resultEl = document.getElementById('compResult');
+  if (!input) { resultEl.innerHTML = '<div style="padding:20px;text-align:center;color:#DC2626;font-weight:700">상품명을 입력해주세요.</div>'; return; }
+
+  // 키워드 매칭
+  let data = null;
+  for (const key of Object.keys(_COMP_DATA)) {
+    if (input.includes(key) || key.includes(input)) { data = _COMP_DATA[key]; break; }
+  }
+
+  if (!data) {
+    // 샘플 데이터 없을 때 카테고리 감지해서 일반 안내
+    const cat = detectProductCategory ? detectProductCategory(input) : 'cosmetics';
+    const catLabel = { food:'식품', supplement:'건강기능식품', fashion:'패션/의류', merch:'K팝 굿즈', cosmetics:'화장품' }[cat] || '일반';
+    resultEl.innerHTML = `
+      <div style="padding:20px 0">
+        <div style="background:#F0FDF4;border:1px solid #86EFAC;border-radius:12px;padding:16px;margin-bottom:14px">
+          <div style="font-weight:800;font-size:0.88rem;color:#166534;margin-bottom:8px">🔍 "${input}" — ${catLabel} 카테고리</div>
+          <div style="font-size:0.8rem;color:#166534;line-height:1.7">해당 상품의 정밀 경쟁 데이터가 아직 없습니다.<br>아래 링크로 직접 검색해 경쟁 현황을 확인해보세요.</div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px">
+          <a href="https://search.rakuten.co.jp/search/mall/${encodeURIComponent(input)}/" target="_blank"
+            style="display:block;text-align:center;padding:12px;background:#FFF7ED;border:1.5px solid #FB923C;border-radius:10px;text-decoration:none">
+            <div style="font-size:1.3rem">🇯🇵</div>
+            <div style="font-weight:700;font-size:0.78rem;color:#C2410C;margin-top:4px">라쿠텐 검색</div>
+          </a>
+          <a href="https://shopee.co.th/search?keyword=${encodeURIComponent(input)}" target="_blank"
+            style="display:block;text-align:center;padding:12px;background:#F0FFF4;border:1.5px solid #22C55E;border-radius:10px;text-decoration:none">
+            <div style="font-size:1.3rem">🌏</div>
+            <div style="font-weight:700;font-size:0.78rem;color:#166534;margin-top:4px">쇼피 검색</div>
+          </a>
+          <a href="https://www.amazon.com/s?k=${encodeURIComponent(input)}" target="_blank"
+            style="display:block;text-align:center;padding:12px;background:#EFF6FF;border:1.5px solid #3B82F6;border-radius:10px;text-decoration:none">
+            <div style="font-size:1.3rem">🇺🇸</div>
+            <div style="font-weight:700;font-size:0.78rem;color:#1D4ED8;margin-top:4px">아마존 검색</div>
+          </a>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const satBg = { '낮음':'#F0FDF4', '중간':'#FFFBEB', '높음':'#FEF2F2', '매우높음':'#FFF0F0' };
+  resultEl.innerHTML = `
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+        <span style="font-weight:800;font-size:0.9rem">"${input}"</span>
+        <span style="font-size:0.72rem;background:#EEF2FF;color:#4338CA;padding:3px 10px;border-radius:99px;font-weight:700">${data.category}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px">
+        ${data.markets.map(m => `
+          <div style="background:${satBg[m.sat]||'#F9FAFB'};border:1.5px solid ${m.satColor}40;border-radius:12px;padding:14px">
+            <div style="font-size:0.78rem;font-weight:800;color:var(--text);margin-bottom:8px">${m.flag} ${m.name}</div>
+            <div style="font-size:0.7rem;color:var(--muted);margin-bottom:4px">경쟁 상품 수</div>
+            <div style="font-weight:900;font-size:1.1rem;color:var(--text);margin-bottom:8px">${m.count.toLocaleString()}개</div>
+            <div style="font-size:0.7rem;color:var(--muted)">가격대: <b>${m.priceRange}</b></div>
+            <div style="font-size:0.7rem;color:var(--muted)">1위 가격: <b>${m.topPrice}</b></div>
+            <div style="margin-top:8px;display:inline-block;padding:3px 10px;border-radius:99px;font-size:0.68rem;font-weight:800;background:${m.satColor}18;color:${m.satColor}">포화도 ${m.sat}</div>
+          </div>`).join('')}
+      </div>
+      <div style="background:#FFFBEB;border:1.5px solid #FCD34D;border-radius:10px;padding:12px 15px;font-size:0.8rem;color:#78350F">
+        💡 <b>전략 제안:</b> ${data.tip}
+      </div>
+    </div>`;
+}
+
+// ──────────────────────────────────────────
+// 🔖 북마크 / 관심상품 패널
+// ──────────────────────────────────────────
+let _bookmarks = JSON.parse(localStorage.getItem('tb_bookmarks') || '[]');
+let _bmPanelOpen = true;
+
+function renderBookmarkPanel() {
+  const list = document.getElementById('bmList');
+  const empty = document.getElementById('bmEmpty');
+  const count = document.getElementById('bmCount');
+  const handleCount = document.getElementById('bmHandleCount');
+  if (!list) return;
+  count.textContent = `저장된 상품 ${_bookmarks.length}개`;
+  handleCount.textContent = _bookmarks.length;
+
+  // 기존 아이템 제거 (empty 제외)
+  list.querySelectorAll('.bm-item').forEach(el => el.remove());
+
+  if (_bookmarks.length === 0) {
+    empty.style.display = 'block';
+  } else {
+    empty.style.display = 'none';
+    _bookmarks.slice().reverse().forEach((bm, i) => {
+      const idx = _bookmarks.length - 1 - i;
+      const div = document.createElement('div');
+      div.className = 'bm-item';
+      div.style.cssText = 'padding:8px 10px;border-bottom:1px solid var(--border,#E2E8F0);display:flex;align-items:flex-start;gap:6px';
+      div.innerHTML = `
+        <span style="font-size:1.1rem;line-height:1.2">${bm.emoji || '📦'}</span>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:0.72rem;font-weight:700;color:var(--text);line-height:1.3;word-break:keep-all">${bm.name.substring(0,28)}${bm.name.length>28?'…':''}</div>
+          <div style="font-size:0.64rem;color:var(--muted);margin-top:2px">${bm.country || ''} · ${bm.price || ''}</div>
+        </div>
+        <button onclick="removeBookmark(${idx})" style="flex-shrink:0;background:none;border:none;color:#9CA3AF;cursor:pointer;font-size:0.8rem;padding:0 2px" title="삭제">✕</button>`;
+      list.appendChild(div);
+    });
+  }
+  localStorage.setItem('tb_bookmarks', JSON.stringify(_bookmarks));
+}
+
+function addBookmark(name, emoji, country, price) {
+  if (_bookmarks.find(b => b.name === name)) {
+    alert('이미 저장된 상품입니다.');
+    return;
+  }
+  _bookmarks.push({ name, emoji: emoji || '📦', country: country || '', price: price || '' });
+  renderBookmarkPanel();
+  // 패널 열기
+  if (!_bmPanelOpen) toggleBookmarkPanel();
+  // 잠깐 하이라이트
+  const panel = document.getElementById('bookmarkPanel');
+  if (panel) {
+    panel.style.boxShadow = '-4px 0 32px rgba(99,102,241,0.5)';
+    setTimeout(() => { panel.style.boxShadow = '-4px 0 24px rgba(0,0,0,0.10)'; }, 600);
+  }
+}
+
+function removeBookmark(idx) {
+  _bookmarks.splice(idx, 1);
+  renderBookmarkPanel();
+}
+
+function clearAllBookmarks() {
+  if (_bookmarks.length === 0) return;
+  if (confirm(`저장된 상품 ${_bookmarks.length}개를 모두 삭제할까요?`)) {
+    _bookmarks = [];
+    renderBookmarkPanel();
+  }
+}
+
+function exportBookmarks() {
+  if (_bookmarks.length === 0) { alert('저장된 상품이 없습니다.'); return; }
+  const text = _bookmarks.map((b,i) => `${i+1}. ${b.emoji} ${b.name} (${b.country} ${b.price})`).join('\n');
+  navigator.clipboard.writeText(text).then(() => alert('관심상품 목록이 클립보드에 복사되었습니다.')).catch(() => alert(text));
+}
+
+function toggleBookmarkPanel() {
+  _bmPanelOpen = !_bmPanelOpen;
+  const panel = document.getElementById('bookmarkPanel');
+  const handle = document.getElementById('bmHandle');
+  const arrow = document.getElementById('bmToggleArrow');
+  if (_bmPanelOpen) {
+    panel.style.transform = 'translateY(-50%) translateX(0)';
+    handle.style.display = 'none';
+    if (arrow) arrow.style.transform = 'rotate(0deg)';
+  } else {
+    panel.style.transform = 'translateY(-50%) translateX(220px)';
+    handle.style.display = 'flex';
+    if (arrow) arrow.style.transform = 'rotate(180deg)';
+  }
+}
+
+// 스크롤 시 패널 부드럽게 따라다니기 (이미 fixed이므로 추가 처리 불필요)
+// 패널 초기 렌더링
+document.addEventListener('DOMContentLoaded', () => {
+  renderBookmarkPanel();
+});
+
+// ──────────────────────────────────────────
+// 상품 카드에 북마크 버튼 삽입 (renderSeaCountryFallback/Items 에서 호출)
+// ──────────────────────────────────────────
+function bmBtnHtml(name, emoji, country, price) {
+  const ns = name.replace(/'/g, "\\'");
+  const es = (emoji||'📦').replace(/'/g, "\\'");
+  const cs = (country||'').replace(/'/g, "\\'");
+  const ps = (price||'').replace(/'/g, "\\'");
+  return `<span onclick="addBookmark('${ns}','${es}','${cs}','${ps}')"
+    style="font-size:0.6rem;color:#6366F1;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #6366F1;border-radius:5px;background:var(--surface);text-align:center">🔖 저장</span>`;
 }
 </script>
 </body>
