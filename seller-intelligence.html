@@ -2988,12 +2988,12 @@ function renderSeaCountryItems(items, country) {
         </div>
         <!-- 버튼 2×2 그리드 -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
-          <a href="${productUrl}" target="_blank" rel="noopener"
-            style="font-size:0.6rem;color:#15803D;font-weight:700;padding:4px 0;border:1px solid #22C55E;border-radius:5px;background:#F0FDF4;text-decoration:none;text-align:center">🛒 상품보기</a>
           <span onclick="openSeaModal('${nameSafe}','factory')"
             style="font-size:0.6rem;color:var(--primary);font-weight:700;cursor:pointer;padding:4px 0;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center">🏭 공장</span>
           <span onclick="openSeaModal('${nameSafe}','cert')"
-            style="font-size:0.6rem;color:${certColor};font-weight:700;cursor:pointer;padding:4px 0;border:1px solid ${certColor};border-radius:5px;background:var(--surface);text-align:center">${flag} 인증</span>
+            style="font-size:0.6rem;color:${certColor};font-weight:700;cursor:pointer;padding:4px 0;border:1px solid ${certColor};border-radius:5px;background:var(--surface);text-align:center">🌏 필요 인증</span>
+          <span onclick="openSeaModal('${nameSafe}','certguide')"
+            style="font-size:0.6rem;color:#0891b2;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #0891b2;border-radius:5px;background:var(--surface);text-align:center">📋 취득법</span>
           <span onclick="openSeaModal('${nameSafe}','partner')"
             style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center">🤝 파트너</span>
         </div>
@@ -3260,12 +3260,12 @@ function renderSeaCountryFallback(country) {
           <span style="font-size:0.6rem;padding:1px 5px;border-radius:99px;background:#FEF9C3;color:#854D0E;border:1px solid #FDE047;font-weight:700">TOP ${rank}</span>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px">
-          <a href="${searchUrl}" target="_blank" rel="noopener"
-            style="font-size:0.6rem;color:#15803D;font-weight:700;padding:4px 0;border:1px solid #22C55E;border-radius:5px;background:#F0FDF4;text-decoration:none;text-align:center">🛒 상품보기</a>
           <span onclick="openSeaModal('${nameSafe}','factory')"
             style="font-size:0.6rem;color:var(--primary);font-weight:700;cursor:pointer;padding:4px 0;border:1px solid var(--primary);border-radius:5px;background:var(--surface);text-align:center">🏭 공장</span>
           <span onclick="openSeaModal('${nameSafe}','cert')"
-            style="font-size:0.6rem;color:${certColor};font-weight:700;cursor:pointer;padding:4px 0;border:1px solid ${certColor};border-radius:5px;background:var(--surface);text-align:center">${flag} 인증</span>
+            style="font-size:0.6rem;color:${certColor};font-weight:700;cursor:pointer;padding:4px 0;border:1px solid ${certColor};border-radius:5px;background:var(--surface);text-align:center">🌏 필요 인증</span>
+          <span onclick="openSeaModal('${nameSafe}','certguide')"
+            style="font-size:0.6rem;color:#0891b2;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #0891b2;border-radius:5px;background:var(--surface);text-align:center">📋 취득법</span>
           <span onclick="openSeaModal('${nameSafe}','partner')"
             style="font-size:0.6rem;color:#059669;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #059669;border-radius:5px;background:var(--surface);text-align:center">🤝 파트너</span>
         </div>
