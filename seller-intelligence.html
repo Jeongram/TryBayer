@@ -1283,8 +1283,8 @@
 <!-- 🔖 플로팅 북마크 / 관심상품 패널 (우측 슬라이딩)       -->
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="bookmarkPanel" style="
-  position:absolute;
-  right:60px; top:100px;
+  position:fixed;
+  right:60px; top:120px;
   width:220px;
   max-height:calc(100vh - 120px);
   background:var(--surface,#fff);
@@ -1323,7 +1323,7 @@
 
 <!-- 접힘 상태일때 탭 핸들 -->
 <div id="bmHandle" style="
-  position:absolute; right:60px; top:100px;
+  position:fixed; right:60px; top:120px;
   background:linear-gradient(135deg,#6366F1,#4F46E5);
   color:#fff; padding:10px 6px;
   border-radius:10px;
@@ -5520,7 +5520,42 @@ function toggleBookmarkPanel() {
   }
 }
 
-// ── 패널 위치: absolute 고정 (스크롤과 함께 움직임) ──
+// ── 패널 플로팅: 스크롤 방향으로 살짝 움직이는 스프링 효과 ──
+(function initBmFloat() {
+  const BASE_TOP = 120;
+  const MAX_OFFSET = 35;
+  let currentTop = BASE_TOP;
+  let targetTop  = BASE_TOP;
+  let lastScrollY = window.scrollY;
+  let rafId = null;
+
+  function animate() {
+    currentTop += (targetTop - currentTop) * 0.10;
+    targetTop  += (BASE_TOP  - targetTop)  * 0.06;
+
+    const panel  = document.getElementById('bookmarkPanel');
+    const handle = document.getElementById('bmHandle');
+    if (panel)  panel.style.top  = currentTop.toFixed(1) + 'px';
+    if (handle) handle.style.top = currentTop.toFixed(1) + 'px';
+
+    if (Math.abs(currentTop - BASE_TOP) > 0.3 || Math.abs(targetTop - BASE_TOP) > 0.3) {
+      rafId = requestAnimationFrame(animate);
+    } else {
+      currentTop = BASE_TOP; targetTop = BASE_TOP;
+      if (panel)  panel.style.top  = BASE_TOP + 'px';
+      if (handle) handle.style.top = BASE_TOP + 'px';
+      rafId = null;
+    }
+  }
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const delta   = scrollY - lastScrollY;
+    lastScrollY   = scrollY;
+    targetTop = Math.max(BASE_TOP - MAX_OFFSET, Math.min(BASE_TOP + MAX_OFFSET, BASE_TOP + delta * 0.6));
+    if (!rafId) rafId = requestAnimationFrame(animate);
+  }, { passive: true });
+})();
 
 // 패널 초기 렌더링
 document.addEventListener('DOMContentLoaded', () => {
