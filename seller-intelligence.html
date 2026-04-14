@@ -5520,30 +5520,51 @@ function toggleBookmarkPanel() {
   }
 }
 
-// ── 패널 플로팅: 스크롤 방향으로 살짝 움직이는 스프링 효과 ──
+// ── 패널 플로팅: 스크롤 시 뷰포트 중앙으로 빠르게 스냅 ──
 (function initBmFloat() {
-  const BASE_TOP = 120;
-  const MAX_OFFSET = 35;
-  let currentTop = BASE_TOP;
-  let targetTop  = BASE_TOP;
+  const MARGIN   = 20;     // 상하 최소 여백
+  const SNAP_SPEED  = 0.18;  // 중앙으로 수렴하는 속도 (클수록 빠름)
+  const PUSH_SPEED  = 0.30;  // 스크롤 밀림 반응 속도
+  const MAX_OFFSET  = 60;    // 스크롤 시 최대 이동 거리(px)
+
+  function getBaseTop() {
+    const panel = document.getElementById('bookmarkPanel');
+    const panelH = panel ? panel.offsetHeight : 300;
+    const vh = window.innerHeight;
+    return Math.max(MARGIN, (vh - panelH) / 2);
+  }
+
+  let currentTop  = getBaseTop();
+  let targetTop   = currentTop;
   let lastScrollY = window.scrollY;
-  let rafId = null;
+  let rafId       = null;
+  let isScrolling = false;
+  let scrollTimer = null;
 
   function animate() {
-    currentTop += (targetTop - currentTop) * 0.10;
-    targetTop  += (BASE_TOP  - targetTop)  * 0.06;
+    const base = getBaseTop();
+
+    // 스크롤 중이면 밀린 위치 유지, 멈추면 빠르게 중앙 복귀
+    const snapSpeed = isScrolling ? PUSH_SPEED : SNAP_SPEED * 1.5;
+    currentTop += (targetTop - currentTop) * snapSpeed;
+
+    // target도 base(중앙)로 수렴
+    if (!isScrolling) {
+      targetTop += (base - targetTop) * 0.12;
+    }
 
     const panel  = document.getElementById('bookmarkPanel');
     const handle = document.getElementById('bmHandle');
     if (panel)  panel.style.top  = currentTop.toFixed(1) + 'px';
     if (handle) handle.style.top = currentTop.toFixed(1) + 'px';
 
-    if (Math.abs(currentTop - BASE_TOP) > 0.3 || Math.abs(targetTop - BASE_TOP) > 0.3) {
+    const diff = Math.abs(currentTop - base) + Math.abs(targetTop - base);
+    if (diff > 0.4) {
       rafId = requestAnimationFrame(animate);
     } else {
-      currentTop = BASE_TOP; targetTop = BASE_TOP;
-      if (panel)  panel.style.top  = BASE_TOP + 'px';
-      if (handle) handle.style.top = BASE_TOP + 'px';
+      currentTop = base; targetTop = base;
+      if (panel)  panel.style.top  = base + 'px';
+      if (handle) handle.style.top = base + 'px';
       rafId = null;
     }
   }
@@ -5552,9 +5573,26 @@ function toggleBookmarkPanel() {
     const scrollY = window.scrollY;
     const delta   = scrollY - lastScrollY;
     lastScrollY   = scrollY;
-    targetTop = Math.max(BASE_TOP - MAX_OFFSET, Math.min(BASE_TOP + MAX_OFFSET, BASE_TOP + delta * 0.6));
+
+    isScrolling = true;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => { isScrolling = false; }, 120);
+
+    const base = getBaseTop();
+    // 스크롤 방향으로 밀리되 범위 제한
+    targetTop = Math.max(base - MAX_OFFSET, Math.min(base + MAX_OFFSET, targetTop + delta * 0.8));
+
     if (!rafId) rafId = requestAnimationFrame(animate);
   }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    currentTop = getBaseTop();
+    targetTop  = currentTop;
+    const panel  = document.getElementById('bookmarkPanel');
+    const handle = document.getElementById('bmHandle');
+    if (panel)  panel.style.top = currentTop + 'px';
+    if (handle) handle.style.top = currentTop + 'px';
+  });
 })();
 
 // 패널 초기 렌더링
