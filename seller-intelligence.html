@@ -5520,52 +5520,49 @@ function toggleBookmarkPanel() {
   }
 }
 
-// ── 패널 플로팅: 스크롤 시 뷰포트 중앙으로 빠르게 스냅 ──
+// ── 패널 플로팅: 물리 기반 스프링 (velocity + damping) ──
 (function initBmFloat() {
-  const MARGIN   = 20;     // 상하 최소 여백
-  const SNAP_SPEED  = 0.18;  // 중앙으로 수렴하는 속도 (클수록 빠름)
-  const PUSH_SPEED  = 0.30;  // 스크롤 밀림 반응 속도
-  const MAX_OFFSET  = 60;    // 스크롤 시 최대 이동 거리(px)
+  const MARGIN      = 20;    // 상하 최소 여백
+  const STIFFNESS   = 0.045; // 스프링 강도 (낮을수록 부드럽게 늘어남)
+  const DAMPING     = 0.78;  // 감쇠 (1에 가까울수록 천천히 멈춤)
+  const SCROLL_GAIN = 0.55;  // 스크롤 델타 → 속도 변환 비율
+  const MAX_OFFSET  = 65;    // 중앙 기준 최대 이탈 거리(px)
 
   function getBaseTop() {
-    const panel = document.getElementById('bookmarkPanel');
-    const panelH = panel ? panel.offsetHeight : 300;
-    const vh = window.innerHeight;
-    return Math.max(MARGIN, (vh - panelH) / 2);
+    const panel  = document.getElementById('bookmarkPanel');
+    const panelH = panel ? panel.offsetHeight : 320;
+    return Math.max(MARGIN, (window.innerHeight - panelH) / 2);
   }
 
-  let currentTop  = getBaseTop();
-  let targetTop   = currentTop;
+  let pos      = getBaseTop();  // 현재 위치
+  let vel      = 0;             // 현재 속도
   let lastScrollY = window.scrollY;
-  let rafId       = null;
-  let isScrolling = false;
-  let scrollTimer = null;
+  let rafId    = null;
 
-  function animate() {
+  // 스크롤 속도를 부드럽게 추정 (EMA)
+  let scrollVel = 0;
+
+  function tick() {
     const base = getBaseTop();
 
-    // 스크롤 중이면 밀린 위치 유지, 멈추면 빠르게 중앙 복귀
-    const snapSpeed = isScrolling ? PUSH_SPEED : SNAP_SPEED * 1.5;
-    currentTop += (targetTop - currentTop) * snapSpeed;
-
-    // target도 base(중앙)로 수렴
-    if (!isScrolling) {
-      targetTop += (base - targetTop) * 0.12;
-    }
+    // 스프링 힘: 중앙 복원
+    const spring = (base - pos) * STIFFNESS;
+    vel = (vel + spring) * DAMPING;
+    pos += vel;
 
     const panel  = document.getElementById('bookmarkPanel');
     const handle = document.getElementById('bmHandle');
-    if (panel)  panel.style.top  = currentTop.toFixed(1) + 'px';
-    if (handle) handle.style.top = currentTop.toFixed(1) + 'px';
+    if (panel)  panel.style.top  = pos.toFixed(2) + 'px';
+    if (handle) handle.style.top = pos.toFixed(2) + 'px';
 
-    const diff = Math.abs(currentTop - base) + Math.abs(targetTop - base);
-    if (diff > 0.4) {
-      rafId = requestAnimationFrame(animate);
-    } else {
-      currentTop = base; targetTop = base;
+    // 거의 정지 상태면 루프 종료
+    if (Math.abs(vel) < 0.05 && Math.abs(pos - base) < 0.1) {
+      pos = base; vel = 0;
       if (panel)  panel.style.top  = base + 'px';
       if (handle) handle.style.top = base + 'px';
       rafId = null;
+    } else {
+      rafId = requestAnimationFrame(tick);
     }
   }
 
@@ -5574,24 +5571,26 @@ function toggleBookmarkPanel() {
     const delta   = scrollY - lastScrollY;
     lastScrollY   = scrollY;
 
-    isScrolling = true;
-    clearTimeout(scrollTimer);
-    scrollTimer = setTimeout(() => { isScrolling = false; }, 120);
+    // 스크롤 델타를 속도로 주입 (범위 제한)
+    const base    = getBaseTop();
+    const impulse = delta * SCROLL_GAIN;
+    vel += impulse;
 
-    const base = getBaseTop();
-    // 스크롤 방향으로 밀리되 범위 제한
-    targetTop = Math.max(base - MAX_OFFSET, Math.min(base + MAX_OFFSET, targetTop + delta * 0.8));
+    // 중앙 기준 이탈 거리 제한
+    const maxDist = MAX_OFFSET;
+    if (pos - base >  maxDist) { pos = base + maxDist; vel = Math.min(vel, 0); }
+    if (pos - base < -maxDist) { pos = base - maxDist; vel = Math.max(vel, 0); }
 
-    if (!rafId) rafId = requestAnimationFrame(animate);
+    if (!rafId) rafId = requestAnimationFrame(tick);
   }, { passive: true });
 
   window.addEventListener('resize', () => {
-    currentTop = getBaseTop();
-    targetTop  = currentTop;
+    const base = getBaseTop();
+    pos = base; vel = 0;
     const panel  = document.getElementById('bookmarkPanel');
     const handle = document.getElementById('bmHandle');
-    if (panel)  panel.style.top = currentTop + 'px';
-    if (handle) handle.style.top = currentTop + 'px';
+    if (panel)  panel.style.top = base + 'px';
+    if (handle) handle.style.top = base + 'px';
   });
 })();
 
