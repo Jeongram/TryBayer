@@ -1283,8 +1283,8 @@
 <!-- 🔖 플로팅 북마크 / 관심상품 패널 (우측 슬라이딩)       -->
 <!-- ══════════════════════════════════════════════════════ -->
 <div id="bookmarkPanel" style="
-  position:fixed;
-  right:14px; top:80px;
+  position:absolute;
+  right:60px; top:100px;
   width:220px;
   max-height:calc(100vh - 120px);
   background:var(--surface,#fff);
@@ -1323,7 +1323,7 @@
 
 <!-- 접힘 상태일때 탭 핸들 -->
 <div id="bmHandle" style="
-  position:fixed; right:14px; top:80px;
+  position:absolute; right:60px; top:100px;
   background:linear-gradient(135deg,#6366F1,#4F46E5);
   color:#fff; padding:10px 6px;
   border-radius:10px;
@@ -5510,51 +5510,17 @@ function toggleBookmarkPanel() {
   const handle = document.getElementById('bmHandle');
   const arrow  = document.getElementById('bmToggleArrow');
   if (_bmPanelOpen) {
-    panel.style.right = '14px';
+    panel.style.right = '60px';
     handle.style.display = 'none';
     if (arrow) { arrow.textContent = '◀'; }
   } else {
-    panel.style.right = '-250px';
+    panel.style.right = '-300px';
     handle.style.display = 'flex';
     if (arrow) { arrow.textContent = '▶'; }
   }
 }
 
-// ── 스크롤 추적: 패널이 항상 화면 안에 부드럽게 따라다님 ──
-(function initBmScroll() {
-  let rafId = null;
-  const MARGIN_TOP = 80;    // 상단 여백 (헤더 아래)
-  const MARGIN_BOT = 20;    // 하단 여백
-
-  function updateBmPos() {
-    const panel  = document.getElementById('bookmarkPanel');
-    const handle = document.getElementById('bmHandle');
-    if (!panel) return;
-
-    const vh = window.innerHeight;
-    const panelH = panel.offsetHeight;
-
-    // 스크롤 위치에 따라 top을 계산 (항상 화면 안에 위치)
-    let scrollY = window.scrollY || document.documentElement.scrollTop;
-    // 페이지 중간 기준으로 패널 중앙 정렬하되, 화면 경계를 벗어나지 않게
-    let idealTop = Math.max(MARGIN_TOP, Math.min(scrollY + (vh / 2) - (panelH / 2), scrollY + vh - panelH - MARGIN_BOT));
-    // fixed 좌표로 변환 (fixed는 viewport 기준이므로 scrollY 빼기)
-    let fixedTop = idealTop - scrollY;
-    fixedTop = Math.max(MARGIN_TOP, Math.min(fixedTop, vh - panelH - MARGIN_BOT));
-
-    panel.style.top  = fixedTop + 'px';
-    if (handle) handle.style.top = fixedTop + 'px';
-    rafId = null;
-  }
-
-  window.addEventListener('scroll', () => {
-    if (!rafId) rafId = requestAnimationFrame(updateBmPos);
-  }, { passive: true });
-
-  window.addEventListener('resize', updateBmPos);
-  // 초기 실행
-  setTimeout(updateBmPos, 100);
-})();
+// ── 패널 위치: absolute 고정 (스크롤과 함께 움직임) ──
 
 // 패널 초기 렌더링
 document.addEventListener('DOMContentLoaded', () => {
