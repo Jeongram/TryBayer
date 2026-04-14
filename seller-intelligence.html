@@ -74,8 +74,122 @@
     .dot.live { background: var(--success); }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
 
+    /* ── SIDEBAR LAYOUT ── */
+    .sidebar {
+      position: fixed; left: 0; top: 57px;
+      width: 240px; height: calc(100vh - 57px);
+      background: var(--surface); border-right: 1px solid var(--border);
+      z-index: 90; display: flex; flex-direction: column;
+      transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+      overflow-y: auto; overflow-x: hidden;
+    }
+    .sidebar.collapsed { transform: translateX(-240px); }
+    .sb-toggle {
+      position: fixed; left: 0; top: 57px;
+      width: 28px; height: 56px;
+      background: var(--primary); color: #fff;
+      border: none; border-radius: 0 8px 8px 0;
+      cursor: pointer; z-index: 91; font-size: 0.75rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: left 0.3s cubic-bezier(.4,0,.2,1), background .2s;
+      box-shadow: 2px 0 8px rgba(124,106,247,0.3);
+    }
+    .sb-toggle:hover { background: var(--primary-light); }
+    body.sb-open .sb-toggle { left: 240px; }
+    body.sb-open .main { margin-left: 240px; }
+    .sb-header {
+      padding: 18px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .sb-title { font-size: 0.72rem; font-weight: 800; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+    .sb-subtitle { font-size: 1rem; font-weight: 900; color: var(--text); }
+    .sb-menu { flex: 1; padding: 12px 0; }
+    .sb-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 11px 18px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
+      color: var(--muted); border-left: 3px solid transparent;
+      transition: all .18s; position: relative;
+    }
+    .sb-item:hover { background: var(--surface2); color: var(--text); }
+    .sb-item.active { background: #EDE9FE; color: var(--primary); border-left-color: var(--primary); }
+    .sb-item .sb-icon { font-size: 1.1rem; flex-shrink: 0; width: 22px; text-align: center; }
+    .sb-item .sb-badge {
+      margin-left: auto; font-size: 0.6rem; font-weight: 800;
+      background: var(--primary); color: #fff;
+      padding: 2px 7px; border-radius: 99px;
+    }
+    .sb-divider { height: 1px; background: var(--border); margin: 8px 16px; }
+    .sb-section-label {
+      font-size: 0.65rem; font-weight: 800; color: var(--muted);
+      letter-spacing: 1px; text-transform: uppercase;
+      padding: 12px 18px 4px;
+    }
+
+    /* ── TAB CONTENT PANELS ── */
+    .tab-panel {
+      display: none; animation: fadeSlideIn .22s ease;
+    }
+    .tab-panel.active { display: block; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── GUIDE CARDS ── */
+    .guide-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--card-radius); padding: 20px; margin-bottom: 16px;
+      transition: box-shadow .2s;
+    }
+    .guide-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .guide-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .guide-flag { font-size: 1.8rem; }
+    .guide-title { font-size: 1rem; font-weight: 800; }
+    .guide-sub { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .guide-steps { display: flex; flex-direction: column; gap: 8px; }
+    .guide-step {
+      display: flex; align-items: flex-start; gap: 10px;
+      font-size: 0.82rem; padding: 10px 12px;
+      background: var(--bg); border-radius: 8px;
+    }
+    .guide-step-num {
+      width: 22px; height: 22px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      font-size: 0.68rem; font-weight: 800;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .guide-step-text { line-height: 1.5; color: var(--text); }
+    .guide-step-text strong { color: var(--primary); }
+    .guide-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 10px; padding: 7px 14px;
+      background: var(--primary); color: #fff; border-radius: 8px;
+      font-size: 0.78rem; font-weight: 700; text-decoration: none;
+      transition: opacity .2s;
+    }
+    .guide-link:hover { opacity: 0.85; }
+    .sourcing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px,1fr)); gap: 10px; margin-bottom: 16px; }
+    .sourcing-cat {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 10px; padding: 14px 10px; text-align: center;
+      cursor: pointer; transition: all .18s; text-decoration: none; display: block;
+    }
+    .sourcing-cat:hover { border-color: var(--primary); background: #EDE9FE; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(124,106,247,0.15); }
+    .sourcing-cat .cat-icon { font-size: 1.6rem; margin-bottom: 6px; }
+    .sourcing-cat .cat-name { font-size: 0.75rem; font-weight: 700; color: var(--text); }
+    .sourcing-cat .cat-sub { font-size: 0.65rem; color: var(--muted); margin-top: 2px; }
+    .logistics-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .logistics-table th { background: var(--surface2); padding: 9px 12px; text-align: left; font-weight: 700; border-bottom: 2px solid var(--border); }
+    .logistics-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    .logistics-table tr:hover td { background: var(--bg); }
+    .ship-tag { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 0.65rem; font-weight: 700; }
+    .ship-fast { background: #DCFCE7; color: #15803D; }
+    .ship-mid  { background: #FEF9C3; color: #B45309; }
+    .ship-slow { background: #FEE2E2; color: #DC2626; }
+
     /* ── MAIN LAYOUT ── */
-    .main { max-width: 1200px; margin: 0 auto; padding: 28px 20px 60px; }
+    .main { max-width: 1200px; margin: 0 auto; padding: 28px 20px 60px; transition: margin-left 0.3s cubic-bezier(.4,0,.2,1); }
     .section-title { font-size: 1.15rem; font-weight: 800; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
     .section-title .tag { font-size: 0.72rem; background: var(--primary); padding: 3px 10px; border-radius: 99px; font-weight: 600; }
 
@@ -338,6 +452,42 @@
   </div>
 </nav>
 
+<!-- 사이드바 열기/닫기 토글 버튼 -->
+<button class="sb-toggle" id="sbToggle" onclick="toggleSidebar()" title="메뉴">&#9776;</button>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 🗂️ 왼쪽 사이드바 네비게이션                     -->
+<!-- ══════════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-header">
+    <div class="sb-title">TryBayer</div>
+    <div class="sb-subtitle">🌏 해외 셀러 허브</div>
+  </div>
+  <nav class="sb-menu">
+    <div class="sb-item active" id="sb-dashboard" onclick="showPanel('dashboard')">
+      <span class="sb-icon">📊</span> 대시보드
+      <span class="sb-badge">LIVE</span>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section-label">소싱 & 입점</div>
+
+    <div class="sb-item" id="sb-sourcing" onclick="showPanel('sourcing')">
+      <span class="sb-icon">🛒</span> 소싱 허브
+    </div>
+    <div class="sb-item" id="sb-entry" onclick="showPanel('entry')">
+      <span class="sb-icon">📋</span> 플랫폼 입점 가이드
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section-label">물류 & 배송</div>
+
+    <div class="sb-item" id="sb-logistics" onclick="showPanel('logistics')">
+      <span class="sb-icon">🚚</span> 국가별 물류/배송
+    </div>
+  </nav>
+</aside>
+
 <div class="demo-banner" id="demoBanner" style="display:none">
   🎯 저장된 API 키가 없습니다 —
   <a href="#" onclick="openApiModal();return false;">여기서 API 키를 입력하면 실시간 데이터로 전환됩니다 →</a>
@@ -363,8 +513,196 @@
   </div>
 </div>
 
+<!-- ══════════════════════════════════════════════ -->
+<!-- 📦 소싱 허브 패널 (도매꾹 연결)                  -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="main tab-panel" id="panel-sourcing">
+  <div class="section-title" style="margin-top:28px">🛒 소싱 허브 <span class="tag">도매꾹 직연결</span></div>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:24px;line-height:1.7">
+    도매꾹에서 직접 소싱할 수 있는 카테고리를 한눈에 확인하세요. 클릭하면 도매꾹 검색 페이지로 바로 이동합니다.
+  </p>
+  <div class="sourcing-grid">
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=스킨케어" target="_blank"><div class="cat-icon">💄</div><div class="cat-name">스킨케어</div><div class="cat-sub">K-뷰티 인기</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=헤어케어" target="_blank"><div class="cat-icon">💇</div><div class="cat-name">헤어케어</div><div class="cat-sub">샴푸·트리트먼트</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=건강식품" target="_blank"><div class="cat-icon">💊</div><div class="cat-name">건강식품</div><div class="cat-sub">홍삼·비타민</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=주방용품" target="_blank"><div class="cat-icon">🍳</div><div class="cat-name">주방용품</div><div class="cat-sub">스테인레스·냄비</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=의류" target="_blank"><div class="cat-icon">👗</div><div class="cat-name">패션/의류</div><div class="cat-sub">동대문 직소싱</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=아동용품" target="_blank"><div class="cat-icon">🧸</div><div class="cat-name">아동용품</div><div class="cat-sub">완구·육아템</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=전자제품" target="_blank"><div class="cat-icon">📱</div><div class="cat-name">전자/IT</div><div class="cat-sub">액세서리·소형가전</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=인테리어" target="_blank"><div class="cat-icon">🛋️</div><div class="cat-name">인테리어</div><div class="cat-sub">홈데코·생활</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=반려동물" target="_blank"><div class="cat-icon">🐾</div><div class="cat-name">반려동물</div><div class="cat-sub">사료·용품</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=스포츠" target="_blank"><div class="cat-icon">⚽</div><div class="cat-name">스포츠</div><div class="cat-sub">운동·아웃도어</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=식품" target="_blank"><div class="cat-icon">🍜</div><div class="cat-name">K-푸드</div><div class="cat-sub">라면·스낵·소스</div></a>
+    <a class="sourcing-cat" href="https://www.domeggook.com/main/search/srchList.php?keyword=잡화" target="_blank"><div class="cat-icon">🎁</div><div class="cat-name">잡화</div><div class="cat-sub">문구·생활소품</div></a>
+  </div>
+  <div style="text-align:center;margin-top:8px">
+    <a class="guide-link" href="https://www.domeggook.com" target="_blank">🛒 도매꾹 전체 카테고리 보기 →</a>
+  </div>
+
+  <!-- 도매꾹 소싱 팁 -->
+  <div class="section-title" style="margin-top:36px">💡 소싱 팁</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-bottom:24px">
+    <div class="guide-card" style="border-left:3px solid var(--primary)">
+      <div style="font-weight:800;margin-bottom:8px;font-size:0.9rem">🇯🇵 일본 잘 팔리는 소싱 포인트</div>
+      <ul style="font-size:0.82rem;color:var(--muted);line-height:1.8;padding-left:16px">
+        <li>고품질 K-뷰티 (마스크팩·앰플)</li>
+        <li>스테인레스 주방용품</li>
+        <li>한국 스낵·라면 세트</li>
+        <li>실용적 생활잡화</li>
+      </ul>
+    </div>
+    <div class="guide-card" style="border-left:3px solid #10B981">
+      <div style="font-weight:800;margin-bottom:8px;font-size:0.9rem">🌏 동남아 잘 팔리는 소싱 포인트</div>
+      <ul style="font-size:0.82rem;color:var(--muted);line-height:1.8;padding-left:16px">
+        <li>K-뷰티 (저가~중가대)</li>
+        <li>패션 의류 (동대문 직소싱)</li>
+        <li>건강식품·홍삼</li>
+        <li>K-푸드 (김·소스류)</li>
+      </ul>
+    </div>
+    <div class="guide-card" style="border-left:3px solid #F59E0B">
+      <div style="font-weight:800;margin-bottom:8px;font-size:0.9rem">🇺🇸 아마존 잘 팔리는 소싱 포인트</div>
+      <ul style="font-size:0.82rem;color:var(--muted);line-height:1.8;padding-left:16px">
+        <li>K-뷰티 (프리미엄 라인)</li>
+        <li>한국 건강식품</li>
+        <li>K-푸드 (라면·소스)</li>
+        <li>반려동물 용품</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 📋 플랫폼 입점 가이드 패널                       -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="main tab-panel" id="panel-entry">
+  <div class="section-title" style="margin-top:28px">📋 플랫폼 입점 가이드 <span class="tag">3대 마켓</span></div>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:24px;line-height:1.7">
+    일본 라쿠텐, 동남아 Shopee, 북미 Amazon 각 플랫폼의 입점 절차를 단계별로 안내합니다.
+  </p>
+
+  <!-- 라쿠텐 -->
+  <div class="guide-card">
+    <div class="guide-card-header">
+      <div class="guide-flag">🇯🇵</div>
+      <div><div class="guide-title">Rakuten Ichiba (라쿠텐)</div><div class="guide-sub">일본 최대 오픈마켓 · 월 1억+ 회원</div></div>
+    </div>
+    <div class="guide-steps">
+      <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-text"><strong>사업자 등록</strong> — 한국 법인 또는 개인사업자 필요. 일본 내 주소 불필요(해외셀러 지원)</div></div>
+      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-text"><strong>RMS 계정 신청</strong> — Rakuten Merchant Server 가입. 심사 기간 약 2~4주</div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-text"><strong>상품 등록</strong> — 일본어 상품 페이지 필수. 이미지·설명 번역 서비스 활용 권장</div></div>
+      <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-text"><strong>결제·정산</strong> — 엔화 결제 → 원화 정산. 수수료 약 3.5~6.5% + 월정액</div></div>
+      <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-text"><strong>배송 연동</strong> — EMS·SAL·국제택배 연동. 라쿠텐 풀필먼트(RFP) 이용 가능</div></div>
+    </div>
+    <a class="guide-link" href="https://global.rakuten.com/corp/seller/" target="_blank">🇯🇵 라쿠텐 셀러 공식 페이지 →</a>
+  </div>
+
+  <!-- Shopee -->
+  <div class="guide-card">
+    <div class="guide-card-header">
+      <div class="guide-flag">🌏</div>
+      <div><div class="guide-title">Shopee (쇼피)</div><div class="guide-sub">동남아 1위 이커머스 · 7개국 진출 가능</div></div>
+    </div>
+    <div class="guide-steps">
+      <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-text"><strong>Shopee Global 셀러 신청</strong> — 한국 사업자로 가능. 무료 입점 (수수료만 발생)</div></div>
+      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-text"><strong>국가 선택</strong> — MY·SG·TH·ID·PH·VN·TW 중 선택. 복수 국가 동시 운영 가능</div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-text"><strong>상품 등록</strong> — 현지어 번역 자동 지원. 이미지 1:1 비율 권장</div></div>
+      <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-text"><strong>Shopee 국제배송 연동</strong> — SLS(Shopee Logistics) 이용시 자동 라벨 발급</div></div>
+      <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-text"><strong>수수료</strong> — 거래 수수료 2~5% (국가별 상이). 광고비 별도</div></div>
+    </div>
+    <a class="guide-link" href="https://seller.shopee.kr/" target="_blank">🌏 Shopee 한국 셀러센터 →</a>
+  </div>
+
+  <!-- Amazon -->
+  <div class="guide-card">
+    <div class="guide-card-header">
+      <div class="guide-flag">🇺🇸</div>
+      <div><div class="guide-title">Amazon Global Selling</div><div class="guide-sub">북미·유럽·일본 · 세계 최대 이커머스</div></div>
+    </div>
+    <div class="guide-steps">
+      <div class="guide-step"><div class="guide-step-num">1</div><div class="guide-step-text"><strong>셀러 계정 개설</strong> — Individual($0) 또는 Professional($39.99/월). 신분증·은행계좌 필요</div></div>
+      <div class="guide-step"><div class="guide-step-num">2</div><div class="guide-step-text"><strong>브랜드 등록</strong> — Amazon Brand Registry 신청. 상표권 필요 (한국 특허청 등록 가능)</div></div>
+      <div class="guide-step"><div class="guide-step-num">3</div><div class="guide-step-text"><strong>FBA vs FBM</strong> — FBA(아마존 물류) 권장. 입고 전 라벨·포장 규정 숙지 필수</div></div>
+      <div class="guide-step"><div class="guide-step-num">4</div><div class="guide-step-text"><strong>상품 리스팅</strong> — 영어 키워드 최적화 필수. A+ 콘텐츠로 전환율 향상</div></div>
+      <div class="guide-step"><div class="guide-step-num">5</div><div class="guide-step-text"><strong>수수료</strong> — 카테고리별 레퍼럴 8~15% + FBA 수수료 별도</div></div>
+    </div>
+    <a class="guide-link" href="https://sell.amazon.com/global-selling" target="_blank">🇺🇸 Amazon Global Selling →</a>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- 🚚 국가별 물류/배송 가이드 패널                  -->
+<!-- ══════════════════════════════════════════════ -->
+<div class="main tab-panel" id="panel-logistics">
+  <div class="section-title" style="margin-top:28px">🚚 국가별 물류/배송 가이드 <span class="tag">3대 마켓</span></div>
+  <p style="font-size:0.85rem;color:var(--muted);margin-bottom:24px;line-height:1.7">
+    일본·동남아·북미 각 시장에 맞는 배송 방법과 물류 전략을 비교합니다.
+  </p>
+
+  <!-- 일본 -->
+  <div class="guide-card">
+    <div class="guide-card-header">
+      <div class="guide-flag">🇯🇵</div>
+      <div><div class="guide-title">일본 배송</div><div class="guide-sub">한국 → 일본 · 소요일 2~7일</div></div>
+    </div>
+    <table class="logistics-table">
+      <thead><tr><th>배송 방법</th><th>소요일</th><th>비용 (1kg 기준)</th><th>특징</th></tr></thead>
+      <tbody>
+        <tr><td><strong>EMS</strong></td><td><span class="ship-tag ship-fast">2~4일</span></td><td>약 ₩18,000~</td><td>가장 빠름. 분실 보상 있음</td></tr>
+        <tr><td><strong>K-Packet</strong></td><td><span class="ship-tag ship-mid">5~10일</span></td><td>약 ₩6,000~</td><td>소형 상품 최적. 2kg 이하</td></tr>
+        <tr><td><strong>SAL</strong></td><td><span class="ship-tag ship-slow">2~3주</span></td><td>약 ₩4,500~</td><td>저렴, 비긴급 상품 적합</td></tr>
+        <tr><td><strong>국제택배</strong> (DHL/FedEx)</td><td><span class="ship-tag ship-fast">1~3일</span></td><td>약 ₩30,000~</td><td>고가 상품 권장. 추적 우수</td></tr>
+        <tr><td><strong>해상+창고 (3PL)</strong></td><td><span class="ship-tag ship-slow">2~4주</span></td><td>kg당 ₩500~</td><td>대량 발송 시 최저가. 일본 현지 창고 필요</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px;font-size:0.78rem;background:var(--bg);padding:10px 14px;border-radius:8px;color:var(--muted)">
+      💡 <strong>라쿠텐 권장:</strong> K-Packet(소형·저가) / EMS(고가·긴급) / 일본 현지 창고 이용 시 배송비 절감 효과 큼
+    </div>
+  </div>
+
+  <!-- 동남아 -->
+  <div class="guide-card">
+    <div class="guide-card-header">
+      <div class="guide-flag">🌏</div>
+      <div><div class="guide-title">동남아 배송 (Shopee)</div><div class="guide-sub">SG·MY·TH·ID·PH·VN · 소요일 5~15일</div></div>
+    </div>
+    <table class="logistics-table">
+      <thead><tr><th>배송 방법</th><th>소요일</th><th>비용 (1kg 기준)</th><th>특징</th></tr></thead>
+      <tbody>
+        <tr><td><strong>SLS</strong> (Shopee Logistics)</td><td><span class="ship-tag ship-mid">5~10일</span></td><td>자동 계산</td><td>쇼피 공식 배송. 가장 간편</td></tr>
+        <tr><td><strong>EMS</strong></td><td><span class="ship-tag ship-fast">5~7일</span></td><td>약 ₩15,000~</td><td>안정적. 싱가포르·말레이시아 적합</td></tr>
+        <tr><td><strong>국제특송</strong> (DHL/FedEx)</td><td><span class="ship-tag ship-fast">2~5일</span></td><td>약 ₩25,000~</td><td>고가 제품·B2B 납품 시 권장</td></tr>
+        <tr><td><strong>해상 벌크</strong></td><td><span class="ship-tag ship-slow">3~5주</span></td><td>kg당 ₩300~</td><td>대량 재고. 현지 3PL 창고 필수</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px;font-size:0.78rem;background:var(--bg);padding:10px 14px;border-radius:8px;color:var(--muted)">
+      💡 <strong>Shopee 권장:</strong> SLS 연동이 가장 간편. 국가별 통관 규정 다름 (인도네시아 특히 엄격)
+    </div>
+  </div>
+
+  <!-- 미국 -->
+  <div class="guide-card">
+    <div class="guide-card-header">
+      <div class="guide-flag">🇺🇸</div>
+      <div><div class="guide-title">북미 배송 (Amazon)</div><div class="guide-sub">한국 → 미국/캐나다 · 소요일 7~21일</div></div>
+    </div>
+    <table class="logistics-table">
+      <thead><tr><th>배송 방법</th><th>소요일</th><th>비용 (1kg 기준)</th><th>특징</th></tr></thead>
+      <tbody>
+        <tr><td><strong>FBA 입고</strong> (해상)</td><td><span class="ship-tag ship-slow">4~6주</span></td><td>CBM당 ₩300,000~</td><td>Amazon 물류 이용. 프라임 뱃지</td></tr>
+        <tr><td><strong>FBA 입고</strong> (항공)</td><td><span class="ship-tag ship-mid">5~10일</span></td><td>kg당 ₩12,000~</td><td>빠른 재고 보충. 비용 높음</td></tr>
+        <tr><td><strong>FBM + EMS</strong></td><td><span class="ship-tag ship-mid">7~14일</span></td><td>약 ₩25,000~</td><td>소량·테스트 판매에 적합</td></tr>
+        <tr><td><strong>국제특송</strong> (DHL/UPS)</td><td><span class="ship-tag ship-fast">3~5일</span></td><td>약 ₩35,000~</td><td>샘플·긴급 발송. 비용 최고</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:12px;font-size:0.78rem;background:var(--bg);padding:10px 14px;border-radius:8px;color:var(--muted)">
+      💡 <strong>Amazon 권장:</strong> FBA 필수. 입고 전 라벨(FNSKU)·포장 규정 반드시 확인. 미국 해상 포워더 비교 필수
+    </div>
+  </div>
+</div>
+
 <!-- MAIN DASHBOARD -->
-<div class="main">
+<div class="main tab-panel active" id="panel-dashboard">
 
   <!-- STATS -->
   <div class="stat-grid" style="margin-top:28px">
@@ -5519,6 +5857,37 @@ function toggleBookmarkPanel() {
     if (arrow) { arrow.textContent = '▶'; }
   }
 }
+
+// ══════════════════════════════════════════
+// 🗂️ 사이드바 토글 + 탭 패널 전환
+// ══════════════════════════════════════════
+function toggleSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const btn     = document.getElementById('sbToggle');
+  const isOpen  = document.body.classList.toggle('sb-open');
+  sidebar.classList.toggle('collapsed', !isOpen);
+  btn.innerHTML = isOpen ? '✕' : '&#9776;';
+}
+
+function showPanel(name) {
+  // 모든 패널 숨기기
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  // 모든 사이드바 아이템 비활성
+  document.querySelectorAll('.sb-item').forEach(i => i.classList.remove('active'));
+  // 선택 패널 + 아이템 활성
+  const panel = document.getElementById('panel-' + name);
+  const item  = document.getElementById('sb-' + name);
+  if (panel) panel.classList.add('active');
+  if (item)  item.classList.add('active');
+  // 스크롤 맨 위로
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// 초기: 사이드바 열린 상태로 시작
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('sb-open');
+  document.getElementById('sbToggle').innerHTML = '✕';
+});
 
 // ── 패널 모션: 스크롤바 비율 추적 + 초부드러운 lerp ──
 (function initBmFloat() {
