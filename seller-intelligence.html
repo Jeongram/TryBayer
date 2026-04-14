@@ -352,7 +352,11 @@
     }
     .sb-hd-close:hover { background: #F9FAFB; color: #374151; }
     /* 네비 */
-    .sb-nav { flex: 1; padding: 8px 0; display: flex; flex-direction: column; }
+    .sb-nav {
+      padding: 8px 0;
+      display: flex; flex-direction: column;
+      justify-content: flex-start; align-items: stretch;
+    }
     .sb-it {
       display: flex; align-items: center; gap: 12px;
       padding: 11px 20px; cursor: pointer;
@@ -360,6 +364,7 @@
       white-space: nowrap; position: relative;
       transition: background .12s, color .12s;
       border: none; background: none;
+      flex-shrink: 0;
     }
     .sb-it:hover  { background: #F9FAFB; color: #111827; }
     .sb-it.active { color: #4F46E5; font-weight: 700; background: #F5F3FF; }
@@ -382,12 +387,12 @@
     .sb-it .badge.new { background: #10B981; }
     .sb-it .badge.beta { background: #F59E0B; }
     /* 구분선 */
-    .sb-divider { height: 1px; background: #F3F4F6; margin: 6px 0; }
+    .sb-divider { height: 1px; background: #F3F4F6; margin: 4px 0; flex-shrink: 0; }
     /* 섹션 그룹 레이블 */
     .sb-label {
       font-size: 0.68rem; font-weight: 700; color: #9CA3AF;
       letter-spacing: 0.07em; text-transform: uppercase;
-      padding: 12px 20px 4px;
+      padding: 10px 20px 4px; flex-shrink: 0;
     }
     /* 섹션 show/hide */
     .sb-sec { display: none; }
