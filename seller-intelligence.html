@@ -2866,6 +2866,333 @@ function getSeaSampleProducts(country) {
   }));
 }
 
+// ──────────────────────────────────────────
+// 🏷️ 제품 카테고리 감지 + 카테고리별 인증 데이터
+// ──────────────────────────────────────────
+function detectProductCategory(name) {
+  const n = name || '';
+  if (/라면|신라면|초코파이|스낵|과자|컨디션|헛개|음료|식품|간식|김|고추장|된장|김치|떡|캔디|젤리|쿠키|비스킷|포카칩|새우깡|홈런볼|허니버터|바나나킥/i.test(n)) return 'food';
+  if (/콜라겐|비타민|글루타치온|홍삼|NMN|유산균|프로바이오틱|오메가|마그네슘|칼슘|영양제|건강기능|이너뷰티|다이어트|슬리밍|디톡스|클렌즈/i.test(n)) return 'supplement';
+  if (/스니커즈|청바지|후디|후드|볼캡|MLB|아디다스|나이키|티셔츠|원피스|패딩|점퍼|자켓|셔츠|팬츠|스커트|가방|백팩|크로스백|지갑|벨트|양말|속옷|레깅스|운동복/i.test(n)) return 'fashion';
+  if (/포토카드|포카|키링|굿즈|MD|앨범|아이돌|K팝|케이팝|피규어|인형|스티커|엽서|배지|뱃지|부채|응원봉|슬로건/i.test(n)) return 'merch';
+  return 'cosmetics';
+}
+
+// ── 식품 인증 데이터 (12개국) ──
+const _SEA_FOOD_CERT = {
+  'co.th': { countryName:'태국', flag:'🇹🇭', agency:'Thai FDA (ORYOR)', agencyUrl:'https://privus.fda.moph.go.th/', difficulty:'mid', period:'1~4개월', cost:'$300~$1,500',
+    certs:[ {name:'FDA 식품 신고 (Notification)',required:true,desc:'가공식품 최초 수입 전 Thai FDA 신고 필수',link:'https://privus.fda.moph.go.th/'}, {name:'라벨링 (태국어)',required:true,desc:'태국어 성분표·유통기한·수입자 표기 필수'}, {name:'할랄 인증 (권고)',required:false,desc:'무슬림 소비자 비중 높아 마케팅 유리'} ],
+    steps:['① 한국 식품 수출 신고서 발급 (KFDA)','② Thai FDA 온라인 e-submission 계정 생성','③ 제품 성분·영양정보·원산지 서류 제출','④ 현지 수입자(임포터) 지정 및 라벨 검토','⑤ 승인 후 통관 및 유통 시작'],
+    tip:'태국은 즉석식품·스낵류 신고가 비교적 빠릅니다. 현지 수입자를 먼저 확보하면 절차가 간소화됩니다.',
+    partners:[ {name:'Bangkok Import Agency',type:'현지 수입 대행',contact:'bkk-import@example.com'}, {name:'Thai Food Compliance Co.',type:'인증 컨설팅',contact:'info@thaifood.example.com'} ] },
+
+  'co.id': { countryName:'인도네시아', flag:'🇮🇩', agency:'BPOM (식품의약청)', agencyUrl:'https://www.pom.go.id/', difficulty:'high', period:'3~9개월', cost:'$1,000~$4,000',
+    certs:[ {name:'BPOM 식품 등록',required:true,desc:'수입 가공식품은 BPOM 사전 등록 필수',link:'https://www.pom.go.id/'}, {name:'할랄 인증 (MUI)',required:true,desc:'인도네시아는 이슬람 국가로 할랄 인증이 법적 의무화',link:'https://www.halalmui.org/'}, {name:'한국어 라벨 + 인니어 병기',required:true,desc:'인도네시아어 성분표 및 경고문구 필수'} ],
+    steps:['① MUI 할랄 인증 취득 (한국 생산시설 대상)','② BPOM e-registration 계정 생성','③ 제품 분석 성적서(CoA)·성분표 제출','④ BPOM 샘플 검사 대기','⑤ 등록번호 취득 후 인니어 라벨 부착'],
+    tip:'할랄 인증이 없으면 BPOM 등록이 거부됩니다. MUI 할랄은 한국 생산시설 방문심사가 필요하므로 최소 6개월 여유를 두세요.',
+    partners:[ {name:'Jakarta Regulatory Services',type:'BPOM 대행',contact:'jrs@example.com'}, {name:'MUI Korea Liaison',type:'할랄 인증 연계',contact:'mui-kr@example.com'} ] },
+
+  'com.my': { countryName:'말레이시아', flag:'🇲🇾', agency:'Bumi MAQIS / MoH', agencyUrl:'https://www.maqis.gov.my/', difficulty:'mid', period:'2~5개월', cost:'$500~$2,000',
+    certs:[ {name:'Bumi MAQIS 식품 검역 허가',required:true,desc:'모든 식품 수입 시 검역 신청 필수'}, {name:'할랄 인증 (JAKIM)',required:false,desc:'무슬림 소비자 타겟 시 JAKIM 인증 권장',link:'https://www.halal.gov.my/'}, {name:'영어·말레이어 라벨링',required:true,desc:'Bahasa Malaysia 성분표 및 영양정보 필수'} ],
+    steps:['① MAQIS 온라인 신청 (iMQS 포털)','② 한국 식약처 수출 증명서(CFS) 준비','③ 제품 CoA 및 영양분석표 제출','④ 말레이어 라벨 검토 및 부착','⑤ 통관 후 유통'],
+    tip:'말레이시아는 싱가포르와 달리 정글 지역 콜드체인 문제가 있습니다. 유통기한 여유(6개월 이상 권장)를 충분히 확인하세요.',
+    partners:[ {name:'KL Food Import Ltd.',type:'현지 수입 대행',contact:'kl-food@example.com'} ] },
+
+  'vn': { countryName:'베트남', flag:'🇻🇳', agency:'VFA (베트남 식품청)', agencyUrl:'https://vfa.gov.vn/', difficulty:'mid', period:'2~6개월', cost:'$500~$2,500',
+    certs:[ {name:'VFA 식품 수입 신고',required:true,desc:'보건부 VFA에 사전 신고 필수'}, {name:'베트남어 라벨링',required:true,desc:'Vietnamese 성분·유통기한·경고문 필수'}, {name:'검역 및 샘플 검사',required:true,desc:'처음 수입 시 국경 검역소 샘플 검사'} ],
+    steps:['① 베트남 현지 수입자 지정','② VFA 수입 신고서 작성 및 제출','③ 국경 검역소 도착 시 샘플 검사','④ 베트남어 라벨 부착 후 통관','⑤ 유통 및 사후관리'],
+    tip:'베트남은 식품에 대한 사전 신고제라 비교적 빠른 편입니다. 라면·스낵류는 관세가 낮아 진입 장벽이 낮습니다.',
+    partners:[ {name:'HCM Food Agency',type:'현지 수입 컨설팅',contact:'hcm-food@example.com'} ] },
+
+  'sg': { countryName:'싱가포르', flag:'🇸🇬', agency:'SFA (싱가포르 식품청)', agencyUrl:'https://www.sfa.gov.sg/', difficulty:'low', period:'1~3개월', cost:'$300~$1,000',
+    certs:[ {name:'SFA 식품 수입업 허가',required:true,desc:'현지 수입업체가 SFA 허가 보유 필요'}, {name:'영문 라벨링',required:true,desc:'영어 성분표·알레르기 정보·영양정보 필수'} ],
+    steps:['① 싱가포르 현지 수입자 확보','② SFA 온라인 신청 (GoBusiness)','③ 영문 라벨 준비 및 검토','④ 통관 (보통 신속처리 가능)','⑤ 판매 시작'],
+    tip:'싱가포르는 K-푸드에 우호적이고 통관이 빠릅니다. 영어 라벨이 되어 있으면 큰 어려움이 없습니다.',
+    partners:[ {name:'SG K-Food Imports',type:'현지 수입 대행',contact:'sg-food@example.com'} ] },
+
+  'ph': { countryName:'필리핀', flag:'🇵🇭', agency:'FDA Philippines', agencyUrl:'https://www.fda.gov.ph/', difficulty:'mid', period:'2~5개월', cost:'$500~$2,000',
+    certs:[ {name:'FDA 식품 제품 등록 (CPR)',required:true,desc:'Certificate of Product Registration 취득 필수',link:'https://www.fda.gov.ph/'}, {name:'영어 라벨링',required:true,desc:'필리핀은 영어 사용국으로 영문 라벨 가능'} ],
+    steps:['① 현지 대리인 또는 수입자 지정','② FDA ePortal 계정 생성','③ 성분표·CoA·한국 수출증명서 제출','④ FDA 검토 (60~90일)','⑤ CPR 발급 후 통관 시작'],
+    tip:'필리핀 FDA는 온라인 처리가 잘 되어 있습니다. 현지 대리인이 있으면 처리가 빠릅니다.',
+    partners:[ {name:'Manila Food Compliance',type:'FDA 대행',contact:'mnl-food@example.com'} ] },
+
+  'tw': { countryName:'대만', flag:'🇹🇼', agency:'TFDA (대만 식품의약청)', agencyUrl:'https://www.fda.gov.tw/', difficulty:'mid', period:'2~4개월', cost:'$500~$2,000',
+    certs:[ {name:'TFDA 식품 신고',required:true,desc:'수입식품 사전 신고 (해관) 필수'}, {name:'번체자 라벨링',required:true,desc:'번체자(繁體字) 중국어 성분표 및 영양정보 필수'} ],
+    steps:['① 대만 수입자 지정','② TFDA 식품 수입 신고서 제출','③ 번체자 라벨 제작','④ 세관 검사 및 샘플 검사','⑤ 통관 완료 후 판매'],
+    tip:'대만은 K-푸드 인기가 높습니다. 번체자 라벨만 잘 준비되면 통관이 빠릅니다.',
+    partners:[ {name:'Taipei Import Services',type:'현지 수입 대행',contact:'tpe-food@example.com'} ] },
+
+  'com.br': { countryName:'브라질', flag:'🇧🇷', agency:'ANVISA', agencyUrl:'https://www.gov.br/anvisa/pt-br', difficulty:'high', period:'6~18개월', cost:'$3,000~$10,000',
+    certs:[ {name:'ANVISA 식품 등록/신고',required:true,desc:'가공식품은 ANVISA 등록 또는 신고 의무'}, {name:'포르투갈어 라벨링',required:true,desc:'포르투갈어 성분표·영양정보·알레르기 경고 필수'}, {name:'SIF (위생검사)',required:false,desc:'육류·유제품 포함 시 농업부 SIF 인증 필요'} ],
+    steps:['① 브라질 법인 또는 현지 대리인 지정','② ANVISA e-NOTIVISA 등록 신청','③ 포르투갈어 라벨 제작','④ 세관(ANVISA) 검사','⑤ 등록 완료 후 유통'],
+    tip:'브라질은 세계에서 가장 복잡한 식품 규제 국가 중 하나입니다. 현지 법인 없이는 수출이 매우 어렵습니다.',
+    partners:[ {name:'São Paulo Food Regulatory',type:'ANVISA 대행',contact:'sp-food@example.com'} ] },
+
+  'com.mx': { countryName:'멕시코', flag:'🇲🇽', agency:'COFEPRIS / SENASICA', agencyUrl:'https://www.gob.mx/cofepris', difficulty:'mid', period:'2~6개월', cost:'$1,000~$3,000',
+    certs:[ {name:'COFEPRIS 식품 수입 허가',required:true,desc:'가공식품 수입 시 COFEPRIS 허가 필수'}, {name:'스페인어 라벨링',required:true,desc:'스페인어 성분표·영양정보·경고표시 필수'}, {name:'SENASICA 검역',required:true,desc:'농축산물 포함 시 SENASICA 검역 필요'} ],
+    steps:['① 멕시코 수입자(임포터) 지정','② COFEPRIS 수입 허가 신청','③ 스페인어 라벨 제작','④ 국경 세관 검사','⑤ 통관 후 유통'],
+    tip:'멕시코는 K-푸드 수요가 빠르게 증가하고 있습니다. 라면·스낵류는 관세가 낮고 수요도 높습니다.',
+    partners:[ {name:'Mexico City Import Co.',type:'COFEPRIS 대행',contact:'mxc-food@example.com'} ] },
+
+  'com.ar': { countryName:'아르헨티나', flag:'🇦🇷', agency:'ANMAT / SENASA', agencyUrl:'https://www.argentina.gob.ar/anmat', difficulty:'high', period:'4~12개월', cost:'$2,000~$6,000',
+    certs:[ {name:'ANMAT 식품 등록',required:true,desc:'수입 가공식품 ANMAT 등록 필수'}, {name:'스페인어 라벨링',required:true,desc:'스페인어 성분·영양·유통기한 필수'}, {name:'SENASA 검역',required:false,desc:'동식물성 원료 포함 시 SENASA 검역'} ],
+    steps:['① 아르헨티나 수입자 지정','② ANMAT 등록 서류 준비','③ 스페인어 라벨 제작','④ 등록 검토 및 승인','⑤ 통관 후 유통'],
+    tip:'아르헨티나는 외환 규제와 관세가 높아 진입이 어렵습니다. 현지 파트너 없이는 사실상 수출이 불가합니다.',
+    partners:[ {name:'Buenos Aires Import Agency',type:'ANMAT 대행',contact:'ba-food@example.com'} ] },
+
+  'com.kh': { countryName:'캄보디아', flag:'🇰🇭', agency:'MAFF / MoH', agencyUrl:'https://www.maff.gov.kh/', difficulty:'low', period:'1~3개월', cost:'$300~$1,000',
+    certs:[ {name:'MAFF 수입 허가',required:true,desc:'농업부 수입 허가 취득'}, {name:'크메르어/영어 라벨',required:true,desc:'크메르어 또는 영어 라벨 허용'} ],
+    steps:['① 현지 수입업체 지정','② MAFF 수입 신청','③ 영어 라벨 제작','④ 세관 통관','⑤ 판매 시작'],
+    tip:'캄보디아는 규제가 느슨하고 K-푸드 인지도가 높아 진입이 쉬운 편입니다.',
+    partners:[ {name:'Phnom Penh Import Co.',type:'현지 수입 대행',contact:'pnh-food@example.com'} ] },
+
+  'la': { countryName:'라오스', flag:'🇱🇦', agency:'FAO/Lao FDA', agencyUrl:'https://www.moh.gov.la/', difficulty:'low', period:'1~2개월', cost:'$200~$800',
+    certs:[ {name:'라오스 FDA 수입 신고',required:true,desc:'식품 수입 시 FDA 신고'}, {name:'라오어/영어 라벨',required:true,desc:'라오어 또는 영어 라벨 허용'} ],
+    steps:['① 라오스 수입자 지정','② Lao FDA 신고','③ 라벨 검토','④ 통관','⑤ 판매'],
+    tip:'라오스는 규제가 가장 간단한 편입니다. 소규모 파일럿 수출에 적합합니다.',
+    partners:[ {name:'Vientiane Trade Agency',type:'현지 대행',contact:'vte-food@example.com'} ] },
+};
+
+// ── 건강기능식품/보충제 인증 데이터 (12개국) ──
+const _SEA_SUPPLEMENT_CERT = {
+  'co.th': { countryName:'태국', flag:'🇹🇭', agency:'Thai FDA (Health Product)', agencyUrl:'https://privus.fda.moph.go.th/', difficulty:'high', period:'3~8개월', cost:'$1,000~$3,000',
+    certs:[ {name:'Health Product 등록',required:true,desc:'건강기능식품은 별도 Health Product 카테고리 등록 필수'}, {name:'GMP 증명서',required:true,desc:'한국 GMP 인증서 제출 필수'}, {name:'태국어 라벨',required:true,desc:'효능 표시 태국 기준 준수'} ],
+    steps:['① 한국 GMP 인증서 준비','② Thai FDA Health Product 등록 신청','③ 제품 안전성 자료 제출','④ 검토 및 샘플 검사','⑤ 등록 승인 후 판매'],
+    tip:'태국은 건강기능식품 광고 규제가 엄격합니다. 효능 표현에 주의하세요.',
+    partners:[ {name:'Bangkok Health Compliance',type:'인증 대행',contact:'bkk-health@example.com'} ] },
+
+  'co.id': { countryName:'인도네시아', flag:'🇮🇩', agency:'BPOM (건강기능식품팀)', agencyUrl:'https://www.pom.go.id/', difficulty:'high', period:'6~12개월', cost:'$2,000~$6,000',
+    certs:[ {name:'BPOM 건강기능식품 등록',required:true,desc:'건강기능식품 별도 BPOM 등록 필수 (일반식품과 다름)'}, {name:'할랄 인증 (MUI)',required:true,desc:'이슬람 국가로 할랄 필수'}, {name:'CoA + 안전성 자료',required:true,desc:'성분 분석·독성 자료 제출'} ],
+    steps:['① 할랄 인증 취득','② BPOM 건강기능식품 등록','③ 제품 성분 CoA 제출','④ BPOM 샘플 검사','⑤ 등록 번호 취득 후 판매'],
+    tip:'건강기능식품은 일반식품보다 등록 기간이 훨씬 길고 비용도 높습니다. 현지 파트너 필수.',
+    partners:[ {name:'Jakarta Health Reg. Agency',type:'BPOM 대행',contact:'jkt-health@example.com'} ] },
+
+  'com.my': { countryName:'말레이시아', flag:'🇲🇾', agency:'MoH (전통·보완의학부)', agencyUrl:'https://www.pharmacy.gov.my/', difficulty:'high', period:'4~12개월', cost:'$1,500~$5,000',
+    certs:[ {name:'NPRA 등록 (건강기능식품)',required:true,desc:'의약품에 준하는 등록 필요'}, {name:'JAKIM 할랄 인증',required:false,desc:'무슬림 소비자 타겟 시 권장'}, {name:'CoA + 임상 자료',required:true,desc:'안전성 및 효능 관련 자료 필요'} ],
+    steps:['① 말레이시아 현지 법인 또는 대리인 지정','② NPRA 등록 신청','③ 안전성 자료 제출','④ 검토 기간 (6~12개월)','⑤ 등록 완료 후 판매'],
+    tip:'말레이시아 건강기능식품 등록은 복잡합니다. 유사 허가를 받은 현지 파트너를 통하면 절차가 빨라집니다.',
+    partners:[ {name:'KL Health Compliance',type:'NPRA 대행',contact:'kl-health@example.com'} ] },
+
+  'vn': { countryName:'베트남', flag:'🇻🇳', agency:'VFA (보건부)', agencyUrl:'https://vfa.gov.vn/', difficulty:'high', period:'4~10개월', cost:'$1,500~$4,000',
+    certs:[ {name:'THƯC PHẨM BẢO VỆ SỨC KHỎE 신고',required:true,desc:'건강보호식품 신고 의무'}, {name:'CoA + 기원증명서',required:true,desc:'성분 CoA 및 원산지 증명 필요'}, {name:'베트남어 라벨',required:true,desc:'Vietnamese 성분·경고·보관법 표기'} ],
+    steps:['① 현지 수입자 지정','② VFA 건강보호식품 신고','③ CoA 및 안전 자료 제출','④ 베트남어 라벨 제작','⑤ 승인 후 판매'],
+    tip:'건강기능식품에 의약품적 효능 표현은 금지입니다. 광고 표현에 매우 주의하세요.',
+    partners:[ {name:'Hanoi Health Import Co.',type:'현지 수입 컨설팅',contact:'hn-health@example.com'} ] },
+
+  'sg': { countryName:'싱가포르', flag:'🇸🇬', agency:'HSA (Health Sciences Authority)', agencyUrl:'https://www.hsa.gov.sg/', difficulty:'mid', period:'2~6개월', cost:'$800~$2,500',
+    certs:[ {name:'HSA 건강보조제 신고',required:true,desc:'HSA에 건강보조식품으로 사전 신고'}, {name:'영문 라벨',required:true,desc:'영문 성분·용량·경고 표기'}, {name:'CoA',required:true,desc:'성분 분석 성적서 제출'} ],
+    steps:['① HSA PRISM 포털 접속','② 건강보조제 신고 신청','③ 영문 라벨 및 CoA 제출','④ 검토 완료','⑤ 판매 시작'],
+    tip:'싱가포르 HSA는 비교적 투명하고 효율적입니다. CoA가 준비되어 있으면 처리가 빠릅니다.',
+    partners:[ {name:'SG Health Regulatory',type:'HSA 대행',contact:'sg-health@example.com'} ] },
+
+  'ph': { countryName:'필리핀', flag:'🇵🇭', agency:'FDA Philippines (식이보충제)', agencyUrl:'https://www.fda.gov.ph/', difficulty:'mid', period:'3~7개월', cost:'$800~$2,500',
+    certs:[ {name:'FDA CPR (식이보충제)',required:true,desc:'Certificate of Product Registration 필수'}, {name:'CoA + 안전성 자료',required:true,desc:'성분 분석 성적서 제출'}, {name:'영어 라벨',required:true,desc:'영문 성분·경고·용량 표기'} ],
+    steps:['① 현지 대리인 지정','② FDA ePortal 신청','③ CoA 및 안전 자료 제출','④ 검토 (90일)','⑤ CPR 취득 후 판매'],
+    tip:'필리핀은 K-뷰티 이너뷰티 제품 인기가 높습니다. 피부 관련 소구는 효과적입니다.',
+    partners:[ {name:'Manila Regulatory Co.',type:'FDA 대행',contact:'mnl-health@example.com'} ] },
+
+  'tw': { countryName:'대만', flag:'🇹🇼', agency:'TFDA (건강기능식품팀)', agencyUrl:'https://www.fda.gov.tw/', difficulty:'mid', period:'3~8개월', cost:'$1,000~$3,000',
+    certs:[ {name:'TFDA 건강식품 허가',required:true,desc:'건강기능식품 허가증 취득 필수'}, {name:'안전성·기능성 시험',required:true,desc:'대만 공인 기관에서 시험 필요'}, {name:'번체자 라벨',required:true,desc:'繁體字 성분·용법·경고 표기'} ],
+    steps:['① 대만 수입업체 지정','② TFDA 건강식품 허가 신청','③ 안전·기능성 시험 완료','④ 번체자 라벨 제작','⑤ 허가 취득 후 판매'],
+    tip:'대만 소비자는 건강기능식품에 높은 구매력을 갖고 있습니다. 콜라겐·홍삼 제품 인기.',
+    partners:[ {name:'Taipei Health Import',type:'TFDA 대행',contact:'tpe-health@example.com'} ] },
+
+  'com.br': { countryName:'브라질', flag:'🇧🇷', agency:'ANVISA (건강보조제)', agencyUrl:'https://www.gov.br/anvisa/pt-br', difficulty:'high', period:'9~24개월', cost:'$5,000~$20,000',
+    certs:[ {name:'ANVISA 식이보충제 등록',required:true,desc:'건강보조식품 ANVISA 사전 등록 필수'}, {name:'포르투갈어 라벨',required:true,desc:'포르투갈어 전성분·용법·경고 필수'}, {name:'GMP 인증',required:true,desc:'한국 GMP 인증 + 브라질 번역 공증'} ],
+    steps:['① GMP 인증서 포르투갈어 공증','② 브라질 법인 지정','③ ANVISA 등록 신청','④ 장기 검토 대기','⑤ 등록 완료 후 판매'],
+    tip:'브라질 건강보조제 등록은 매우 복잡합니다. 현지 법인 없이는 사실상 불가합니다.',
+    partners:[ {name:'SP Health Regulatory',type:'ANVISA 대행',contact:'sp-health@example.com'} ] },
+
+  'com.mx': { countryName:'멕시코', flag:'🇲🇽', agency:'COFEPRIS (건강제품)', agencyUrl:'https://www.gob.mx/cofepris', difficulty:'mid', period:'3~8개월', cost:'$1,500~$4,000',
+    certs:[ {name:'COFEPRIS 건강보조제 허가',required:true,desc:'건강보조식품 허가 취득 필수'}, {name:'스페인어 라벨',required:true,desc:'스페인어 성분·용법·경고 필수'}, {name:'CoA',required:true,desc:'성분 분석 성적서 제출'} ],
+    steps:['① 멕시코 수입자 지정','② COFEPRIS 신청','③ 스페인어 라벨 제작','④ 세관 통관','⑤ 판매'],
+    tip:'멕시코는 미국과 인접해 있어 미국 인증(NSF 등)이 있으면 절차가 간소화될 수 있습니다.',
+    partners:[ {name:'CDMX Health Import',type:'COFEPRIS 대행',contact:'mx-health@example.com'} ] },
+
+  'com.ar': { countryName:'아르헨티나', flag:'🇦🇷', agency:'ANMAT (보충제)', agencyUrl:'https://www.argentina.gob.ar/anmat', difficulty:'high', period:'6~15개월', cost:'$3,000~$8,000',
+    certs:[ {name:'ANMAT 식이보충제 등록',required:true,desc:'ANMAT에 보충제 등록 필수'}, {name:'스페인어 라벨',required:true,desc:'스페인어 전성분 라벨 필수'} ],
+    steps:['① 현지 대리인 지정','② ANMAT 등록','③ 라벨 제작','④ 검토','⑤ 판매'],
+    tip:'아르헨티나는 규제가 복잡하고 외환 규제도 있습니다. 소규모 테스트 후 확장 전략을 권장합니다.',
+    partners:[ {name:'BA Health Agency',type:'ANMAT 대행',contact:'ba-health@example.com'} ] },
+
+  'com.kh': { countryName:'캄보디아', flag:'🇰🇭', agency:'MoH Cambodia', agencyUrl:'https://www.moh.gov.kh/', difficulty:'low', period:'1~4개월', cost:'$400~$1,500',
+    certs:[ {name:'MoH 식이보충제 등록',required:true,desc:'보건부 등록 필요'}, {name:'영어/크메르어 라벨',required:true,desc:'영어 라벨 허용'} ],
+    steps:['① 현지 수입자 지정','② MoH 등록 신청','③ 영어 라벨 제작','④ 통관','⑤ 판매'],
+    tip:'캄보디아는 건강기능식품 규제가 비교적 간단합니다. K-헬스 제품 수요가 증가 중입니다.',
+    partners:[ {name:'PNH Import Co.',type:'현지 대행',contact:'pnh-health@example.com'} ] },
+
+  'la': { countryName:'라오스', flag:'🇱🇦', agency:'Lao FDA (MoH)', agencyUrl:'https://www.moh.gov.la/', difficulty:'low', period:'1~3개월', cost:'$200~$800',
+    certs:[ {name:'Lao FDA 수입 신고',required:true,desc:'식이보충제 수입 신고'}, {name:'영어 라벨',required:true,desc:'영어 라벨 허용'} ],
+    steps:['① 현지 대리인 지정','② Lao FDA 신고','③ 영어 라벨 제작','④ 통관','⑤ 판매'],
+    tip:'라오스는 K-헬스 제품 수요가 초기 단계입니다. 소규모 진출에 적합합니다.',
+    partners:[ {name:'Vientiane Health Trade',type:'현지 대행',contact:'vte-health@example.com'} ] },
+};
+
+// ── 패션/의류 인증 데이터 (12개국) ──
+const _SEA_FASHION_CERT = {
+  'co.th': { countryName:'태국', flag:'🇹🇭', agency:'Thai Customs / TIS', agencyUrl:'https://www.customs.go.th/', difficulty:'low', period:'통관 1~7일', cost:'관세 20~30% + 부가세 7%',
+    certs:[ {name:'HS Code 확인 (섬유류)',required:true,desc:'HS 6101~6217 섬유류 코드 확인'}, {name:'원산지증명서 (CO)',required:true,desc:'한국산 CO 발급 (CEPA 관세 혜택 가능)'}, {name:'TIS 섬유 안전기준',required:false,desc:'아동복의 경우 TIS 인증 권장'} ],
+    steps:['① HS Code 확인 및 관세율 조사','② 한국산 CO 발급 (상공회의소)','③ B/L·Invoice·Packing List 준비','④ 태국 세관 통관','⑤ 현지 창고 입고 및 판매'],
+    tip:'한-아세안 FTA로 섬유류 관세 혜택을 받을 수 있습니다. CO 발급을 반드시 준비하세요.',
+    partners:[ {name:'BKK Fashion Import',type:'통관 대행',contact:'bkk-fashion@example.com'} ] },
+
+  'co.id': { countryName:'인도네시아', flag:'🇮🇩', agency:'Bea Cukai (세관)', agencyUrl:'https://www.beacukai.go.id/', difficulty:'mid', period:'통관 3~14일', cost:'관세 15~25% + PPh 2.5%',
+    certs:[ {name:'SNI 인증 (아동복 필수)',required:false,desc:'아동용 의류는 SNI 인증 의무'}, {name:'원산지증명서',required:true,desc:'한-아세안 FTA CO 발급'}, {name:'수입업자 API 번호',required:true,desc:'인도네시아 수입업체 API 등록 필요'} ],
+    steps:['① 인도네시아 수입업체 API 확인','② CO 발급 (한국 상공회의소)','③ SNI 인증 여부 확인 (아동복)','④ Bea Cukai 통관','⑤ 창고 입고'],
+    tip:'인도네시아는 2022년부터 의류 수입 쿼터 제도가 있습니다. 수입 물량 계획을 미리 수립하세요.',
+    partners:[ {name:'Jakarta Fashion Customs',type:'통관 대행',contact:'jkt-fashion@example.com'} ] },
+
+  'com.my': { countryName:'말레이시아', flag:'🇲🇾', agency:'Royal Malaysia Customs', agencyUrl:'https://www.customs.gov.my/', difficulty:'low', period:'통관 1~5일', cost:'관세 0~20% + SST 10%',
+    certs:[ {name:'원산지증명서',required:true,desc:'한-아세안 FTA CO로 관세 혜택'}, {name:'섬유 수입 신고',required:true,desc:'일반 수입 통관 서류 준비'} ],
+    steps:['① CO 발급','② B/L·Invoice·Packing List 준비','③ 말레이시아 세관 통관','④ SST 납부','⑤ 창고 입고 및 판매'],
+    tip:'말레이시아는 의류 수입 규제가 비교적 자유롭습니다. 무슬림 소비자를 위한 모디스트 패션 제품 고려를 추천합니다.',
+    partners:[ {name:'KL Fashion Import',type:'통관 대행',contact:'kl-fashion@example.com'} ] },
+
+  'vn': { countryName:'베트남', flag:'🇻🇳', agency:'General Dept. of Vietnam Customs', agencyUrl:'https://www.customs.gov.vn/', difficulty:'low', period:'통관 1~7일', cost:'관세 12~20% + VAT 10%',
+    certs:[ {name:'원산지증명서 (CO Form KV)',required:true,desc:'한-베트남 FTA CO로 관세 혜택'}, {name:'섬유 HS Code 신고',required:true,desc:'정확한 HS Code 확인 필수'} ],
+    steps:['① 한-베트남 FTA CO Form KV 발급','② 수출 서류 준비','③ 베트남 세관 통관','④ VAT 납부','⑤ 창고 입고'],
+    tip:'베트남은 K-패션 소비자층이 두껍습니다. MLB·이랜드 등 한국 브랜드 인지도가 높습니다.',
+    partners:[ {name:'HCM Fashion Customs',type:'통관 대행',contact:'hcm-fashion@example.com'} ] },
+
+  'sg': { countryName:'싱가포르', flag:'🇸🇬', agency:'Singapore Customs', agencyUrl:'https://www.customs.gov.sg/', difficulty:'low', period:'통관 당일~2일', cost:'GST 9% (관세 없음)',
+    certs:[ {name:'TradeNet 수입 신고',required:true,desc:'Singapore Customs TradeNet 온라인 신고'}, {name:'원산지증명서',required:false,desc:'관세 없으므로 CO 불필요 (단, 원산지 표기는 필요)'} ],
+    steps:['① TradeNet 계정 생성','② 수입 허가 신청','③ GST 납부','④ 통관 (매우 빠름)','⑤ 판매 시작'],
+    tip:'싱가포르는 관세가 없어 의류 수출이 매우 간단합니다. 아시아 패션 허브로 활용 가능.',
+    partners:[ {name:'SG Fashion Import',type:'통관 대행',contact:'sg-fashion@example.com'} ] },
+
+  'ph': { countryName:'필리핀', flag:'🇵🇭', agency:'BOC (Bureau of Customs)', agencyUrl:'https://www.customs.gov.ph/', difficulty:'mid', period:'통관 3~10일', cost:'관세 10~30% + VAT 12%',
+    certs:[ {name:'BOC 수입 신고',required:true,desc:'Bureau of Customs 수입 신고 필수'}, {name:'원산지증명서',required:true,desc:'한-아세안 FTA CO 발급'} ],
+    steps:['① CO 발급','② B/L·Invoice 준비','③ BOC 수입 신고','④ 세관 검사','⑤ 통관 완료'],
+    tip:'필리핀 세관은 검사가 엄격한 편입니다. 서류 준비를 철저히 하고 현지 브로커를 활용하세요.',
+    partners:[ {name:'Manila Fashion Brokers',type:'통관 브로커',contact:'mnl-fashion@example.com'} ] },
+
+  'tw': { countryName:'대만', flag:'🇹🇼', agency:'Customs Administration', agencyUrl:'https://web.customs.gov.tw/', difficulty:'low', period:'통관 1~5일', cost:'관세 6~12% + VAT 5%',
+    certs:[ {name:'수입 신고',required:true,desc:'대만 세관에 수입 신고'}, {name:'원산지 표시',required:true,desc:'"Made in Korea" 라벨 부착 필수'} ],
+    steps:['① 대만 수입업체 확보','② 수출 서류 준비','③ 세관 통관','④ VAT 납부','⑤ 창고 입고'],
+    tip:'대만 소비자는 K-패션에 관심이 높습니다. MLB·에이블리 등 한국 패션 브랜드 인지도 상승 중.',
+    partners:[ {name:'Taipei Fashion Import',type:'통관 대행',contact:'tpe-fashion@example.com'} ] },
+
+  'com.br': { countryName:'브라질', flag:'🇧🇷', agency:'Receita Federal (세관)', agencyUrl:'https://www.gov.br/receitafederal/', difficulty:'high', period:'통관 2~8주', cost:'관세 35% + ICMS 18% + IPI + PIS/COFINS (총 100%+)',
+    certs:[ {name:'SISCOMEX 수입 등록',required:true,desc:'브라질 수입 시스템 SISCOMEX 등록'}, {name:'INMETRO 섬유 라벨링',required:true,desc:'포르투갈어 소재·세탁방법 라벨 필수'}, {name:'브라질 법인 또는 대리인',required:true,desc:'현지 Importer of Record 필수'} ],
+    steps:['① 브라질 법인/대리인 지정','② SISCOMEX 수입 등록','③ 포르투갈어 INMETRO 라벨 제작','④ 복잡한 세관 통관','⑤ 높은 세금 납부 후 판매'],
+    tip:'브라질은 세계에서 가장 높은 수입 관세 중 하나입니다. 현지 생산 또는 보세창고 전략을 검토하세요.',
+    partners:[ {name:'São Paulo Fashion Customs',type:'통관 대행',contact:'sp-fashion@example.com'} ] },
+
+  'com.mx': { countryName:'멕시코', flag:'🇲🇽', agency:'SAT / VUCEM', agencyUrl:'https://www.sat.gob.mx/', difficulty:'mid', period:'통관 2~10일', cost:'관세 25~35% + IVA 16%',
+    certs:[ {name:'VUCEM 수입 신고',required:true,desc:'멕시코 무역 단일창구 신고'}, {name:'NOM 섬유 라벨',required:true,desc:'NOM-004-SCFI 섬유 라벨 규정 준수'}, {name:'원산지증명서',required:false,desc:'FTA 비해당 (멕시코는 한-멕시코 FTA 없음)'} ],
+    steps:['① 멕시코 수입업체 지정','② VUCEM 신고','③ NOM 라벨 스페인어 제작','④ 세관 통관','⑤ 창고 입고 및 판매'],
+    tip:'K-패션은 멕시코 MZ세대에게 인기입니다. 소셜미디어 마케팅과 함께 진행하면 효과적입니다.',
+    partners:[ {name:'CDMX Fashion Customs',type:'통관 대행',contact:'mx-fashion@example.com'} ] },
+
+  'com.ar': { countryName:'아르헨티나', flag:'🇦🇷', agency:'AFIP / INDEC', agencyUrl:'https://www.afip.gob.ar/', difficulty:'high', period:'통관 2~6주', cost:'관세 35% + IVA 21% + 통계세',
+    certs:[ {name:'AFIP 수입 허가',required:true,desc:'AFIP 수입 신고 필수'}, {name:'INTI 섬유 검사',required:false,desc:'대량 수입 시 INTI 품질 검사 권장'}, {name:'스페인어 라벨',required:true,desc:'스페인어 소재·세탁법 표기'} ],
+    steps:['① 현지 수입업체 지정','② AFIP 수입 신고','③ 스페인어 라벨 제작','④ 높은 세관세 납부','⑤ 창고 입고'],
+    tip:'아르헨티나는 외환 규제로 인해 수입 결제에 어려움이 있습니다. 현지 파트너와 결제 방식을 사전에 협의하세요.',
+    partners:[ {name:'Buenos Aires Fashion',type:'통관 대행',contact:'ba-fashion@example.com'} ] },
+
+  'com.kh': { countryName:'캄보디아', flag:'🇰🇭', agency:'CAMCONTROL / Customs', agencyUrl:'https://www.camcontrol.gov.kh/', difficulty:'low', period:'통관 1~5일', cost:'관세 12~15% + VAT 10%',
+    certs:[ {name:'수입 신고',required:true,desc:'Cambodia Customs 수입 신고'}, {name:'원산지증명서',required:true,desc:'한-아세안 FTA CO 발급'} ],
+    steps:['① CO 발급','② B/L·Invoice 준비','③ 세관 통관','④ 창고 입고','⑤ 판매'],
+    tip:'캄보디아는 의류 생산지로 패션 수입 통관이 익숙합니다. 진입 장벽이 낮습니다.',
+    partners:[ {name:'Phnom Penh Fashion',type:'통관 대행',contact:'pnh-fashion@example.com'} ] },
+
+  'la': { countryName:'라오스', flag:'🇱🇦', agency:'Lao Customs Department', agencyUrl:'https://www.customs.gov.la/', difficulty:'low', period:'통관 1~5일', cost:'관세 10~20% + VAT 10%',
+    certs:[ {name:'수입 신고',required:true,desc:'세관 수입 신고'}, {name:'원산지증명서',required:true,desc:'한-아세안 FTA CO 발급'} ],
+    steps:['① CO 발급','② 수출 서류 준비','③ 라오스 세관 통관','④ 창고 입고','⑤ 판매'],
+    tip:'라오스는 소규모 시장이지만 진입 장벽이 낮습니다. 인접 태국·베트남 시장 교두보로 활용 가능.',
+    partners:[ {name:'Vientiane Fashion Trade',type:'통관 대행',contact:'vte-fashion@example.com'} ] },
+};
+
+// ── K팝 굿즈/MD 인증 데이터 (12개국) ──
+const _SEA_MERCH_CERT = {
+  'co.th': { countryName:'태국', flag:'🇹🇭', agency:'Thai Customs', agencyUrl:'https://www.customs.go.th/', difficulty:'low', period:'통관 1~5일', cost:'관세 10~30% + VAT 7%',
+    certs:[ {name:'HS Code 확인 (완구/잡화)',required:true,desc:'포토카드·키링 등 HS Code 4901~4911, 9503 확인'}, {name:'원산지증명서',required:false,desc:'소액 수입은 CO 생략 가능'}, {name:'저작권/라이선스 서류',required:false,desc:'K팝 공식 MD는 라이선스 계약서 보관'} ],
+    steps:['① HS Code 및 관세율 확인','② B/L·Invoice·Packing List 준비','③ 저작권 라이선스 서류 준비','④ 세관 통관','⑤ 판매'],
+    tip:'K팝 굿즈는 정품 라이선스 여부가 중요합니다. 정품 인증을 강조하면 소비자 신뢰도가 높아집니다.',
+    partners:[ {name:'BKK Merch Import',type:'통관 대행',contact:'bkk-merch@example.com'} ] },
+
+  'co.id': { countryName:'인도네시아', flag:'🇮🇩', agency:'Bea Cukai', agencyUrl:'https://www.beacukai.go.id/', difficulty:'mid', period:'통관 3~10일', cost:'관세 5~20% + PPN 11%',
+    certs:[ {name:'수입 신고',required:true,desc:'Bea Cukai 수입 신고'}, {name:'라이선스 서류',required:false,desc:'공식 K팝 MD 라이선스 보관 권장'}, {name:'원산지증명서',required:false,desc:'소액 시 CO 생략 가능'} ],
+    steps:['① HS Code 확인','② 라이선스 서류 준비','③ Bea Cukai 통관','④ 창고 입고','⑤ 판매'],
+    tip:'인도네시아 K팝 팬덤이 세계 최대 규모 중 하나입니다. BTS·BLACKPINK 관련 굿즈 수요가 높습니다.',
+    partners:[ {name:'Jakarta Merch Import',type:'통관 대행',contact:'jkt-merch@example.com'} ] },
+
+  'com.my': { countryName:'말레이시아', flag:'🇲🇾', agency:'Malaysia Customs', agencyUrl:'https://www.customs.gov.my/', difficulty:'low', period:'통관 1~5일', cost:'SST 10%',
+    certs:[ {name:'수입 신고',required:true,desc:'Royal Malaysia Customs 신고'}, {name:'라이선스 증빙',required:false,desc:'공식 라이선스 계약서 보관'} ],
+    steps:['① 수출 서류 준비','② 말레이시아 세관 통관','③ SST 납부','④ 창고 입고','⑤ 판매'],
+    tip:'말레이시아는 K팝 팬층이 두텁습니다. 공식 K팝 라이선스 MD임을 강조하면 프리미엄 가격 형성 가능.',
+    partners:[ {name:'KL Merch Import',type:'통관 대행',contact:'kl-merch@example.com'} ] },
+
+  'vn': { countryName:'베트남', flag:'🇻🇳', agency:'Vietnam Customs', agencyUrl:'https://www.customs.gov.vn/', difficulty:'low', period:'통관 1~5일', cost:'관세 10~25% + VAT 10%',
+    certs:[ {name:'수입 신고',required:true,desc:'베트남 세관 수입 신고'}, {name:'저작권 서류',required:false,desc:'IP 관련 분쟁 방지를 위해 라이선스 서류 보관'} ],
+    steps:['① HS Code 확인','② 수출 서류 준비','③ 베트남 세관 통관','④ 창고 입고','⑤ 판매'],
+    tip:'베트남 K팝 팬덤이 빠르게 성장 중입니다. SNS 마케팅과 연계 시 효과적입니다.',
+    partners:[ {name:'HCM Merch Import',type:'통관 대행',contact:'hcm-merch@example.com'} ] },
+
+  'sg': { countryName:'싱가포르', flag:'🇸🇬', agency:'Singapore Customs', agencyUrl:'https://www.customs.gov.sg/', difficulty:'low', period:'통관 당일~2일', cost:'GST 9% (관세 없음)',
+    certs:[ {name:'TradeNet 수입 신고',required:true,desc:'단순 신고만으로 통관 가능'}, {name:'저작권 등록 권장',required:false,desc:'IP 보호를 위해 싱가포르 IP 등록 고려'} ],
+    steps:['① TradeNet 신고','② GST 납부','③ 통관','④ 판매 시작','⑤ 온라인 채널 연계'],
+    tip:'싱가포르는 K팝 굿즈 아시아 허브로 활용 가능합니다. 팝업스토어 전략에 효과적.',
+    partners:[ {name:'SG Merch Distribution',type:'유통 대행',contact:'sg-merch@example.com'} ] },
+
+  'ph': { countryName:'필리핀', flag:'🇵🇭', agency:'BOC Philippines', agencyUrl:'https://www.customs.gov.ph/', difficulty:'mid', period:'통관 3~10일', cost:'관세 10~30% + VAT 12%',
+    certs:[ {name:'BOC 수입 신고',required:true,desc:'Bureau of Customs 신고'}, {name:'라이선스 서류',required:false,desc:'공식 MD 라이선스 보관'} ],
+    steps:['① HS Code 확인','② B/L·Invoice 준비','③ BOC 통관','④ 창고 입고','⑤ 판매'],
+    tip:'필리핀은 K팝 팬덤이 매우 활발합니다. 공식 콘서트 MD와 연계한 판매 전략이 효과적입니다.',
+    partners:[ {name:'Manila Merch Import',type:'통관 대행',contact:'mnl-merch@example.com'} ] },
+
+  'tw': { countryName:'대만', flag:'🇹🇼', agency:'Taiwan Customs', agencyUrl:'https://web.customs.gov.tw/', difficulty:'low', period:'통관 1~5일', cost:'관세 0~10% + VAT 5%',
+    certs:[ {name:'수입 신고',required:true,desc:'대만 세관 수입 신고'}, {name:'원산지 표기',required:true,desc:'"Made in Korea" 표기 필수'} ],
+    steps:['① 수출 서류 준비','② 대만 세관 통관','③ 원산지 라벨 확인','④ 창고 입고','⑤ 판매'],
+    tip:'대만은 K팝·K드라마 팬층이 두텁습니다. 아이돌 관련 굿즈 수요가 지속 증가 중입니다.',
+    partners:[ {name:'Taipei Merch Import',type:'통관 대행',contact:'tpe-merch@example.com'} ] },
+
+  'com.br': { countryName:'브라질', flag:'🇧🇷', agency:'Receita Federal', agencyUrl:'https://www.gov.br/receitafederal/', difficulty:'high', period:'통관 2~8주', cost:'관세 20~35% + ICMS + 복합세',
+    certs:[ {name:'SISCOMEX 수입 등록',required:true,desc:'브라질 수입 시스템 등록'}, {name:'포르투갈어 라벨',required:true,desc:'포르투갈어 상품 설명 표기'}, {name:'라이선스 서류',required:false,desc:'저작권 관련 통관 지연 방지를 위해 보관'} ],
+    steps:['① 브라질 법인/대리인 지정','② SISCOMEX 등록','③ 복잡한 세관 통관','④ 높은 세금 납부','⑤ 판매'],
+    tip:'브라질 K팝 팬덤이 남미 최대 규모입니다. 높은 관세에도 불구하고 수요가 강합니다.',
+    partners:[ {name:'SP Merch Import',type:'통관 대행',contact:'sp-merch@example.com'} ] },
+
+  'com.mx': { countryName:'멕시코', flag:'🇲🇽', agency:'SAT / VUCEM', agencyUrl:'https://www.sat.gob.mx/', difficulty:'mid', period:'통관 2~10일', cost:'관세 10~20% + IVA 16%',
+    certs:[ {name:'VUCEM 수입 신고',required:true,desc:'멕시코 무역 단일창구 신고'}, {name:'라이선스 서류',required:false,desc:'저작권 보호를 위해 계약서 보관'} ],
+    steps:['① 멕시코 수입업체 지정','② VUCEM 신고','③ 스페인어 라벨 제작','④ 세관 통관','⑤ 판매'],
+    tip:'멕시코 MZ세대의 K팝 열풍이 강합니다. 소셜미디어 인플루언서와 협업 마케팅 추천.',
+    partners:[ {name:'CDMX Merch Import',type:'통관 대행',contact:'mx-merch@example.com'} ] },
+
+  'com.ar': { countryName:'아르헨티나', flag:'🇦🇷', agency:'AFIP', agencyUrl:'https://www.afip.gob.ar/', difficulty:'high', period:'통관 2~6주', cost:'관세 20~35% + IVA 21%',
+    certs:[ {name:'AFIP 수입 허가',required:true,desc:'수입 신고 필수'}, {name:'라이선스 서류',required:false,desc:'저작권 통관 지연 방지'} ],
+    steps:['① 현지 수입업체 지정','② AFIP 수입 신고','③ 세관 통관','④ 높은 세금 납부','⑤ 판매'],
+    tip:'아르헨티나도 K팝 팬덤이 매우 활발합니다. 외환 규제로 결제 방식을 사전에 확인하세요.',
+    partners:[ {name:'BA Merch Import',type:'통관 대행',contact:'ba-merch@example.com'} ] },
+
+  'com.kh': { countryName:'캄보디아', flag:'🇰🇭', agency:'Cambodia Customs', agencyUrl:'https://www.customs.gov.kh/', difficulty:'low', period:'통관 1~5일', cost:'관세 10~15% + VAT 10%',
+    certs:[ {name:'수입 신고',required:true,desc:'캄보디아 세관 신고'} ],
+    steps:['① HS Code 확인','② B/L·Invoice 준비','③ 세관 통관','④ 창고 입고','⑤ 판매'],
+    tip:'캄보디아는 K팝 굿즈 진입 장벽이 낮습니다. 초기 시장 테스트에 적합합니다.',
+    partners:[ {name:'PNH Merch Import',type:'통관 대행',contact:'pnh-merch@example.com'} ] },
+
+  'la': { countryName:'라오스', flag:'🇱🇦', agency:'Lao Customs', agencyUrl:'https://www.customs.gov.la/', difficulty:'low', period:'통관 1~3일', cost:'관세 5~15% + VAT 10%',
+    certs:[ {name:'수입 신고',required:true,desc:'라오스 세관 신고'} ],
+    steps:['① 수출 서류 준비','② 세관 통관','③ 창고 입고','④ 판매','⑤ 현지 SNS 마케팅'],
+    tip:'라오스는 소규모 시장이지만 K팝 열풍이 불고 있습니다. 소규모 파일럿 수출에 적합합니다.',
+    partners:[ {name:'Vientiane Merch Trade',type:'통관 대행',contact:'vte-merch@example.com'} ] },
+};
+
+// ── 카테고리별 인증 데이터 반환 함수 ──
+function getSeaProductCertData(country, category) {
+  if (category === 'food')       return _SEA_FOOD_CERT[country]       || _SEA_FOOD_CERT['sg'];
+  if (category === 'supplement') return _SEA_SUPPLEMENT_CERT[country]  || _SEA_SUPPLEMENT_CERT['sg'];
+  if (category === 'fashion')    return _SEA_FASHION_CERT[country]     || _SEA_FASHION_CERT['sg'];
+  if (category === 'merch')      return _SEA_MERCH_CERT[country]       || _SEA_MERCH_CERT['sg'];
+  return SEA_COUNTRY_CERT_DATA[country]; // cosmetics (기존 데이터)
+}
+
+// 카테고리 한국어 라벨
+const _CATEGORY_LABEL = {
+  food: '🍜 식품', supplement: '💊 건강기능식품', fashion: '👗 패션/의류',
+  merch: '📦 K팝 굿즈', cosmetics: '💄 화장품'
+};
+
 function switchSeaCountry(country, btn) {
   document.querySelectorAll('.sea-ctab').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -3007,15 +3334,17 @@ function renderSeaCountryItems(items, country) {
 // ──────────────────────────────────────────
 function openSeaModal(productName, activeTab) {
   const country   = _currentSeaCountry;
-  const certData  = SEA_COUNTRY_CERT_DATA[country];
+  const category  = detectProductCategory(productName);
+  const certData  = getSeaProductCertData(country, category);
   const flag      = SEA_COUNTRY_FLAGS[country] || '🌏';
   const cName     = certData?.countryName || SEA_COUNTRY_NAME[country] || country.toUpperCase();
   const shortName = productName.substring(0, 22) + (productName.length > 22 ? '...' : '');
+  const catLabel  = _CATEGORY_LABEL[category] || '💄 화장품';
 
   const titleMap = {
     factory:   `🏭 한국 공장 소싱 — "${shortName}"`,
-    cert:      `${flag} ${cName} 판매 인증 — "${shortName}"`,
-    certguide: `📋 ${cName} 인증 취득 절차`,
+    cert:      `${flag} ${cName} 판매 인증 [${catLabel}] — "${shortName}"`,
+    certguide: `📋 ${cName} 인증 취득 절차 [${catLabel}]`,
     partner:   `🤝 ${cName} 파트너 찾기`,
   };
   document.getElementById('modalTitle').innerHTML = titleMap[activeTab] || titleMap.factory;
@@ -3081,7 +3410,7 @@ function openSeaModal(productName, activeTab) {
           <span style="font-weight:800;font-size:0.9rem">${c.name}</span>
           <span style="font-size:0.68rem;padding:2px 8px;border-radius:99px;font-weight:700;background:${c.required ? '#FEE2E2' : '#F1F5F9'};color:${c.required ? '#DC2626' : '#64748B'}">${c.required ? '필수' : '권장'}</span>
         </div>
-        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:4px">${c.full}</div>
+        ${c.full ? `<div style="font-size:0.72rem;color:var(--muted);margin-bottom:4px">${c.full}</div>` : ''}
         <div style="font-size:0.81rem;color:var(--text);line-height:1.6">${c.desc}</div>
       </div>`).join('')}
     <div style="background:#FFFBEB;border:1px solid #FCD34D;border-radius:10px;padding:12px 15px;font-size:0.81rem;color:#92400E;line-height:1.6">
