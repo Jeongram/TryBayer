@@ -2520,7 +2520,7 @@ async function loadRealJPRankings(appId, accessKey) {
 
     loaded++;
     if (tag) tag.textContent = `🔴 LIVE ${loaded}/${total}`;
-    renderJpProducts();
+    renderRankList(DEMO_CATEGORIES);
   }
 
   if (tag) { tag.textContent = '🔴 LIVE'; tag.style.background = '#EF4444'; }
@@ -4696,7 +4696,7 @@ function connectAPI(silent = false) {
 }
 
 function loadDemo() {
-  renderJpProducts();
+  renderRankList(DEMO_CATEGORIES);
   fetchSeaCountryProducts('co.id');
   renderAmazonList(AMAZON_CATEGORIES);
   renderProductTable(DEMO_PRODUCTS);
@@ -4751,7 +4751,7 @@ const tabData = {
 function switchTab(tab, btn) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  renderJpProducts(); // 탭 전환 시에도 상품 카드 유지
+  renderRankList(tabData[tab]);
   renderTrendChart(tabData[tab]);
 }
 
@@ -5254,7 +5254,7 @@ function renderDmgCard(item) {
   const { key, accessKey } = getSavedKeys();
 
   // 임시로 데모 렌더 (연결 완료 전 화면 채우기)
-  renderJpProducts();
+  renderRankList(DEMO_CATEGORIES);
   renderTrendChart(DEMO_CATEGORIES);
   // 동남아: 인도네시아 탭 기본 로드
   fetchSeaCountryProducts('co.id');
