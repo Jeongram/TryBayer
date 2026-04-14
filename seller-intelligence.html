@@ -4514,6 +4514,7 @@ function closeModal(e) {
 
 function renderProductTable(products) {
   const tbody = document.getElementById('productTableBody');
+  if (!tbody) return; // 섹션 제거됨 — 안전하게 스킵
   tbody.innerHTML = products.map(p => `
     <tr>
       <td><strong style="color:var(--accent)">#${p.rank}</strong></td>
