@@ -351,22 +351,31 @@
     }
     .sb-hd-close:hover { background: #F3F4F6; }
     /* 아이템 */
-    .sb-nav { flex: 1; padding: 6px 0; display: flex; flex-direction: column; }
+    .sb-nav { flex: 1; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+    /* 대시보드 탭 - 상단 강조 스타일 */
     .sb-it {
-      display: flex; align-items: center; gap: 11px;
-      padding: 11px 18px; cursor: pointer;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; cursor: pointer;
       font-size: 0.875rem; font-weight: 600; color: #374151;
-      border-left: 3px solid transparent; white-space: nowrap;
-      transition: background .15s, color .15s;
+      border-radius: 10px; white-space: nowrap;
+      border: 1.5px solid #E5E7EB;
+      background: #fff;
+      transition: background .15s, color .15s, border-color .15s, box-shadow .15s;
     }
-    .sb-it:hover  { background: #F9FAFB; color: #111827; }
-    .sb-it.active { background: #EEF2FF; color: #4F46E5; border-left-color: #4F46E5; }
-    .sb-it .ic { width: 20px; text-align: center; font-size: 1rem; flex-shrink: 0; }
+    .sb-it:hover  { background: #F5F3FF; color: #4F46E5; border-color: #C7D2FE; }
+    .sb-it.active { background: #EEF2FF; color: #4F46E5; border-color: #6366F1; box-shadow: 0 2px 8px rgba(99,102,241,0.10); }
+    .sb-it .ic { width: 22px; text-align: center; font-size: 1.05rem; flex-shrink: 0; }
     .sb-it .badge {
-      margin-left: auto; font-size: 0.6rem; font-weight: 800; flex-shrink: 0;
+      margin-left: auto; font-size: 0.58rem; font-weight: 800; flex-shrink: 0;
       background: #6366F1; color: #fff; padding: 2px 7px; border-radius: 99px;
     }
-    .sb-divider { height: 1px; background: #F3F4F6; margin: 4px 0; }
+    /* 구분선 → 섹션 레이블로 교체 */
+    .sb-divider { height: 1px; background: #F3F4F6; margin: 6px 0; }
+    .sb-label {
+      font-size: 0.7rem; font-weight: 700; color: #9CA3AF;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 4px 4px 2px; margin-top: 4px;
+    }
     /* 섹션 show/hide */
     .sb-sec { display: none; }
     .sb-sec.on { display: block; animation: sbFade .2s ease; }
@@ -385,11 +394,13 @@
     <button class="sb-hd-close" onclick="toggleSB()">닫기</button>
   </div>
   <nav class="sb-nav">
+    <div class="sb-label">메인</div>
     <div class="sb-it active" id="sbi-dashboard" onclick="showSec('dashboard')">
       <span class="ic">📊</span> 대시보드
       <span class="badge">LIVE</span>
     </div>
     <div class="sb-divider"></div>
+    <div class="sb-label">셀러 도구</div>
     <div class="sb-it" id="sbi-sourcing" onclick="showSec('sourcing')">
       <span class="ic">🛒</span> 소싱 허브
     </div>
