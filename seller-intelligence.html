@@ -5520,86 +5520,38 @@ function toggleBookmarkPanel() {
   }
 }
 
-// ── 패널 모션: 관성 + 마찰 (흔들림 없이 스르륵 멈춤) ──
+// ── 패널 모션: 스크롤바 비율 추적 + 초부드러운 lerp ──
 (function initBmFloat() {
-  const MARGIN      = 20;    // 상하 최소 여백
-  const FRICTION    = 0.91;  // 매 프레임 속도 감쇠 (낮을수록 빨리 멈춤)
-  const SCROLL_GAIN = 0.10;  // 스크롤 → 속도 변환 (작을수록 조용히 반응)
-  const MAX_OFFSET  = 50;    // 중앙 기준 최대 이탈(px)
-  const RETURN_EASE = 0.025; // 정지 후 중앙 복귀 속도 (매우 느리게)
+  const MARGIN  = 24;    // 상하 최소 여백(px)
+  const EASE    = 0.032; // lerp 속도 — 낮을수록 더 천천히 따라옴
 
-  function getBaseTop() {
-    const panel  = document.getElementById('bookmarkPanel');
-    const panelH = panel ? panel.offsetHeight : 320;
-    return Math.max(MARGIN, (window.innerHeight - panelH) / 2);
+  function getTargetTop() {
+    const panel   = document.getElementById('bookmarkPanel');
+    const panelH  = panel ? panel.offsetHeight : 320;
+    const vh      = window.innerHeight;
+    const docH    = document.documentElement.scrollHeight;
+    const maxScroll = Math.max(1, docH - vh);
+    const ratio   = window.scrollY / maxScroll;           // 0(상단) ~ 1(하단)
+    const travel  = Math.max(0, vh - panelH - MARGIN * 2);
+    return MARGIN + ratio * travel;
   }
 
-  let pos         = getBaseTop();
-  let vel         = 0;
-  let lastScrollY = window.scrollY;
-  let rafId       = null;
-  let idleFrames  = 0;  // 스크롤 멈춘 후 프레임 카운트
+  let pos   = getTargetTop();
+  let rafId = null;
 
   function tick() {
-    const base = getBaseTop();
-
-    // 관성: 마찰만 적용 (스프링 없음 → 흔들림 없음)
-    vel *= FRICTION;
-    pos += vel;
-
-    // 범위 초과 시 벽에 부드럽게 멈춤 (반동 없이)
-    if (pos > base + MAX_OFFSET) { pos = base + MAX_OFFSET; vel = 0; }
-    if (pos < base - MAX_OFFSET) { pos = base - MAX_OFFSET; vel = 0; }
-
-    // 속도가 거의 없으면 중앙으로 아주 천천히 복귀
-    if (Math.abs(vel) < 0.1) {
-      idleFrames++;
-      if (idleFrames > 20) {  // 약 0.3초 후부터 복귀 시작
-        pos += (base - pos) * RETURN_EASE;
-      }
-    } else {
-      idleFrames = 0;
-    }
+    const target = getTargetTop();
+    pos += (target - pos) * EASE;
 
     const panel  = document.getElementById('bookmarkPanel');
     const handle = document.getElementById('bmHandle');
     if (panel)  panel.style.top = pos.toFixed(2) + 'px';
     if (handle) handle.style.top = pos.toFixed(2) + 'px';
 
-    // 완전 정지 판정
-    if (Math.abs(vel) < 0.01 && Math.abs(pos - base) < 0.1) {
-      pos = base; vel = 0; idleFrames = 0;
-      if (panel)  panel.style.top = base + 'px';
-      if (handle) handle.style.top = base + 'px';
-      rafId = null;
-    } else {
-      rafId = requestAnimationFrame(tick);
-    }
+    requestAnimationFrame(tick); // 항상 루프 유지 — 끊김 없음
   }
 
-  window.addEventListener('scroll', () => {
-    const scrollY = window.scrollY;
-    const delta   = scrollY - lastScrollY;
-    lastScrollY   = scrollY;
-    idleFrames    = 0;
-
-    vel += delta * SCROLL_GAIN;
-
-    const base = getBaseTop();
-    if (pos > base + MAX_OFFSET) { pos = base + MAX_OFFSET; if (vel > 0) vel = 0; }
-    if (pos < base - MAX_OFFSET) { pos = base - MAX_OFFSET; if (vel < 0) vel = 0; }
-
-    if (!rafId) rafId = requestAnimationFrame(tick);
-  }, { passive: true });
-
-  window.addEventListener('resize', () => {
-    const base = getBaseTop();
-    pos = base; vel = 0; idleFrames = 0;
-    const panel  = document.getElementById('bookmarkPanel');
-    const handle = document.getElementById('bmHandle');
-    if (panel)  panel.style.top = base + 'px';
-    if (handle) handle.style.top = base + 'px';
-  });
+  requestAnimationFrame(tick); // 최초 1회 시작, 이후 자동 지속
 })();
 
 // 패널 초기 렌더링
