@@ -322,12 +322,90 @@
     .dmg-link:hover { opacity:.85; }
     .dmg-shipping-free { color:#16a34a; font-weight:700; }
     .dmg-status-msg { text-align:center; padding:28px 0; color:var(--muted); font-size:0.9rem; }
+
+    /* ════════════════════════════════════════
+       SIDEBAR
+    ════════════════════════════════════════ */
+    .sidebar {
+      position: fixed; left: 0; top: 57px;
+      width: 242px; height: calc(100vh - 57px);
+      background: #fff; border-right: 1px solid #E5E7EB;
+      z-index: 90; display: flex; flex-direction: column;
+      transform: translateX(-242px);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+      overflow-y: auto; overflow-x: hidden;
+    }
+    body.sb-open .sidebar { transform: translateX(0); }
+    body.sb-open .main    { margin-left: 242px; }
+    .main { transition: margin-left .3s cubic-bezier(.4,0,.2,1); }
+    /* 헤더 */
+    .sb-hd {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-bottom: 1px solid #E5E7EB; flex-shrink: 0;
+    }
+    .sb-hd-logo { font-size: 1.05rem; font-weight: 900; color: #6366F1; }
+    .sb-hd-logo span { color: #D97706; }
+    .sb-hd-close {
+      background: none; border: 1px solid #E5E7EB; border-radius: 6px;
+      padding: 3px 10px; font-size: 0.76rem; color: #6B7280; cursor: pointer;
+    }
+    .sb-hd-close:hover { background: #F3F4F6; }
+    /* 아이템 */
+    .sb-nav { flex: 1; padding: 6px 0; }
+    .sb-it {
+      display: flex; align-items: center; gap: 11px;
+      padding: 11px 18px; cursor: pointer;
+      font-size: 0.875rem; font-weight: 600; color: #374151;
+      border-left: 3px solid transparent; white-space: nowrap;
+      transition: background .15s, color .15s;
+    }
+    .sb-it:hover  { background: #F9FAFB; color: #111827; }
+    .sb-it.active { background: #EEF2FF; color: #4F46E5; border-left-color: #4F46E5; }
+    .sb-it .ic { width: 20px; text-align: center; font-size: 1rem; flex-shrink: 0; }
+    .sb-it .badge {
+      margin-left: auto; font-size: 0.6rem; font-weight: 800; flex-shrink: 0;
+      background: #6366F1; color: #fff; padding: 2px 7px; border-radius: 99px;
+    }
+    .sb-divider { height: 1px; background: #F3F4F6; margin: 4px 0; }
+    /* 섹션 show/hide */
+    .sb-sec { display: none; }
+    .sb-sec.on { display: block; animation: sbFade .2s ease; }
+    @keyframes sbFade { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:none; } }
   </style>
 </head>
 <body>
 
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║  LEFT SIDEBAR                        ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<aside class="sidebar" id="sidebar">
+  <div class="sb-hd">
+    <div class="sb-hd-logo">Try<span>Bayer</span></div>
+    <button class="sb-hd-close" onclick="toggleSB()">닫기</button>
+  </div>
+  <nav class="sb-nav">
+    <div class="sb-it active" id="sbi-dashboard" onclick="showSec('dashboard')">
+      <span class="ic">📊</span> 대시보드
+      <span class="badge">LIVE</span>
+    </div>
+    <div class="sb-divider"></div>
+    <div class="sb-it" id="sbi-sourcing" onclick="showSec('sourcing')">
+      <span class="ic">🛒</span> 소싱 허브
+    </div>
+    <div class="sb-it" id="sbi-entry" onclick="showSec('entry')">
+      <span class="ic">📋</span> 플랫폼 입점 가이드
+    </div>
+    <div class="sb-it" id="sbi-logistics" onclick="showSec('logistics')">
+      <span class="ic">🚚</span> 국가별 물류/배송
+    </div>
+  </nav>
+</aside>
 <nav>
-  <div class="logo">Try<span>Bayer</span></div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button onclick="toggleSB()" style="background:none;border:none;cursor:pointer;font-size:1.2rem;color:#6B7280;padding:2px 4px;line-height:1" title="메뉴">☰</button>
+    <div class="logo">Try<span>Bayer</span></div>
+  </div>
   <div style="display:flex;gap:12px;align-items:center">
     <div class="api-status" id="apiStatus">
       <div class="dot" id="statusDot"></div>
@@ -390,6 +468,7 @@
     </div>
   </div>
 
+  <div class="sb-sec" id="sec-sourcing">
   <!-- DOMEGGOOK SOURCING SECTION -->
   <div class="section-title" style="margin-top:28px">
     🏭 한국 공장 소싱 <span class="tag">도매꾹 실시간</span>
@@ -536,6 +615,8 @@
     </div>
   </div>
 
+  <div class="sb-sec on" id="sec-dashboard">
+  </div><!-- /sec-sourcing -->
   <!-- CATEGORY RANKING + CHART -->
   <div class="section-title">🌏 글로벌 카테고리 랭킹 <span class="tag">JP · 동남아 · 아마존</span></div>
   <div class="tabs">
@@ -700,6 +781,8 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════════ -->
+  <div class="sb-sec" id="sec-entry">
+  </div><!-- /sec-entry -->
   <!-- 4. 각 플랫폼 입점 가이드                           -->
   <!-- ═══════════════════════════════════════════════════ -->
   <div class="section-title" style="margin-top:40px" id="platformGuide">
@@ -993,6 +1076,7 @@
   </div>
 
   <!-- ═══════════════════════════════════════════════════ -->
+  <div class="sb-sec" id="sec-logistics">
   <!-- 5. 유사상품 / 경쟁상품 분석                         -->
   <!-- ═══════════════════════════════════════════════════ -->
   <div class="section-title" style="margin-top:40px" id="compAnalysis">
@@ -1263,6 +1347,7 @@
     </div>
   </div>
 
+  </div><!-- /sec-logistics -->
   <div style="height:48px"></div><!-- bottom padding -->
 
 </div>
@@ -5570,5 +5655,39 @@ function bmBtnHtml(name, emoji, country, price) {
   return `<span onclick="addBookmark('${ns}','${es}','${cs}','${ps}')"
     style="font-size:0.6rem;color:#6366F1;font-weight:700;cursor:pointer;padding:4px 0;border:1px solid #6366F1;border-radius:5px;background:var(--surface);text-align:center">🔖 저장</span>`;
 }
+
+// ══════════════════════════════════════════
+// SIDEBAR
+// ══════════════════════════════════════════
+function toggleSB() {
+  document.body.classList.toggle('sb-open');
+}
+
+const _SEC_MAP = {
+  dashboard: 'sec-dashboard',
+  sourcing:  'sec-sourcing',
+  entry:     'sec-entry',
+  logistics: 'sec-logistics',
+};
+
+function showSec(name) {
+  // 모든 섹션 숨기기
+  Object.values(_SEC_MAP).forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.classList.remove('on');
+  });
+  // 모든 아이템 비활성
+  document.querySelectorAll('.sb-it').forEach(el => el.classList.remove('active'));
+  // 선택된 섹션 + 아이템 활성
+  const sec = document.getElementById(_SEC_MAP[name]);
+  if (sec) sec.classList.add('on');
+  const item = document.getElementById('sbi-' + name);
+  if (item) item.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  showSec('dashboard');
+});
 </script>
 </body>
