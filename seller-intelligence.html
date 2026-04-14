@@ -4535,7 +4535,9 @@ function renderProductTable(products) {
 }
 
 function renderTrendChart(categories) {
-  const ctx = document.getElementById('trendChart').getContext('2d');
+  const _tcEl = document.getElementById('trendChart');
+  if (!_tcEl) return; // 차트 섹션 제거됨 — 안전하게 스킵
+  const ctx = _tcEl.getContext('2d');
   const weeks = ['W1','W2','W3','W4','W5','W6','W7','W8'];
   const colors = ['#4F46E5','#F59E0B','#10B981','#EF4444','#8B5CF6'];
   const top5 = categories.slice(0,5);
